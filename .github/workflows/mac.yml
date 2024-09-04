@@ -1,0 +1,42 @@
+name: Build macOS
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build macOS App
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Flutter SDK
+        run: |
+          brew install --cask flutter
+          flutter doctor
+
+      - name: Install Dependencies
+        run: flutter pub get
+
+      - name: Build macOS Release
+        run: flutter build macos --release
+
+      - name: Create .dmg File
+        run: |
+          APP_NAME="YourAppName"
+          BUILD_DIR="build/macos/Build/Products/Release/$APP_NAME.app"
+          DMG_DIR="$GITHUB_WORKSPACE/build/macos/dmg"
+          mkdir -p "$DMG_DIR"
+          hdiutil create -volname "$APP_NAME" -srcfolder "$BUILD_DIR" -ov -format UDZO "$DMG_DIR/$APP_NAME.dmg"
+
+      - name: Upload Release Asset
+        uses: softprops/action-gh-release@v1
+        with:
+          files: build/macos/dmg/*.dmg
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
