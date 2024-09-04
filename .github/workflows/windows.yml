@@ -1,4 +1,4 @@
-name: Build Windows
+name: Build Windows App
 
 on:
   push:
@@ -38,14 +38,18 @@ jobs:
         run: flutter build windows --release
         shell: pwsh
 
+      - name: List Build Directory
+        run: Get-ChildItem -Recurse build/windows/runner/Release
+        shell: pwsh
+
       - name: Create Installer
         run: |
           $APP_NAME="structogrammar"
-          $BUILD_DIR="build\windows\runner\Release\$APP_NAME.exe"
-          $ZIP_DIR="$env:GITHUB_WORKSPACE\build\windows\zip"
+          $BUILD_DIR="build/windows/runner/Release/$APP_NAME.exe"
+          $ZIP_DIR="$env:GITHUB_WORKSPACE/build/windows/zip"
           mkdir $ZIP_DIR
           Copy-Item -Path $BUILD_DIR -Destination $ZIP_DIR
-          Compress-Archive -Path $ZIP_DIR\$APP_NAME.exe -DestinationPath $ZIP_DIR\$APP_NAME.zip
+          Compress-Archive -Path $ZIP_DIR/$APP_NAME.exe -DestinationPath $ZIP_DIR/$APP_NAME.zip
         shell: pwsh
 
       - name: Upload Windows Artifact
