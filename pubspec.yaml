@@ -4,7 +4,7 @@ publish_to: 'none'
 version: 0.1.0
 
 environment:
-  sdk: '>=3.13.8 <4.0.0'
+  sdk: '>=3.0.0 <4.0.0'
 
 dependencies:
   community_material_icon: ^5.9.55
