@@ -13,6 +13,12 @@ so I tried to build something more modern and cross platform compatible.
 |-------|--------|--------|----|---------------------------|---------------------------|
 | ✅     | ✅      | ✅      | ✅      | ❌(possibly in the future) | ❌(possible in the future) |
 
+## MacOS Program can not be opened
+how to solve this:
+- hold shift and right click on the program
+- click open
+- click open again
+
 ## Roadmap
 - [ ] Case statement
 - [ ] Multilanguage
