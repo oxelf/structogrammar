@@ -1,6 +1,10 @@
 name: Flutter CI
 
-on: push
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
 
 jobs:
   build-and-release-linux:
@@ -64,30 +68,46 @@ jobs:
           files: build/windows/x64/runner/Release/structogrammar-${{github.ref_name}}-windows.zip
 
   build-and-release-macos:
+    name: Build and Release macOS App
     runs-on: macos-latest
 
     steps:
-      - uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2
-        with:
-          channel: 'stable'
-          architecture: x64
-      - name: Install project dependencies
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      - name: Set up Flutter SDK
+        run: |
+          git clone https://github.com/flutter/flutter.git --branch stable --depth 1
+          echo "$GITHUB_WORKSPACE/flutter/bin" >> $GITHUB_PATH
+
+      - name: Flutter Version
+        run: flutter --version
+
+      - name: Install Dependencies
         run: flutter pub get
-      - name: Enable macOS build
-        run: flutter config --enable-macos-desktop
-      - name: Build artifacts
+
+      - name: Create a Tag
+        id: tag
+        run: |
+          TAG="v$(date +'%Y%m%d%H%M%S')" # Example tag format
+          git tag $TAG
+          git push origin $TAG
+          echo "TAG=$TAG" >> $GITHUB_ENV
+
+      - name: Build macOS Release
         run: flutter build macos --release
-      - name: Archive Release
-        uses: thedoctor0/zip-release@master
-        with:
-          type: 'zip'
-          filename: structogrammar-${{github.ref_name}}-macos.zip
-          directory: build/macos/Build/Products/Release
-      - name: macOS Release
+
+      - name: Create .dmg File
+        run: |
+          APP_NAME="structogrammar"
+          BUILD_DIR="build/macos/Build/Products/Release/$APP_NAME.app"
+          DMG_DIR="$GITHUB_WORKSPACE/build/macos/dmg"
+          mkdir -p "$DMG_DIR"
+          hdiutil create -volname "$APP_NAME" -srcfolder "$BUILD_DIR" -ov -format UDZO "$DMG_DIR/$APP_NAME.dmg"
+
+      - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
-        if: startsWith(github.ref, 'refs/tags/')
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          files: build/macos/Build/Products/Release/structogrammar-${{github.ref_name}}-macos.zip
+          files: build/macos/dmg/*.dmg
+          tag_name: ${{ env.TAG }}
