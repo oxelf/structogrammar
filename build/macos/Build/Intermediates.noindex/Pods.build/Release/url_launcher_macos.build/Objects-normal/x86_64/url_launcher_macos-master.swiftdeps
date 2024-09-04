@@ -1,9 +1,0 @@
-version: "Apple Swift version 5.10 (swiftlang-5.10.0.13 clang-1500.3.9.4)"
-options: "7619ba69f5a2714a1cbf8b25fcd23fa41e7d95cd9fe867818d447aba1f6fdab0"
-build_start_time: [1725457759, 659681000]
-build_end_time: [1725457765, 503225000]
-inputs:
-  ? "/Users/joscha/.pub-cache/hosted/pub.dev/url_launcher_macos-3.2.0/macos/url_launcher_macos/Sources/url_launcher_macos/UrlLauncherPlugin.swift"
-  : [1723142338, 625696808]
-  ? "/Users/joscha/.pub-cache/hosted/pub.dev/url_launcher_macos-3.2.0/macos/url_launcher_macos/Sources/url_launcher_macos/messages.g.swift"
-  : [1723142338, 625794308]
