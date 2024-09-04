@@ -55,5 +55,6 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: build/macos/dmg/*.dmg
+          tag_name: ${{ env.TAG }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -17,14 +17,17 @@ jobs:
 
       - name: Set up Flutter SDK
         run: |
+          # Download and install Flutter SDK
           git clone https://github.com/flutter/flutter.git --branch stable --depth 1
-          $env:GITHUB_PATH += ";$env:GITHUB_WORKSPACE/flutter/bin"
+          echo "$GITHUB_WORKSPACE/flutter/bin" | Out-File -FilePath $env:GITHUB_PATH -Append
 
       - name: Flutter Version
         run: flutter --version
+        shell: pwsh
 
       - name: Install Dependencies
         run: flutter pub get
+        shell: pwsh
 
       - name: Create a Tag
         id: tag
@@ -33,9 +36,11 @@ jobs:
           git tag $TAG
           git push origin $TAG
           echo "TAG=$TAG" >> $env:GITHUB_ENV
+        shell: pwsh
 
       - name: Build Windows Release
         run: flutter build windows --release
+        shell: pwsh
 
       - name: Create Installer
         run: |
@@ -45,6 +50,7 @@ jobs:
           mkdir $ZIP_DIR
           Copy-Item -Path $BUILD_DIR -Destination $ZIP_DIR
           Compress-Archive -Path $ZIP_DIR\$APP_NAME.exe -DestinationPath $ZIP_DIR\$APP_NAME.zip
+        shell: pwsh
 
       - name: Upload Windows Artifact
         uses: actions/upload-artifact@v3
@@ -56,5 +62,6 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: build/windows/zip/*.zip
+          tag_name: ${{ env.TAG }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
