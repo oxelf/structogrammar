@@ -1,4 +1,4 @@
-name: Build Windows App
+name: Build and Release Windows App
 
 on:
   push:
@@ -38,18 +38,23 @@ jobs:
         run: flutter build windows --release
         shell: pwsh
 
-      - name: List Build Directory
-        run: Get-ChildItem -Recurse build/windows/runner/Release
-        shell: pwsh
-
-      - name: Create Installer
+      - name: Prepare Release Bundle
         run: |
-          $APP_NAME="structogrammar"
-          $BUILD_DIR="build/windows/runner/Release/$APP_NAME.exe"
+          $APP_NAME="structogrammar"  # Update with your actual app name
+          $BUILD_DIR="build/windows/runner/Release"
           $ZIP_DIR="$env:GITHUB_WORKSPACE/build/windows/zip"
           mkdir $ZIP_DIR
-          Copy-Item -Path $BUILD_DIR -Destination $ZIP_DIR
-          Compress-Archive -Path $ZIP_DIR/$APP_NAME.exe -DestinationPath $ZIP_DIR/$APP_NAME.zip
+          mkdir $ZIP_DIR/data
+          
+          # Copy the executable and DLLs
+          Copy-Item -Path "$BUILD_DIR/$APP_NAME.exe" -Destination $ZIP_DIR
+          Copy-Item -Path "$BUILD_DIR/*.dll" -Destination $ZIP_DIR
+          
+          # Copy the data directory
+          Copy-Item -Path "$BUILD_DIR/data/*" -Destination "$ZIP_DIR/data" -Recurse
+          
+          # Zip the release folder
+          Compress-Archive -Path "$ZIP_DIR/*" -DestinationPath "$ZIP_DIR/$APP_NAME.zip"
         shell: pwsh
 
       - name: Upload Windows Artifact
