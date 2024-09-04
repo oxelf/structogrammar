@@ -18,7 +18,7 @@ jobs:
       - name: Set up Flutter SDK
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.24.2' # Specify the desired Flutter version
+          flutter-version: '3.24.2'
           channel: 'stable'
 
       - name: Install Dependencies
@@ -28,7 +28,7 @@ jobs:
       - name: Create a Tag
         id: tag
         run: |
-          TAG="v$(date +'%Y%m%d%H%M%S')" # Example tag format
+          $TAG = "v$(Get-Date -Format 'yyyyMMddHHmmss')"
           git tag $TAG
           git push origin $TAG
           echo "TAG=$TAG" >> $env:GITHUB_ENV
