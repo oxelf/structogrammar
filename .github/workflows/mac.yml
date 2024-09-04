@@ -1,4 +1,4 @@
-name: Build macOS
+name: Flutter CI
 
 on:
   push:
@@ -7,13 +7,73 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
-    name: Build macOS App
+  build-and-release-linux:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          architecture: x64
+      - name: Install dependencies
+        run: sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-0 libgtk-3-dev libblkid1 liblzma5
+      - name: Install project dependencies
+        run: flutter pub get
+      - name: Enable linux build
+        run: flutter config --enable-linux-desktop
+      - name: Build artifacts
+        run: flutter build linux --release
+      - name: Archive Release
+        uses: thedoctor0/zip-release@master
+        with:
+          type: 'zip'
+          filename: structogrammar-${{github.ref_name}}-linux.zip
+          directory: build/linux/x64/release/bundle
+      - name: Linux Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          files: build/linux/x64/release/bundle/structogrammar-${{github.ref_name}}-linux.zip
+
+  build-and-release-windows:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          architecture: x64
+      - name: Install project dependencies
+        run: flutter pub get
+      - name: Enable windows build
+        run: flutter config --enable-windows-desktop
+      - name: Build artifacts
+        run: flutter build windows --release
+      - name: Archive Release
+        uses: thedoctor0/zip-release@master
+        with:
+          type: 'zip'
+          filename: structogrammar-${{github.ref_name}}-windows.zip
+          directory: build/windows/x64/runner/Release
+      - name: Windows Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          files: build/windows/x64/runner/Release/structogrammar-${{github.ref_name}}-windows.zip
+
+  build-and-release-macos:
+    name: Build and Release macOS App
     runs-on: macos-latest
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Flutter SDK
         run: |
@@ -45,16 +105,10 @@ jobs:
           mkdir -p "$DMG_DIR"
           hdiutil create -volname "$APP_NAME" -srcfolder "$BUILD_DIR" -ov -format UDZO "$DMG_DIR/$APP_NAME.dmg"
 
-      - name: Upload macOS Artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: macos-dmg
-          path: build/macos/dmg/*.dmg
-
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           files: build/macos/dmg/*.dmg
           tag_name: ${{ env.TAG }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
