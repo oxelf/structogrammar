@@ -1,4 +1,4 @@
-name: Build and Release Windows App
+name: Build and Release Windows Installer
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    name: Build Windows App
+    name: Build Windows Installer
     runs-on: windows-latest
 
     steps:
@@ -38,35 +38,25 @@ jobs:
         run: flutter build windows --release
         shell: pwsh
 
-      - name: Prepare Release Bundle
-        run: |
-          $APP_NAME="structogrammar"  # Update with your actual app name
-          $BUILD_DIR="build/windows/runner/Release"
-          $ZIP_DIR="$env:GITHUB_WORKSPACE/build/windows/zip"
-          mkdir $ZIP_DIR
-          mkdir $ZIP_DIR/data
-          
-          # Copy the executable and DLLs
-          Copy-Item -Path "$BUILD_DIR/$APP_NAME.exe" -Destination $ZIP_DIR
-          Copy-Item -Path "$BUILD_DIR/*.dll" -Destination $ZIP_DIR
-          
-          # Copy the data directory
-          Copy-Item -Path "$BUILD_DIR/data/*" -Destination "$ZIP_DIR/data" -Recurse
-          
-          # Zip the release folder
-          Compress-Archive -Path "$ZIP_DIR/*" -DestinationPath "$ZIP_DIR/$APP_NAME.zip"
+      - name: Install Inno Setup
+        run: choco install innosetup --yes
         shell: pwsh
 
-      - name: Upload Windows Artifact
+      - name: Create Installer
+        run: |
+          "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" windows_installer.iss
+        shell: pwsh
+
+      - name: Upload Installer Artifact
         uses: actions/upload-artifact@v3
         with:
           name: windows-installer
-          path: build/windows/zip/*.zip
+          path: my_app_installer.exe
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
-          files: build/windows/zip/*.zip
+          files: my_app_installer.exe
           tag_name: ${{ env.TAG }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
