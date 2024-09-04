@@ -109,8 +109,22 @@ jobs:
           APP_NAME="structogrammar"
           BUILD_DIR="build/macos/Build/Products/Release/$APP_NAME.app"
           DMG_DIR="$GITHUB_WORKSPACE/build/macos/dmg"
+          TMP_DIR="$GITHUB_WORKSPACE/tmp"
+
+          # Create the necessary directories
           mkdir -p "$DMG_DIR"
-          hdiutil create -volname "$APP_NAME" -srcfolder "$BUILD_DIR" -ov -format UDZO "$DMG_DIR/$APP_NAME.dmg"
+          mkdir -p "$TMP_DIR"
+
+          # Create an Applications alias
+          ln -s /Applications "$TMP_DIR/Applications"
+
+          # Copy the app to the temp directory
+          cp -R "$BUILD_DIR" "$TMP_DIR"
+
+          # Create the DMG with the app and the Applications alias
+          hdiutil create -volname "$APP_NAME" \
+                         -srcfolder "$TMP_DIR" \
+                         -ov -format UDZO "$DMG_DIR/$APP_NAME.dmg"
 
       - name: Upload macOS Artifact
         uses: actions/upload-artifact@v3
