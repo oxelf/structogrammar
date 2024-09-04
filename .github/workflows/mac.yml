@@ -1,4 +1,4 @@
-name: Build macOS
+name: Build macOS App and Release
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    name: Build macOS App
+    name: Build Flutter macOS App
     runs-on: macos-latest
 
     steps:
@@ -17,8 +17,11 @@ jobs:
 
       - name: Set up Flutter SDK
         run: |
-          brew install --cask flutter
-          flutter doctor
+          git clone https://github.com/flutter/flutter.git --branch stable --depth 1
+          echo "$GITHUB_WORKSPACE/flutter/bin" >> $GITHUB_PATH
+
+      - name: Flutter Version
+        run: flutter --version
 
       - name: Install Dependencies
         run: flutter pub get
@@ -28,7 +31,7 @@ jobs:
 
       - name: Create .dmg File
         run: |
-          APP_NAME="YourAppName"
+          APP_NAME="structogrammar"
           BUILD_DIR="build/macos/Build/Products/Release/$APP_NAME.app"
           DMG_DIR="$GITHUB_WORKSPACE/build/macos/dmg"
           mkdir -p "$DMG_DIR"
