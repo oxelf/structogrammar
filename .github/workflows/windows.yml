@@ -17,12 +17,14 @@ jobs:
 
       - name: Set up Flutter SDK
         run: |
-          # Download and install Flutter SDK
+          # Clone Flutter SDK
           git clone https://github.com/flutter/flutter.git --branch stable --depth 1
-          echo "$GITHUB_WORKSPACE/flutter/bin" | Out-File -FilePath $env:GITHUB_PATH -Append
-
-      - name: Flutter Version
-        run: flutter --version
+          
+          # Add Flutter to PATH temporarily for the session
+          $env:PATH += ";$env:GITHUB_WORKSPACE/flutter/bin"
+          
+          # Verify Flutter is available
+          flutter --version
         shell: pwsh
 
       - name: Install Dependencies
