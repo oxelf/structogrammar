@@ -20,10 +20,11 @@ jobs:
           # Clone Flutter SDK
           git clone https://github.com/flutter/flutter.git --branch stable --depth 1
           
-          # Add Flutter to PATH temporarily for the session
-          $env:PATH += ";$env:GITHUB_WORKSPACE/flutter/bin"
+          # Update PATH for the current session
+          $env:GITHUB_PATH += ";$env:GITHUB_WORKSPACE/flutter/bin"
           
           # Verify Flutter is available
+          echo $env:GITHUB_PATH
           flutter --version
         shell: pwsh
 
