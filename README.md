@@ -1,7 +1,7 @@
 # structogrammar
 
 ## Download
-You can download it [here](github.com/oxelf/structogrammar/releases)
+You can download it [here](https://github.com/oxelf/structogrammar/releases)
 
 ## The Reason I built this
 I didn't like the way the available structogram

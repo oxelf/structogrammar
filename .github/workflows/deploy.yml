@@ -47,71 +47,36 @@ jobs:
         with:
           channel: 'stable'
           architecture: x64
+      - name: Install Inno Setup
+        run: choco install innosetup
       - name: Install project dependencies
         run: flutter pub get
       - name: Enable windows build
         run: flutter config --enable-windows-desktop
       - name: Build artifacts
         run: flutter build windows --release
-
-      # Install WiX Toolset
-      - name: Install WiX Toolset
+      - name: Create Inno Setup Script
         run: |
-          choco install wix --version 3.11.2
-
-      # Create WiX XML file for installer
-      - name: Create WiX Installer XML
+          echo '[Setup]' > setup.iss
+          echo 'AppName=Structogrammar' >> setup.iss
+          echo 'AppVersion=1.0' >> setup.iss
+          echo 'DefaultDirName={pf}\Structogrammar' >> setup.iss
+          echo 'DefaultGroupName=Structogrammar' >> setup.iss
+          echo 'OutputBaseFilename=setup' >> setup.iss
+          echo 'Compression=lzma' >> setup.iss
+          echo 'SolidCompression=yes' >> setup.iss
+          echo '[Files]' >> setup.iss
+          echo 'Source: "build/windows/x64/runner/Release/structogrammar.exe"; DestDir: "{app}"; Flags: ignoreversion' >> setup.iss
+      - name: Create Inno Setup Installer
         run: |
-          echo '<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">' > installer.wxs
-          echo '  <Product Id="*" Name="Structogrammar" Language="1033" Version="1.0.0.0" Manufacturer="YourCompany" UpgradeCode="PUT-GUID-HERE">' >> installer.wxs
-          echo '    <Package InstallerVersion="500" Compressed="yes" InstallScope="perMachine" />' >> installer.wxs
-          echo '    <Media Id="1" Cabinet="product.cab" />' >> installer.wxs
-          echo '    <Directory Id="TARGETDIR" Name="SourceDir">' >> installer.wxs
-          echo '      <Directory Id="ProgramFilesFolder">' >> installer.wxs
-          echo '        <Directory Id="INSTALLFOLDER" Name="Structogrammar">' >> installer.wxs
-          echo '          <Component Id="StructogrammarComponent" Guid="PUT-GUID-HERE">' >> installer.wxs
-          echo '            <File Id="StructogrammarExe" Source="build/windows/x64/runner/Release/structogrammar.exe" />' >> installer.wxs
-          echo '          </Component>' >> installer.wxs
-          echo '        </Directory>' >> installer.wxs
-          echo '      </Directory>' >> installer.wxs
-          echo '    </Directory>' >> installer.wxs
-          echo '    <Feature Id="ProductFeature" Title="Structogrammar" Level="1">' >> installer.wxs
-          echo '      <ComponentRef Id="StructogrammarComponent" />' >> installer.wxs
-          echo '    </Feature>' >> installer.wxs
-          echo '  </Product>' >> installer.wxs
-          echo '</Wix>' >> installer.wxs
-
-      # Build the MSI installer using WiX
-      - name: Build MSI Installer
-        run: |
-          candle installer.wxs -o installer.wixobj
-          light installer.wixobj -o structogrammar-${{github.ref_name}}.msi
-
-      # Create a setup EXE using WiX bootstrapper
-      - name: Create EXE Installer
-        run: |
-          # Create a WiX bundle to package the MSI
-          echo '<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">' > bundle.wxs
-          echo '  <Bundle Name="Structogrammar Installer" Version="1.0.0.0" Manufacturer="YourCompany" UpgradeCode="PUT-GUID-HERE">' >> bundle.wxs
-          echo '    <BootstrapperApplicationRef Id="WixStandardBootstrapperApplication.RtfLicense" />' >> bundle.wxs
-          echo '    <Chain>' >> bundle.wxs
-          echo '      <MsiPackage SourceFile="structogrammar-${{github.ref_name}}.msi" />' >> bundle.wxs
-          echo '    </Chain>' >> bundle.wxs
-          echo '  </Bundle>' >> bundle.wxs
-          echo '</Wix>' >> bundle.wxs
-
-          # Compile the bundle into an EXE
-          candle bundle.wxs -o bundle.wixobj
-          light bundle.wixobj -o structogrammar-${{github.ref_name}}.exe
-
-      # Upload the Windows EXE Installer
+          & 'C:\Program Files (x86)\Inno Setup 6\ISCC.exe' setup.iss
       - name: Windows Release
         uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/')
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          files: structogrammar-${{github.ref_name}}.exe
+          files: setup.exe
 
   build-and-release-macos:
     name: Build and Release macOS App
