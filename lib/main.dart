@@ -3,10 +3,11 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:structogrammar/pages/main/main_page.dart';
-
+import 'package:flutter_web_plugins/url_strategy.dart';
 
 
 void main() {
+  usePathUrlStrategy();
   WidgetsFlutterBinding.ensureInitialized();
   runApp(const ProviderScope( child:  MainApp()));
 }
