@@ -1,4 +1,4 @@
-name: Build macOS App and Release
+name: Build macOS
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    name: Build Flutter macOS App
+    name: Build macOS App
     runs-on: macos-latest
 
     steps:
@@ -26,6 +26,14 @@ jobs:
       - name: Install Dependencies
         run: flutter pub get
 
+      - name: Create a Tag
+        id: tag
+        run: |
+          TAG="v$(date +'%Y%m%d%H%M%S')" # Example tag format
+          git tag $TAG
+          git push origin $TAG
+          echo "TAG=$TAG" >> $GITHUB_ENV
+
       - name: Build macOS Release
         run: flutter build macos --release
 
@@ -37,7 +45,13 @@ jobs:
           mkdir -p "$DMG_DIR"
           hdiutil create -volname "$APP_NAME" -srcfolder "$BUILD_DIR" -ov -format UDZO "$DMG_DIR/$APP_NAME.dmg"
 
-      - name: Upload Release Asset
+      - name: Upload macOS Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: macos-dmg
+          path: build/macos/dmg/*.dmg
+
+      - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
           files: build/macos/dmg/*.dmg
