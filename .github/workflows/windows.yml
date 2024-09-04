@@ -1,4 +1,4 @@
-name: Build and Release Windows Installer
+name: Build Windows Executable
 
 on:
   push:
@@ -8,9 +8,12 @@ on:
 
 jobs:
   build:
-    name: Build Windows Installer
-    runs-on: windows-latest
-
+    strategy:
+      matrix:
+        include:
+          - target: x86_64-pc-windows-msvc
+            os: windows-latest
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -25,38 +28,37 @@ jobs:
         run: flutter pub get
         shell: pwsh
 
-      - name: Create a Tag
-        id: tag
-        run: |
-          $TAG = "v$(Get-Date -Format 'yyyyMMddHHmmss')"
-          git tag $TAG
-          git push origin $TAG
-          echo "TAG=$TAG" >> $env:GITHUB_ENV
-        shell: pwsh
-
       - name: Build Windows Release
         run: flutter build windows --release
         shell: pwsh
 
-      - name: Install Inno Setup
-        run: choco install innosetup --yes
+      - name: Package Executable
         shell: pwsh
-
-      - name: Create Installer
         run: |
-          "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" windows_installer.iss
-        shell: pwsh
+          $BUILD_DIR = "build/windows/runner/Release"
+          $DIST_DIR = "build/windows/installer"
+          $APP_NAME = "structogrammer"  # Update with your app's name
+          
+          # Create directory for packaging
+          New-Item -Path $DIST_DIR -ItemType Directory -Force
+          
+          # Copy executable and DLLs
+          Copy-Item -Path "$BUILD_DIR/$APP_NAME.exe" -Destination $DIST_DIR
+          Copy-Item -Path "$BUILD_DIR/*.dll" -Destination $DIST_DIR
+          Copy-Item -Path "$BUILD_DIR/data/*" -Destination "$DIST_DIR/data" -Recurse
+          
+          # Optional: Create a zip file if needed
+          Compress-Archive -Path "$DIST_DIR/*" -DestinationPath "$DIST_DIR/$APP_NAME.zip"
 
-      - name: Upload Installer Artifact
+      - name: Upload Executable Artifact
         uses: actions/upload-artifact@v3
         with:
-          name: windows-installer
-          path: my_app_installer.exe
+          name: windows-executable
+          path: build/windows/installer/*.exe
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
-          files: my_app_installer.exe
-          tag_name: ${{ env.TAG }}
+          files: build/windows/installer/*.exe
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
