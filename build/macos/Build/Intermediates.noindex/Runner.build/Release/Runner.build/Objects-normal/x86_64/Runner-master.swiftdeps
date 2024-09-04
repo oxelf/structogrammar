@@ -1,0 +1,10 @@
+version: "Apple Swift version 5.10 (swiftlang-5.10.0.13 clang-1500.3.9.4)"
+options: "afe5c642d71d21655e88cdfc08a58b28fe93fec67e54095d6ffc444f179972ff"
+build_start_time: [1725457784, 122317000]
+build_end_time: [1725457788, 327938000]
+inputs:
+  ? "/Users/joscha/Documents/dev/scanning/machamp/structogrammar/build/macos/Build/Intermediates.noindex/Runner.build/Release/Runner.build/DerivedSources/GeneratedAssetSymbols.swift"
+  : [1725457784, 114636478]
+  "/Users/joscha/Documents/dev/scanning/machamp/structogrammar/macos/Flutter/GeneratedPluginRegistrant.swift": [1725457755, 833901830]
+  "/Users/joscha/Documents/dev/scanning/machamp/structogrammar/macos/Runner/AppDelegate.swift": [1721263830, 0]
+  "/Users/joscha/Documents/dev/scanning/machamp/structogrammar/macos/Runner/MainFlutterWindow.swift": [1721263830, 0]

@@ -1,0 +1,9 @@
+version: "Apple Swift version 5.10 (swiftlang-5.10.0.13 clang-1500.3.9.4)"
+options: "55726e15700bfcfc6f2f122af6c899cdbb6f987726740947c1cf655bd22ca35e"
+build_start_time: [1725457759, 659680000]
+build_end_time: [1725457765, 501418000]
+inputs:
+  ? "/Users/joscha/.pub-cache/hosted/pub.dev/path_provider_foundation-2.4.0/darwin/path_provider_foundation/Sources/path_provider_foundation/PathProviderPlugin.swift"
+  : [1723142332, 462157111]
+  ? "/Users/joscha/.pub-cache/hosted/pub.dev/path_provider_foundation-2.4.0/darwin/path_provider_foundation/Sources/path_provider_foundation/messages.g.swift"
+  : [1723142332, 462442818]

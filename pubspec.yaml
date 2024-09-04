@@ -1,0 +1,57 @@
+name: structogrammar
+description: "A new Flutter project."
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: '>=3.4.4 <4.0.0'
+
+dependencies:
+  community_material_icon: ^5.9.55
+  dotted_border: ^2.1.0
+  equatable: ^2.0.5
+
+  file_picker: ^8.1.2
+  flutter:
+    sdk: flutter
+  flutter_code_editor: ^0.3.2
+  flutter_context_menu: ^0.2.0
+  flutter_highlight: ^0.7.0
+
+  flutter_riverpod: ^2.5.1
+  hexcolor: ^3.0.1
+  highlight: ^0.7.0
+  menu_bar: ^0.5.3
+  path_provider: ^2.1.4
+  resizable_widget: ^1.0.5
+  screenshot: ^3.0.0
+  universal_html: ^2.2.4
+  uuid: ^4.5.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+  flutter_launcher_icons: ^0.13.1
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icon.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+  web:
+    generate: true
+    image_path: "assets/icon.png"
+    background_color: "#FFFFFF"
+    theme_color: "#FFFFFF"
+  windows:
+    generate: true
+    image_path: "assets/icon.png"
+    icon_size: 48 # min:48, max:256, default: 48
+  macos:
+    generate: true
+    image_path: "assets/icon.png"
+
+
+flutter:
+  uses-material-design: true

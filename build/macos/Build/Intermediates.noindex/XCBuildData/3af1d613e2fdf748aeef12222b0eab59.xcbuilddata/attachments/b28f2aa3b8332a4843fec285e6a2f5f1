@@ -1,0 +1,20 @@
+{
+  "" : {
+    "const-values" : "/Users/joscha/Documents/dev/scanning/machamp/structogrammar/build/macos/Build/Intermediates.noindex/Pods.build/Release/path_provider_foundation.build/Objects-normal/x86_64/path_provider_foundation-master.swiftconstvalues",
+    "dependencies" : "/Users/joscha/Documents/dev/scanning/machamp/structogrammar/build/macos/Build/Intermediates.noindex/Pods.build/Release/path_provider_foundation.build/Objects-normal/x86_64/path_provider_foundation-master.d",
+    "diagnostics" : "/Users/joscha/Documents/dev/scanning/machamp/structogrammar/build/macos/Build/Intermediates.noindex/Pods.build/Release/path_provider_foundation.build/Objects-normal/x86_64/path_provider_foundation-master.dia",
+    "emit-module-dependencies" : "/Users/joscha/Documents/dev/scanning/machamp/structogrammar/build/macos/Build/Intermediates.noindex/Pods.build/Release/path_provider_foundation.build/Objects-normal/x86_64/path_provider_foundation-master-emit-module.d",
+    "emit-module-diagnostics" : "/Users/joscha/Documents/dev/scanning/machamp/structogrammar/build/macos/Build/Intermediates.noindex/Pods.build/Release/path_provider_foundation.build/Objects-normal/x86_64/path_provider_foundation-master-emit-module.dia",
+    "swift-dependencies" : "/Users/joscha/Documents/dev/scanning/machamp/structogrammar/build/macos/Build/Intermediates.noindex/Pods.build/Release/path_provider_foundation.build/Objects-normal/x86_64/path_provider_foundation-master.swiftdeps"
+  },
+  "/Users/joscha/.pub-cache/hosted/pub.dev/path_provider_foundation-2.4.0/darwin/path_provider_foundation/Sources/path_provider_foundation/messages.g.swift" : {
+    "index-unit-output-path" : "/Pods.build/Release/path_provider_foundation.build/Objects-normal/x86_64/messages.g.o",
+    "llvm-bc" : "/Users/joscha/Documents/dev/scanning/machamp/structogrammar/build/macos/Build/Intermediates.noindex/Pods.build/Release/path_provider_foundation.build/Objects-normal/x86_64/messages.g.bc",
+    "object" : "/Users/joscha/Documents/dev/scanning/machamp/structogrammar/build/macos/Build/Intermediates.noindex/Pods.build/Release/path_provider_foundation.build/Objects-normal/x86_64/messages.g.o"
+  },
+  "/Users/joscha/.pub-cache/hosted/pub.dev/path_provider_foundation-2.4.0/darwin/path_provider_foundation/Sources/path_provider_foundation/PathProviderPlugin.swift" : {
+    "index-unit-output-path" : "/Pods.build/Release/path_provider_foundation.build/Objects-normal/x86_64/PathProviderPlugin.o",
+    "llvm-bc" : "/Users/joscha/Documents/dev/scanning/machamp/structogrammar/build/macos/Build/Intermediates.noindex/Pods.build/Release/path_provider_foundation.build/Objects-normal/x86_64/PathProviderPlugin.bc",
+    "object" : "/Users/joscha/Documents/dev/scanning/machamp/structogrammar/build/macos/Build/Intermediates.noindex/Pods.build/Release/path_provider_foundation.build/Objects-normal/x86_64/PathProviderPlugin.o"
+  }
+}

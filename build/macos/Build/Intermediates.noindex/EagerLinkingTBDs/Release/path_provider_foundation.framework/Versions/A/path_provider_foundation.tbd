@@ -1,0 +1,71 @@
+{
+  "main_library": {
+    "exported_symbols": [
+      {
+        "data": {
+          "global": [
+            "_$s24path_provider_foundation18PathProviderPluginCMn",
+            "_path_provider_foundationVersionString",
+            "_$s24path_provider_foundation18PathProviderPluginCMa",
+            "_$s24path_provider_foundation18PathProviderPluginCfD",
+            "_path_provider_foundationVersionNumber",
+            "_$s24path_provider_foundation18PathProviderPluginC8register4withySo07FlutterF9Registrar_p_tFZ",
+            "_$s24path_provider_foundation18PathProviderPluginCACycfC",
+            "_$s24path_provider_foundation18PathProviderPluginCN",
+            "_$s24path_provider_foundation18PathProviderPluginCACycfc"
+          ],
+          "objc_class": [
+            "PodsDummy_path_provider_foundation",
+            "_TtC24path_provider_foundation18PathProviderPlugin"
+          ]
+        }
+      },
+      {
+        "data": {
+          "global": [
+            "_Swift50Overrides",
+            "_Swift51Overrides"
+          ]
+        },
+        "targets": [
+          "x86_64-macos"
+        ],
+        "text": {
+          "global": [
+            "__ZN5swift34swift50override_conformsToProtocolEPKNS_14TargetMetadataINS_9InProcessEEEPKNS_24TargetProtocolDescriptorIS1_EEPFPKNS_18TargetWitnessTableIS1_EES4_S8_E",
+            "__Z34_swiftoverride_class_getSuperclassPKN5swift14TargetMetadataINS_9InProcessEEE",
+            "__ZN5swift39swift51override_conformsToSwiftProtocolEPKNS_14TargetMetadataINS_9InProcessEEEPKNS_24TargetProtocolDescriptorIS1_EEN7__swift9__runtime4llvm9StringRefEPFPKNS_35TargetProtocolConformanceDescriptorIS1_EES4_S8_SC_E"
+          ]
+        }
+      }
+    ],
+    "flags": [
+      {
+        "attributes": [
+          "not_app_extension_safe"
+        ]
+      }
+    ],
+    "install_names": [
+      {
+        "name": "@rpath/path_provider_foundation.framework/Versions/A/path_provider_foundation"
+      }
+    ],
+    "swift_abi": [
+      {
+        "abi": 7
+      }
+    ],
+    "target_info": [
+      {
+        "min_deployment": "10.14",
+        "target": "x86_64-macos"
+      },
+      {
+        "min_deployment": "11",
+        "target": "arm64-macos"
+      }
+    ]
+  },
+  "tapi_tbd_version": 5
+}
