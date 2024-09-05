@@ -52,7 +52,7 @@ jobs:
       - name: Install Node.js and flutter_distributor
         run: |
           choco install nodejs-lts
-          npm install -g flutter_distributor
+          flutter pub global activate flutter_distributor
       - name: Extract Version (Remove 'v' Prefix)
         id: version
         run: |
