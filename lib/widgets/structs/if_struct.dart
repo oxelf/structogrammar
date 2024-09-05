@@ -54,9 +54,7 @@ class IFStructWidget extends ConsumerWidget {
                             child: Text(
                               overflow: TextOverflow.visible,
                               struct.data["condition"].toString(),
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
+                              style: TextStyle( fontSize: 14,
                               ),
                             ),
                           ),
@@ -90,6 +88,11 @@ class IFStructWidget extends ConsumerWidget {
                 ],
               ),
             ),
+            Row(
+              children: [
+                Expanded(child: Container( height: 2, color: Colors.black,)),
+              ],
+            ),
             Builder(builder: (context) {
               var trueStructs = struct.subStructs
                   .where((e) => e.data["ifValue"] == true)
@@ -115,6 +118,7 @@ class IFStructWidget extends ConsumerWidget {
                                 maxWidth: (maxWidth / 2.0) - (((parent?.type ?? StructType.instruction) == StructType.function)? 3: 1),
                                 noRightBorder: true,
                                 noLeftBorder: true,
+                                noTopBorder: (i == 0),
                                 bottomBorder: (i + 1 == trueStructs.length &&
                                     trueStructs.length < falseStructs.length),
                               ),

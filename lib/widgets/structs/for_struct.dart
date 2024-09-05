@@ -6,6 +6,7 @@ import 'package:structogrammar/models/struct.dart';
 import 'package:structogrammar/widgets/struct_draggable.dart';
 
 import '../../riverpod/state.dart';
+import '../../riverpod/structs.dart';
 import '../struct_builder.dart';
 import '../struct_drag_target.dart';
 
@@ -16,6 +17,8 @@ class ForStructWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     String selectedStruct = ref.watch(selectedStructPod);
+    Struct? parent = ref.read(structsPod.notifier).findParentStruct(struct.id);
+    bool parentIsIfStruct = (parent?.type ?? StructType.instruction) == StructType.ifSelect || (parent?.type ?? StructType.instruction) == StructType.loop;
     bool showDrag = ref.watch(showDragPod);
     String? color = struct.data["color"];
     return  Container(
@@ -39,10 +42,11 @@ class ForStructWidget extends ConsumerWidget {
           Row(
             children: [
               Container(width: 20,),
-              Container(width: maxWidth - 20, height: 2, color: Colors.black,),
+              Expanded(child: Container( height: 2, color: Colors.black,)),
             ],
           ),
           Container(
+            width: maxWidth,
             color: ((selectedStruct == struct.id)
     ? Colors.orangeAccent
         : (color != null)? HexColor(color): Colors.white),
@@ -58,12 +62,12 @@ class ForStructWidget extends ConsumerWidget {
                       for (int i = 0; i < struct.subStructs.length; i++) Column(
                         children: [
                           StructDragTarget(
-                              width: maxWidth - 22, structId: struct.id, index: i),
-                          StructDraggable(index: i, data: struct.subStructs[i], parentStructId: struct.id, child: StructBuilder(struct: struct.subStructs[i], maxWidth: maxWidth-22, noTopBorder: (showDrag || i == 0), noRightBorder: true, noLeftBorder: true, bottomBorder: showDrag,)),
+                              width: maxWidth - ((parentIsIfStruct)? 22: 26), structId: struct.id, index: i),
+                          StructDraggable(index: i, data: struct.subStructs[i], parentStructId: struct.id, child: StructBuilder(struct: struct.subStructs[i], maxWidth: maxWidth- ((parentIsIfStruct)? 22: 26), noTopBorder: (showDrag || i == 0), noRightBorder: true, noLeftBorder: true, bottomBorder: showDrag,)),
                         ],
                       ),
                       StructDragTarget(
-                          width: maxWidth - 22, structId: struct.id, index: struct.subStructs.length),
+                          width: maxWidth - ((parentIsIfStruct)? 22: 26), structId: struct.id, index: struct.subStructs.length),
                     ],
                   ),
                 )

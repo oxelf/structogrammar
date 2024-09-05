@@ -56,6 +56,7 @@ class StructBuilder extends ConsumerWidget {
         maxWidth = newSize;
       }
     }
+
     return Padding(
         padding: (struct.data["size"] != null)
             ? const EdgeInsets.all(8.0)
@@ -175,34 +176,37 @@ class StructBuilder extends ConsumerWidget {
                               ? HexColor(color)
                               : Colors.white),
                   child: IntrinsicHeight(
-                    child: Column(
-                      children: [
-                        Builder(builder: (context) {
-                          switch (struct.type) {
-                            case StructType.function:
-                              return FunctionStructWidget(
-                                struct: struct,
-                                maxWidth: maxWidth,
-                              );
-                            case StructType.ifSelect:
-                              return IFStructWidget(
-                                  struct: struct, maxWidth: maxWidth);
-                            case StructType.instruction:
-                              return InstructionStructWidget(
-                                  struct: struct, maxWidth: maxWidth);
-                            case StructType.loop:
-                              return ForStructWidget(
-                                  struct: struct, maxWidth: maxWidth);
-                            case StructType.repeat:
-                              return UntilStructWidget(
-                                  struct: struct, maxWidth: maxWidth);
-                            default:
-                              return InstructionStructWidget(
-                                  struct: struct, maxWidth: maxWidth);
-                          }
-                        }),
-                        SizedBox()
-                      ],
+                    child: SizedBox(
+                      width: maxWidth,
+                      child: Column(
+                        children: [
+                          Builder(builder: (context) {
+                            switch (struct.type) {
+                              case StructType.function:
+                                return FunctionStructWidget(
+                                  struct: struct,
+                                  maxWidth: maxWidth,
+                                );
+                              case StructType.ifSelect:
+                                return IFStructWidget(
+                                    struct: struct, maxWidth: maxWidth);
+                              case StructType.instruction:
+                                return InstructionStructWidget(
+                                    struct: struct, maxWidth: maxWidth);
+                              case StructType.loop:
+                                return ForStructWidget(
+                                    struct: struct, maxWidth: maxWidth);
+                              case StructType.repeat:
+                                return UntilStructWidget(
+                                    struct: struct, maxWidth: maxWidth);
+                              default:
+                                return InstructionStructWidget(
+                                    struct: struct, maxWidth: maxWidth);
+                            }
+                          }),
+                          SizedBox()
+                        ],
+                      ),
                     ),
                   ),
                 ),

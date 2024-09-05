@@ -1,4 +1,6 @@
 # structogrammar
+A structogram editor running on every platform
+and on the browser.
 
 ## Download
 You can download it [here](https://github.com/oxelf/structogrammar/releases)
