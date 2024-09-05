@@ -59,9 +59,10 @@ jobs:
         run: flutter config --enable-windows-desktop
       - name: Extract Version (Remove 'v' Prefix)
         id: version
+        shell: pwsh
         run: |
-          VERSION=${GITHUB_REF#refs/tags/v}
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          $version = $env:GITHUB_REF -replace 'refs/tags/v', ''
+          echo "VERSION=$version" >> $env:GITHUB_ENV
       - name: Update Version in pubspec.yaml
         shell: pwsh
         run: |
@@ -70,7 +71,7 @@ jobs:
         shell: pwsh
         run: |
           $env:PATH += ";$HOME/.pub-cache/bin"
-          echo "PATH=$env:PATH" >> $GITHUB_ENV
+          echo "PATH=$env:PATH" >> $env:GITHUB_ENV
       - name: Package Windows Release with flutter_distributor
         shell: pwsh
         run: |
