@@ -12,13 +12,14 @@ class MainPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var controller = ref.watch(codePod);
+    Size size = MediaQuery.sizeOf(context);
     return Scaffold(
       body:
       AppMenuBar(
         child: SizedBox(
           height: MediaQuery.sizeOf(context).height - 20,
           child: ResizableWidget(
-            isHorizontalSeparator: false,
+            isHorizontalSeparator: (size.height > size.width),
             // optional
             isDisabledSmartHide: false,
             // optional

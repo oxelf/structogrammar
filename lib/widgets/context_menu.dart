@@ -242,7 +242,7 @@ ContextMenu getContextMenuForStruct(Struct struct,BuildContext context, WidgetRe
       }
       final container = ProviderScope.containerOf(context);
       ScreenshotController screenShotController = ScreenshotController();
-          Uint8List? bytes = await screenShotController.captureFromLongWidget(UncontrolledProviderScope(container: container, child: MediaQuery(data: MediaQueryData(), child: MaterialApp(debugShowCheckedModeBanner: false, theme: ThemeData(textTheme: TextTheme()), home: Material(textStyle: TextStyle(color: Colors.black), child: StructBuilder(struct: rootStruct, screenshot: true, maxWidth: 400,))))));
+          Uint8List? bytes = await screenShotController.captureFromLongWidget(pixelRatio: 4, UncontrolledProviderScope(container: container, child: MediaQuery(data: MediaQueryData(), child: MaterialApp(debugShowCheckedModeBanner: false, theme: ThemeData(textTheme: TextTheme()), home: Material(textStyle: TextStyle(color: Colors.black), child: StructBuilder(struct: rootStruct, screenshot: true, maxWidth: 400,))))));
           String fileName = (ref.read(structsPod.notifier).findRootStruct(struct.id)?.data["name"] ?? "main") + ".png";
 
           if (kIsWeb) {

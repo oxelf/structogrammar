@@ -19,7 +19,6 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return  MaterialApp(
       scrollBehavior:  const MaterialScrollBehavior().copyWith(
-        // Mouse dragging enabled for this demo
         dragDevices: PointerDeviceKind.values.toSet(),
       ),
       debugShowCheckedModeBanner: false,

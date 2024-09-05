@@ -30,6 +30,7 @@ class _RightPanelState extends ConsumerState<RightPanel>with TickerProviderState
     var codeInputController = ref.watch(codeInputPod);
     var pageController = PageController();
     var tabController = ref.watch(tabControllerPod);
+    Size size = MediaQuery.sizeOf(context);
     return Container(
       height: MediaQuery.sizeOf(context).height,
       decoration: BoxDecoration(
@@ -42,10 +43,10 @@ class _RightPanelState extends ConsumerState<RightPanel>with TickerProviderState
           }, tabs: [
             Tab(text: "Edit",),
             Tab(text: "Output",),
-
           ]),
           Container(
-            height: MediaQuery.sizeOf(context).height - 88,
+            height: (size.height > size.width)? null: MediaQuery.sizeOf(context).height - 88,
+    width: (size.height > size.width)? null: MediaQuery.sizeOf(context).width,
             child: PageView(
               physics: NeverScrollableScrollPhysics(),
               controller: pageController,
