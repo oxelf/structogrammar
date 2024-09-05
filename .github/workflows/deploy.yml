@@ -60,8 +60,8 @@ jobs:
       - name: Extract Version (Remove 'v' Prefix)
         id: version
         run: |
-          VERSION=${GITHUB_REF#refs/tags/v}
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          $version = $env:GITHUB_REF -replace '^refs/tags/v', ''
+          echo "VERSION=$version" >> $env:GITHUB_ENV
       - name: Update Version in pubspec.yaml
         run: |
           sed -i '' 's/^version: .*/version: '${{ env.VERSION }}'/' pubspec.yaml
