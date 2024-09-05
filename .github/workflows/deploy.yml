@@ -111,6 +111,12 @@ jobs:
           flutter pub global activate flutter_distributor
           echo "$HOME/.pub-cache/bin" >> $GITHUB_PATH
 
+      - name: Extract Version (Remove 'v' Prefix)
+        id: version
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/v}
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
       - name: Package macOS Release with flutter_distributor
         run: |
           export PATH="$PATH:$HOME/.pub-cache/bin"
@@ -122,7 +128,7 @@ jobs:
         run: |
           export PATH="$PATH:$HOME/.pub-cache/bin"
           flutter_distributor publish \
-            --path dist/${{ github.ref_name }}/structogrammar-${{ github.ref_name }}+${{ github.ref_name }}-macos.dmg \
+            --path dist/${{ env.VERSION }}/structogrammar-${{ env.VERSION }}+${{ env.VERSION }}-macos.dmg \
             --targets github \
             --github-repo-owner 'oxelf' \
             --github-repo-name 'structogrammar'
