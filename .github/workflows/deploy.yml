@@ -117,6 +117,10 @@ jobs:
           VERSION=${GITHUB_REF#refs/tags/v}
           echo "VERSION=$VERSION" >> $GITHUB_ENV
 
+      - name: Update Version in pubspec.yaml
+        run: |
+          sed -i '' 's/^version: .*/version: '${{ env.VERSION }}'/' pubspec.yaml
+
       - name: Package macOS Release with flutter_distributor
         run: |
           export PATH="$PATH:$HOME/.pub-cache/bin"
