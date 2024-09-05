@@ -62,9 +62,12 @@ jobs:
         run: |
           $version = $env:GITHUB_REF -replace '^refs/tags/v', ''
           echo "VERSION=$version" >> $env:GITHUB_ENV
+
       - name: Update Version in pubspec.yaml
+        shell: pwsh
         run: |
-          sed -i '' 's/^version: .*/version: '${{ env.VERSION }}'/' pubspec.yaml
+          (Get-Content pubspec.yaml) -replace '^version: .+', "version: $env:VERSION" | Set-Content pubspec.yaml
+
       - name: Package Windows Release with flutter_distributor
         run: |
           export PATH="$PATH:$HOME/.pub-cache/bin"
