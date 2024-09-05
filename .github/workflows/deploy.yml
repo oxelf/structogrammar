@@ -43,42 +43,39 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-
-      - name: Install Flutter
-        run: |
-          git clone https://github.com/flutter/flutter.git --branch stable --depth 1
-          setx PATH "%PATH%;%GITHUB_WORKSPACE%\\flutter\\bin"
-          echo "Flutter path added to PATH."
-
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          architecture: x64
       - name: Install Inno Setup
         run: choco install innosetup
-
-      - name: Install Node.js and flutter_distributor
+      - name: Install project dependencies
+        run: flutter pub get
+      - name: Enable windows build
+        run: flutter config --enable-windows-desktop
+      - name: Install flutter_distributor
         run: |
-          choco install nodejs-lts
           flutter pub global activate flutter_distributor
-
-      - name: Refresh Environment
-        run: refreshenv
-
+          echo "$HOME/.pub-cache/bin" >> $GITHUB_PATH
       - name: Extract Version (Remove 'v' Prefix)
         id: version
         run: |
-          $version = $env:GITHUB_REF -replace '^refs/tags/v', ''
-          echo "VERSION=$version" >> $env:GITHUB_ENV
-
+          VERSION=${GITHUB_REF#refs/tags/v}
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
       - name: Update Version in pubspec.yaml
         run: |
-          $version = $env:VERSION
-          (Get-Content pubspec.yaml) -replace '^version: .+', "version: $version" | Set-Content pubspec.yaml
-
-      - name: Package and Publish Windows Release
+          sed -i '' 's/^version: .*/version: '${{ env.VERSION }}'/' pubspec.yaml
+      - name: Package Windows Release with flutter_distributor
+        run: |
+          export PATH="$PATH:$HOME/.pub-cache/bin"
+          flutter_distributor package --platform windows --targets exe
+      - name: Publish Windows Release using flutter_distributor
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          flutter_distributor package --platform windows --targets exe
+          export PATH="$PATH:$HOME/.pub-cache/bin"
           flutter_distributor publish \
-            --path dist/${{ env.VERSION }}/structogrammar-${{ env.VERSION }}-windows.exe \
+            --path dist/${{ env.VERSION }}/structogrammar-${{ env.VERSION }}+${{ env.VERSION }}-windows.exe \
             --targets github \
             --github-repo-owner 'oxelf' \
             --github-repo-name 'structogrammar'
