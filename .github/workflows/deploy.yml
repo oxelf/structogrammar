@@ -49,34 +49,37 @@ jobs:
           architecture: x64
       - name: Install Inno Setup
         run: choco install innosetup
-      - name: Install project dependencies
-        run: flutter pub get
-      - name: Enable windows build
-        run: flutter config --enable-windows-desktop
       - name: Install flutter_distributor
         run: |
           flutter pub global activate flutter_distributor
           echo "$HOME/.pub-cache/bin" >> $GITHUB_PATH
+      - name: Install project dependencies
+        run: flutter pub get
+      - name: Enable windows build
+        run: flutter config --enable-windows-desktop
       - name: Extract Version (Remove 'v' Prefix)
         id: version
         run: |
-          $version = $env:GITHUB_REF -replace '^refs/tags/v', ''
-          echo "VERSION=$version" >> $env:GITHUB_ENV
-
+          VERSION=${GITHUB_REF#refs/tags/v}
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
       - name: Update Version in pubspec.yaml
         shell: pwsh
         run: |
           (Get-Content pubspec.yaml) -replace '^version: .+', "version: $env:VERSION" | Set-Content pubspec.yaml
-
-      - name: Package Windows Release with flutter_distributor
+      - name: Add flutter_distributor to PATH
+        shell: pwsh
         run: |
-          export PATH="$PATH:$HOME/.pub-cache/bin"
+          $env:PATH += ";$HOME/.pub-cache/bin"
+          echo "PATH=$env:PATH" >> $GITHUB_ENV
+      - name: Package Windows Release with flutter_distributor
+        shell: pwsh
+        run: |
           flutter_distributor package --platform windows --targets exe
       - name: Publish Windows Release using flutter_distributor
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: pwsh
         run: |
-          export PATH="$PATH:$HOME/.pub-cache/bin"
           flutter_distributor publish \
             --path dist/${{ env.VERSION }}/structogrammar-${{ env.VERSION }}+${{ env.VERSION }}-windows.exe \
             --targets github \
