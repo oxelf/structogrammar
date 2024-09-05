@@ -81,7 +81,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: pwsh
         run: |
-          flutter_distributor publish --path dist/${{ env.VERSION }}/structogrammar-${{ env.VERSION }}+${{ env.VERSION }}-windows.exe --targets github --github-repo-owner 'oxelf' --github-repo-name 'structogrammar'
+          flutter_distributor publish --path dist/${{ env.VERSION }}/structogrammar-${{ env.VERSION }}+${{ env.VERSION }}-windows-setup.exe --targets github --github-repo-owner 'oxelf' --github-repo-name 'structogrammar'
 
   build-and-release-macos:
     name: Build and Release macOS App
