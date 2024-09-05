@@ -49,38 +49,32 @@ jobs:
           architecture: x64
       - name: Install Inno Setup
         run: choco install innosetup
-      - name: Install project dependencies
-        run: flutter pub get
-      - name: Enable windows build
-        run: flutter config --enable-windows-desktop
-      - name: Build artifacts
-        run: flutter build windows --release
-      - name: Create Inno Setup Script
+      - name: Install flutter_distributor
         run: |
-          echo '[Setup]' > setup.iss
-          echo 'AppName=Structogrammar' >> setup.iss
-          echo 'AppVersion=1.0' >> setup.iss
-          echo 'DefaultDirName={pf}\Structogrammar' >> setup.iss
-          echo 'DefaultGroupName=Structogrammar' >> setup.iss
-          echo 'OutputDir=Output' >> setup.iss
-          echo 'OutputBaseFilename=setup' >> setup.iss
-          echo 'Compression=lzma' >> setup.iss
-          echo 'SolidCompression=yes' >> setup.iss
-          echo '[Files]' >> setup.iss
-          echo 'Source: "build/windows/x64/runner/Release/structogrammar.exe"; DestDir: "{app}"; Flags: ignoreversion' >> setup.iss
-      - name: Create Inno Setup Installer
+          dart pub global activate flutter_distributor
+          echo "$HOME/.pub-cache/bin" >> $GITHUB_PATH
+      - name: Extract Version (Remove 'v' Prefix)
+        id: version
         run: |
-          & 'C:\Program Files (x86)\Inno Setup 6\ISCC.exe' setup.iss
-      - name: Rename Installer
+          VERSION=${GITHUB_REF#refs/tags/v}
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+      - name: Update Version in pubspec.yaml
         run: |
-          Rename-Item -Path Output/setup.exe -NewName structogrammar.exe
-      - name: Windows Release
-        uses: softprops/action-gh-release@v2
-        if: startsWith(github.ref, 'refs/tags/')
+          sed -i 's/^version: .*/version: '${{ env.VERSION }}'/' pubspec.yaml
+      - name: Build and Package Windows with flutter_distributor
+        run: |
+          export PATH="$PATH:$HOME/.pub-cache/bin"
+          flutter_distributor package --platform windows --targets exe
+      - name: Publish Windows Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          files: Output/structogrammar.exe
+        run: |
+          export PATH="$PATH:$HOME/.pub-cache/bin"
+          flutter_distributor publish \
+            --path dist/${{ env.VERSION }}/structogrammar-${{ env.VERSION }}+${{ env.VERSION }}-windows.exe \
+            --targets github \
+            --github-repo-owner 'oxelf' \
+            --github-repo-name 'structogrammar'
 
   build-and-release-macos:
     name: Build and Release macOS App
