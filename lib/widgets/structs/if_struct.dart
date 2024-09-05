@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:structogrammar/models/struct.dart';
+import 'package:structogrammar/riverpod/structs.dart';
 
 import '../../riverpod/state.dart';
 import '../struct_builder.dart';
@@ -18,6 +19,7 @@ class IFStructWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     String selectedStruct = ref.watch(selectedStructPod);
+    Struct? parent = ref.read(structsPod.notifier).findParentStruct(struct.id);
     return Container(
       child: IntrinsicHeight(
         child: Column(
@@ -96,49 +98,52 @@ class IFStructWidget extends ConsumerWidget {
                   .where((e) => e.data["ifValue"] == false)
                   .toList();
 
-              return IntrinsicHeight(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    // First column
-                    Expanded(
-                      child: Column(
-                        children: [
-                          for (int i = 0; i < trueStructs.length; i++)
-                            StructBuilder(
-                              struct: trueStructs[i],
-                              // - 2 because of the border
-                              maxWidth: (maxWidth / 2.0) - 1,
-                              noRightBorder: true,
-                              noLeftBorder: true,
-                              bottomBorder: (i + 1 == trueStructs.length &&
-                                  trueStructs.length < falseStructs.length),
-                            ),
-                        ],
+              return Container(
+                color: Colors.white,
+                child: IntrinsicHeight(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      // First column
+                      Expanded(
+                        child: Column(
+                          children: [
+                            for (int i = 0; i < trueStructs.length; i++)
+                              StructBuilder(
+                                struct: trueStructs[i],
+                                // - 2 because of the border
+                                maxWidth: (maxWidth / 2.0) - (((parent?.type ?? StructType.instruction) == StructType.function)? 3: 1),
+                                noRightBorder: true,
+                                noLeftBorder: true,
+                                bottomBorder: (i + 1 == trueStructs.length &&
+                                    trueStructs.length < falseStructs.length),
+                              ),
+                          ],
+                        ),
                       ),
-                    ),
-                    // Vertical line between columns
-                    Container(
-                      width: 2,
-                      color: Colors.black,
-                    ),
-                    // Second column
-                    Expanded(
-                      child: Column(
-                        children: [
-                          for (int i = 0; i < falseStructs.length; i++)
-                            StructBuilder(
-                              struct: falseStructs[i],
-                              maxWidth: (maxWidth / 2.0) - 1,
-                              noRightBorder: true,
-                              noLeftBorder: true,
-                              bottomBorder: (i + 1 == falseStructs.length &&
-                                  trueStructs.length > falseStructs.length),
-                            ),
-                        ],
+                      // Vertical line between columns
+                      Container(
+                        width: 2,
+                        color: Colors.black,
                       ),
-                    ),
-                  ],
+                      // Second column
+                      Expanded(
+                        child: Column(
+                          children: [
+                            for (int i = 0; i < falseStructs.length; i++)
+                              StructBuilder(
+                                struct: falseStructs[i],
+                                maxWidth: (maxWidth / 2.0) - (((parent?.type ?? StructType.instruction) == StructType.function)? 3: 1),
+                                noRightBorder: true,
+                                noLeftBorder: true,
+                                bottomBorder: (i + 1 == falseStructs.length &&
+                                    trueStructs.length > falseStructs.length),
+                              ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               );
             }),

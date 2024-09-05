@@ -39,7 +39,7 @@ class ForStructWidget extends ConsumerWidget {
           Row(
             children: [
               Container(width: 20,),
-              Container(width: maxWidth - 24, height: 2, color: Colors.black,),
+              Container(width: maxWidth - 20, height: 2, color: Colors.black,),
             ],
           ),
           Container(
@@ -58,12 +58,12 @@ class ForStructWidget extends ConsumerWidget {
                       for (int i = 0; i < struct.subStructs.length; i++) Column(
                         children: [
                           StructDragTarget(
-                              width: maxWidth - 26, structId: struct.id, index: i),
-                          StructDraggable(index: i, data: struct.subStructs[i], parentStructId: struct.id, child: StructBuilder(struct: struct.subStructs[i], maxWidth: maxWidth-26, noTopBorder: (showDrag || i == 0), noRightBorder: true, noLeftBorder: true, bottomBorder: showDrag,)),
+                              width: maxWidth - 22, structId: struct.id, index: i),
+                          StructDraggable(index: i, data: struct.subStructs[i], parentStructId: struct.id, child: StructBuilder(struct: struct.subStructs[i], maxWidth: maxWidth-22, noTopBorder: (showDrag || i == 0), noRightBorder: true, noLeftBorder: true, bottomBorder: showDrag,)),
                         ],
                       ),
                       StructDragTarget(
-                          width: maxWidth - 26, structId: struct.id, index: struct.subStructs.length),
+                          width: maxWidth - 22, structId: struct.id, index: struct.subStructs.length),
                     ],
                   ),
                 )
