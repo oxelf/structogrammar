@@ -7,7 +7,7 @@ import 'package:structogrammar/models/struct.dart';
 class CodeNotifier extends Notifier<CodeController> {
   @override
   CodeController build() {
-    return CodeController(language: cpp, text: "");
+    return CodeController(language: cpp, text: "int main() \n { \n \n }");
   }
 
   void generate(Struct struct) {
@@ -51,7 +51,7 @@ class CodeNotifier extends Notifier<CodeController> {
           code += "while (${struct.data["condition"]});";
           return code;
         case StructType.function:
-          code = "void ${struct.data["name"] ?? ""}() \n{";
+          code = "int ${struct.data["name"] ?? ""}() \n{";
           for (int i = 0; i < struct.subStructs.length; i++) {
             code += "\n\t${getCodeFromStruct(struct.subStructs[i])}";
           }

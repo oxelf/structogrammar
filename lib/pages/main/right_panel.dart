@@ -4,8 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:structogrammar/pages/main/edit_panel.dart';
 import 'package:structogrammar/parser/cpp_parser.dart';
 import 'package:structogrammar/riverpod/code_notifier.dart';
+import 'package:structogrammar/riverpod/settings.dart';
 import 'package:structogrammar/riverpod/state.dart';
 import 'package:structogrammar/riverpod/structs.dart';
+import 'package:structogrammar/riverpod/translation.dart';
 
 import '../../models/struct.dart';
 
@@ -28,6 +30,8 @@ class _RightPanelState extends ConsumerState<RightPanel>with TickerProviderState
   Widget build(BuildContext context) {
     var codeController = ref.watch(codePod);
     var codeInputController = ref.watch(codeInputPod);
+    var translations = ref.watch(translationsPod);
+    var settings = ref.watch(settingsPod);
     var pageController = PageController();
     var tabController = ref.watch(tabControllerPod);
     Size size = MediaQuery.sizeOf(context);
@@ -41,8 +45,8 @@ class _RightPanelState extends ConsumerState<RightPanel>with TickerProviderState
           if (tabController != null) TabBar(controller: tabController,onTap: (index) {
             pageController.jumpToPage(index);
           }, tabs: [
-            Tab(text: "Edit",),
-            Tab(text: "Output",),
+            Tab(text: translations["edit"].toString(),),
+            Tab(text: translations["output"].toString(),),
           ]),
           Container(
             height: (size.height > size.width)? null: MediaQuery.sizeOf(context).height - 88,

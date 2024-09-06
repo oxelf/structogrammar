@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:structogrammar/models/struct.dart';
+import 'package:structogrammar/riverpod/code_notifier.dart';
 import 'package:structogrammar/riverpod/state.dart';
 import 'package:structogrammar/util/uuid.dart';
 
@@ -14,8 +15,25 @@ class StructsNotifier extends Notifier<List<Struct>> {
     ];
   }
 
+  List<dynamic> structsToJson() {
+    List<dynamic> json = [];
+    for (int i = 0; i < state.length; i++) {
+      json.add(state[i].toJson());
+    }
+    return json;
+  }
+
+  void structsFromJson(List<dynamic> json) {
+    List<Struct> structs = [];
+    for (int i = 0; i < json.length; i++) {
+      structs.add(Struct.fromJson(json[i]));
+    }
+    state = structs;
+  }
+
   void addStruct(Struct struct) {
     state = [...state, struct];
+    ref.read(selectedStructPod.notifier).state = struct.id;
   }
 
   void reorderStructs(int oldIndex, int newIndex) {
@@ -334,6 +352,8 @@ class StructsNotifier extends Notifier<List<Struct>> {
   }
 
 }
+
+
 
 
 final structsPod = NotifierProvider<StructsNotifier, List<Struct>>((){

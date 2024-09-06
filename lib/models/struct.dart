@@ -11,8 +11,8 @@ enum StructType {
   tryBlock,
 }
 
-extension StructTypeExtension on StructType {
-  StructType? getFromString(String stringType) {
+
+  StructType? structTypeFromString(String stringType) {
     for  (var structType in StructType.values) {
       if (structType.toString() == stringType) {
         return structType;
@@ -20,7 +20,7 @@ extension StructTypeExtension on StructType {
     }
     return null;
   }
-}
+
 
 class Struct extends Equatable {
   String id;
@@ -36,6 +36,24 @@ class Struct extends Equatable {
 
   @override
   List<Object> get props => [id, type, data, subStructs];
+
+  Map<String, dynamic> toJson() {
+    return {
+      "id": id,
+      "type": type.toString(),
+      "data": data,
+      "subStructs": subStructs.map((e) => e.toJson()).toList(),
+    };
+  }
+
+   factory Struct.fromJson(Map<String, dynamic> json) {
+    List<dynamic> jsonSubstructs = json["subStructs"];
+    List<Struct> structs = [];
+    for (int i = 0; i < jsonSubstructs.length; i++) {
+      structs.add(Struct.fromJson(jsonSubstructs[i]));
+    }
+    return Struct(id: json["id"] ?? "", type: structTypeFromString(json["type"] ?? "") ?? StructType.instruction, data: json["data"], subStructs: structs);
+   }
 
   Struct copyWith({Map<String, dynamic>? data, List<Struct>? subStructs}) {
     return Struct(

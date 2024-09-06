@@ -53,3 +53,6 @@ flutter_launcher_icons:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/translation/en.json
+    - assets/translation/de.json

@@ -5,6 +5,7 @@ import 'package:community_material_icon/community_material_icon.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:structogrammar/riverpod/translation.dart';
 import 'package:universal_html/html.dart' as html;
 import 'package:flutter_context_menu/flutter_context_menu.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -19,26 +20,27 @@ import 'package:structogrammar/widgets/struct_builder.dart';
 
 
 ContextMenu getContextMenuForStruct(Struct struct,BuildContext context, WidgetRef ref) {
+  var translations = ref.read(translationsPod);
   Map<String, dynamic> additionalData = {};
   additionalData["ifValue"] = struct.data["ifValue"];
 
   final entries = <ContextMenuEntry>[
     MenuItem(
-      label: 'Copy',
+      label: translations["copy"].toString(),
       icon: Icons.copy,
       onSelected: () {
         // implement copy
       },
     ),
     MenuItem(
-      label: 'Paste',
+      label: translations["paste"].toString(),
       icon: Icons.paste,
       onSelected: () {
         // implement paste
       },
     ),
     MenuItem(
-      label: 'Delete',
+      label: translations["delete"].toString(),
       icon: Icons.delete,
       onSelected: () {
         ref.read(structsPod.notifier).removeStruct(struct.id);
@@ -49,8 +51,8 @@ ContextMenu getContextMenuForStruct(Struct struct,BuildContext context, WidgetRe
    const MenuDivider(),
     if ((struct.type == StructType.loop || struct.type == StructType.function || struct.type == StructType.repeat))
       MenuItem.submenu(
-          label: "Add Inside", icon: Icons.add, items: [MenuItem(
-        label: 'Instruction',
+          label: translations["addInside"].toString(), icon: Icons.add, items: [MenuItem(
+        label: translations["instruction"].toString(),
         value: "instruction",
         icon: Icons.integration_instructions_outlined,
         onSelected: () {
@@ -61,7 +63,7 @@ ContextMenu getContextMenuForStruct(Struct struct,BuildContext context, WidgetRe
         },
       ),
         MenuItem(
-          label: 'IF Statement',
+          label: translations["ifStatement"].toString(),
           value: 'if',
           icon: CommunityMaterialIcons.code_parentheses,
           onSelected: () {
@@ -72,7 +74,7 @@ ContextMenu getContextMenuForStruct(Struct struct,BuildContext context, WidgetRe
           },
         ),
         MenuItem(
-          label: 'Case Statement',
+          label: translations["caseStatement"].toString(),
           value: 'case',
           icon: CommunityMaterialIcons.code_array,
           onSelected: () {
@@ -80,7 +82,7 @@ ContextMenu getContextMenuForStruct(Struct struct,BuildContext context, WidgetRe
           },
         ),
         MenuItem(
-          label: 'For loop',
+          label: translations["forLoop"].toString(),
           value: 'for',
           icon: Icons.loop_outlined,
           onSelected: () {
@@ -90,7 +92,7 @@ ContextMenu getContextMenuForStruct(Struct struct,BuildContext context, WidgetRe
           },
         ),
         MenuItem(
-          label: 'WHILE loop',
+          label: translations["whileLoop"].toString(),
           value: 'while',
           icon: Icons.loop_outlined,
           onSelected: () {
@@ -100,7 +102,7 @@ ContextMenu getContextMenuForStruct(Struct struct,BuildContext context, WidgetRe
           },
         ),
         MenuItem(
-          label: 'Do While loop',
+          label: translations["doWhileLoop"].toString(),
           value: 'repeat',
           icon: Icons.loop_outlined,
           onSelected: () {
@@ -110,10 +112,10 @@ ContextMenu getContextMenuForStruct(Struct struct,BuildContext context, WidgetRe
           },
         ),
       ]),
-    if (!(struct.type == StructType.loop || struct.type == StructType.function || struct.type == StructType.repeat))  MenuItem.submenu(label: "Add", icon: Icons.add, items: [
+    if (!(struct.type == StructType.function))  MenuItem.submenu(label: translations["add"].toString(), icon: Icons.add, items: [
       MenuItem.submenu(
-          label: "Before", icon: Icons.arrow_upward, items: [MenuItem(
-        label: 'Instruction',
+          label: translations["before"].toString(), icon: Icons.arrow_upward, items: [MenuItem(
+        label: translations["instruction"].toString(),
         value: "instruction",
         icon: Icons.integration_instructions_outlined,
         onSelected: () {
@@ -124,7 +126,7 @@ ContextMenu getContextMenuForStruct(Struct struct,BuildContext context, WidgetRe
         },
       ),
         MenuItem(
-          label: 'IF Statement',
+          label: translations["ifStatement"].toString(),
           value: 'if',
           icon: CommunityMaterialIcons.code_parentheses,
           onSelected: () {
@@ -135,7 +137,7 @@ ContextMenu getContextMenuForStruct(Struct struct,BuildContext context, WidgetRe
           },
         ),
         MenuItem(
-          label: 'Case Statement',
+          label: translations["caseStatement"].toString(),
           value: 'case',
           icon: CommunityMaterialIcons.code_array,
           onSelected: () {
@@ -143,7 +145,7 @@ ContextMenu getContextMenuForStruct(Struct struct,BuildContext context, WidgetRe
           },
         ),
         MenuItem(
-          label: 'For loop',
+          label: translations["forLoop"].toString(),
           value: 'for',
           icon: Icons.loop_outlined,
           onSelected: () {
@@ -153,7 +155,7 @@ ContextMenu getContextMenuForStruct(Struct struct,BuildContext context, WidgetRe
           },
         ),
         MenuItem(
-          label: 'WHILE loop',
+          label:translations["whileLoop"].toString(),
           value: 'while',
           icon: Icons.loop_outlined,
           onSelected: () {
@@ -163,7 +165,7 @@ ContextMenu getContextMenuForStruct(Struct struct,BuildContext context, WidgetRe
           },
         ),
         MenuItem(
-          label: 'Do While loop',
+          label: translations["doWhileLoop"].toString(),
           value: 'repeat',
           icon: Icons.loop_outlined,
           onSelected: () {
@@ -173,9 +175,9 @@ ContextMenu getContextMenuForStruct(Struct struct,BuildContext context, WidgetRe
           },
         ),
       ]),
-      MenuItem.submenu(label: "After", icon: Icons.arrow_upward, items: [
+      MenuItem.submenu(label: translations["after"].toString(), icon: Icons.arrow_upward, items: [
         MenuItem(
-          label: 'Instruction',
+          label: translations["instruction"].toString(),
           value: "instruction",
           icon: Icons.integration_instructions_outlined,
           onSelected: () {
@@ -186,7 +188,7 @@ ContextMenu getContextMenuForStruct(Struct struct,BuildContext context, WidgetRe
           },
         ),
         MenuItem(
-          label: 'IF Statement',
+          label: translations["ifStatement"].toString(),
           value: 'if',
           icon: CommunityMaterialIcons.code_parentheses,
           onSelected: () {
@@ -196,7 +198,7 @@ ContextMenu getContextMenuForStruct(Struct struct,BuildContext context, WidgetRe
           },
         ),
         MenuItem(
-          label: 'Case Statement',
+          label: translations["caseStatement"].toString(),
           value: 'case',
           icon: CommunityMaterialIcons.code_array,
           onSelected: () {
@@ -204,7 +206,7 @@ ContextMenu getContextMenuForStruct(Struct struct,BuildContext context, WidgetRe
           },
         ),
         MenuItem(
-          label: 'For loop',
+          label: translations["forLoop"].toString(),
           value: 'for',
           icon: Icons.loop_outlined,
           onSelected: () {
@@ -214,7 +216,7 @@ ContextMenu getContextMenuForStruct(Struct struct,BuildContext context, WidgetRe
           },
         ),
         MenuItem(
-          label: 'WHILE loop',
+          label: translations["whileLoop"].toString(),
           value: 'while',
           icon: Icons.loop_outlined,
           onSelected: () {
@@ -224,7 +226,7 @@ ContextMenu getContextMenuForStruct(Struct struct,BuildContext context, WidgetRe
           },
         ),
         MenuItem(
-          label: 'Do While loop',
+          label: translations["doWhileLoop"].toString(),
           value: 'repeat',
           icon: Icons.loop_outlined,
           onSelected: () {
@@ -234,31 +236,15 @@ ContextMenu getContextMenuForStruct(Struct struct,BuildContext context, WidgetRe
             // implement redo
           },
         ),
-        // MenuItem(
-        //   label: 'Parrallel',
-        //   value: 'parrallel',
-        //   icon: Icons.loop_outlined,
-        //   onSelected: () {
-        //     // implement redo
-        //   },
-        // ),
-        // MenuItem(
-        //   label: 'Try',
-        //   value: 'for',
-        //   icon: Icons.loop_outlined,
-        //   onSelected: () {
-        //     // implement redo
-        //   },
-        // ),
-
       ]),
     ],),
     const MenuDivider(),
-    MenuItem(label: "screenshot",
+    MenuItem(label: translations["exportImage"].toString(),
         icon: Icons.image,
         value: "screenshot",
         onSelected: () async {
-      ref.read(selectedStructPod.notifier).state = "";
+      try {
+      ref.read(selectedStructPod.notifier).state = "";} catch (_) {}
       Struct? rootStruct = ref.read(structsPod.notifier).findRootStruct(struct.id);
       if (rootStruct == null) {
         return;
