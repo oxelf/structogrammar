@@ -138,6 +138,7 @@ class IFStructWidget extends ConsumerWidget {
                               StructBuilder(
                                 struct: falseStructs[i],
                                 maxWidth: (maxWidth / 2.0) - (((parent?.type ?? StructType.instruction) == StructType.function)? 3: 1),
+                                noTopBorder: (i == 0),
                                 noRightBorder: true,
                                 noLeftBorder: true,
                                 bottomBorder: (i + 1 == falseStructs.length &&

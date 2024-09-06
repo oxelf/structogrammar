@@ -46,8 +46,71 @@ ContextMenu getContextMenuForStruct(Struct struct,BuildContext context, WidgetRe
       },
     ),
 
-    const MenuDivider(),
-    MenuItem.submenu(label: "Add", icon: Icons.add, items: [
+   const MenuDivider(),
+    if ((struct.type == StructType.loop || struct.type == StructType.function || struct.type == StructType.repeat))
+      MenuItem.submenu(
+          label: "Add Inside", icon: Icons.add, items: [MenuItem(
+        label: 'Instruction',
+        value: "instruction",
+        icon: Icons.integration_instructions_outlined,
+        onSelected: () {
+          ref.read(structsPod.notifier).addSubStruct(struct.id,
+              Struct.instruction(
+                  "", additionalData: additionalData));
+          // implement undo
+        },
+      ),
+        MenuItem(
+          label: 'IF Statement',
+          value: 'if',
+          icon: CommunityMaterialIcons.code_parentheses,
+          onSelected: () {
+            ref.read(structsPod.notifier).addSubStruct(struct.id,
+                Struct.ifStatement(
+                    "?",trueSubStructs: [Struct.instruction("", additionalData: {"ifValue": true})], falseSubStructs: [Struct.instruction("", additionalData: {"ifValue": false})], additionalData: additionalData));
+            // implement redo
+          },
+        ),
+        MenuItem(
+          label: 'Case Statement',
+          value: 'case',
+          icon: CommunityMaterialIcons.code_array,
+          onSelected: () {
+            // implement redo
+          },
+        ),
+        MenuItem(
+          label: 'For loop',
+          value: 'for',
+          icon: Icons.loop_outlined,
+          onSelected: () {
+            ref.read(structsPod.notifier).addSubStruct(struct.id,
+                Struct.loop(
+                    "?","for", [Struct.instruction("")], additionalData: additionalData));
+          },
+        ),
+        MenuItem(
+          label: 'WHILE loop',
+          value: 'while',
+          icon: Icons.loop_outlined,
+          onSelected: () {
+            ref.read(structsPod.notifier).addSubStruct(struct.id,
+                Struct.loop(
+                    "?","while", [Struct.instruction("")], additionalData: additionalData));
+          },
+        ),
+        MenuItem(
+          label: 'Do While loop',
+          value: 'repeat',
+          icon: Icons.loop_outlined,
+          onSelected: () {
+            ref.read(structsPod.notifier).addSubStruct(struct.id,
+                Struct.until(
+                    "?", [Struct.instruction("")], additionalData: additionalData));
+          },
+        ),
+      ]),
+    if (!(struct.type == StructType.loop || struct.type == StructType.function || struct.type == StructType.repeat))  MenuItem.submenu(label: "Add", icon: Icons.add, items: [
       MenuItem.submenu(
           label: "Before", icon: Icons.arrow_upward, items: [MenuItem(
         label: 'Instruction',
@@ -109,46 +172,6 @@ ContextMenu getContextMenuForStruct(Struct struct,BuildContext context, WidgetRe
                     "?", [Struct.instruction("")], additionalData: additionalData));
           },
         ),
-        // MenuItem(
-        //   label: 'ENDLESS loop',
-        //   value: 'endless',
-        //   icon: Icons.loop_outlined,
-        //   onSelected: () {
-        //     // implement redo
-        //   },
-        // ),
-        // MenuItem(
-        //   label: 'Call',
-        //   value: 'call',
-        //   icon: Icons.loop_outlined,
-        //   onSelected: () {
-        //     // implement redo
-        //   },
-        // ),
-        // MenuItem(
-        //   label: 'Exit',
-        //   value: 'exit',
-        //   icon: Icons.loop_outlined,
-        //   onSelected: () {
-        //     // implement redo
-        //   },
-        // ),
-        // MenuItem(
-        //   label: 'Parrallel',
-        //   value: 'parrallel',
-        //   icon: Icons.loop_outlined,
-        //   onSelected: () {
-        //     // implement redo
-        //   },
-        // ),
-        // MenuItem(
-        //   label: 'Try',
-        //   value: 'for',
-        //   icon: Icons.loop_outlined,
-        //   onSelected: () {
-        //     // implement redo
-        //   },
-        // ),
       ]),
       MenuItem.submenu(label: "After", icon: Icons.arrow_upward, items: [
         MenuItem(
@@ -265,6 +288,10 @@ ContextMenu getContextMenuForStruct(Struct struct,BuildContext context, WidgetRe
           ref.read(selectedStructPod.notifier).state = struct.id;
         }),
   ];
+
+  if (struct.type == StructType.loop || struct.type == StructType.function || struct.type == StructType.repeat) {
+
+  }
   return ContextMenu(
     entries: entries,
     padding: const EdgeInsets.all(8.0),
