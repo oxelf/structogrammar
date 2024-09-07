@@ -1,1 +1,0 @@
- /Users/joscha/Documents/dev/structogrammar/.dart_tool/flutter_build/b5f10834bb6182ea7bc1ff0d33179381/native_assets.yaml: 

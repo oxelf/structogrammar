@@ -116,11 +116,12 @@ class AppMenuBar extends ConsumerWidget {
               MenuButton(
                   text: Text(translations["english"].toString()),
                   icon: Text("🇺🇸"),
-                  shortcutText:  "default",
+                  shortcutText: (settings.language == "en")?" selected": "",
                   onTap: () {
                     ref.read(settingsPod.notifier).setLanguage("en");
                   }),MenuButton(
                   text: Text(translations["german"].toString()),
+                  shortcutText: (settings.language == "de")?" selected": "",
                   icon: Text("🇩🇪"),
                   onTap: () {
                   ref.read(settingsPod.notifier).setLanguage("de");
