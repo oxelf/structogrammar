@@ -116,6 +116,19 @@ class Struct extends Equatable {
 
 
 
+  factory Struct.caseStatement(String condition,
+      {required List<Struct> subStructs,
+        Map<String, dynamic>? additionalData}) {
+    Map<String, dynamic> newData = additionalData ?? {};
+    newData["condition"] = condition;
+    return Struct(
+        id: generateUUID(),
+        type: StructType.caseSelect,
+        data: newData,
+        subStructs: subStructs);
+  }
+
+
   factory Struct.ifStatement(String condition,
       {required List<Struct> trueSubStructs,
       required List<Struct> falseSubStructs,

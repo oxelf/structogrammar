@@ -5,6 +5,7 @@ import 'package:structogrammar/widgets/struct_drag_target.dart';
 import 'package:structogrammar/widgets/struct_draggable.dart';
 
 import '../../riverpod/state.dart';
+import '../../riverpod/structs.dart';
 import '../struct_builder.dart';
 
 class UntilStructWidget extends ConsumerWidget {
@@ -14,7 +15,8 @@ class UntilStructWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     String selectedStruct = ref.watch(selectedStructPod);
-
+    Struct? parent = ref.read(structsPod.notifier).findParentStruct(struct.id);
+    bool parentIsIfStruct = (parent?.type ?? StructType.instruction) == StructType.ifSelect || (parent?.type ?? StructType.instruction) == StructType.loop || (parent?.type ?? StructType.instruction) == StructType.caseSelect;
     return  Container(
       width: maxWidth,
       child: Column(
@@ -30,8 +32,8 @@ class UntilStructWidget extends ConsumerWidget {
 
                   for (int i = 0; i < struct.subStructs.length; i++) Column(
                     children: [
-                      StructDragTarget(width: maxWidth - 24, structId: struct.id, index: i),
-                      StructDraggable(data: struct.subStructs[i], index: i, parentStructId: struct.id, child: StructBuilder(struct: struct.subStructs[i], maxWidth: maxWidth-24, noTopBorder: true, noRightBorder: true, bottomBorder: true, )),
+                      StructDragTarget(width: maxWidth - ((parentIsIfStruct)? 20: 24), structId: struct.id, index: i),
+                      StructDraggable(data: struct.subStructs[i], index: i, parentStructId: struct.id, child: StructBuilder(struct: struct.subStructs[i], maxWidth: maxWidth - ((parentIsIfStruct)? 20: 24), noTopBorder: true, noRightBorder: true, bottomBorder: true, )),
                     ],
                   ),
                   StructDragTarget(width: maxWidth - 24, structId: struct.id, index: struct.subStructs.length),

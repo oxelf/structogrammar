@@ -28,6 +28,7 @@ class AppMenuBar extends ConsumerWidget {
     return MenuBarWidget(
       enabled: true,
       barStyle: MenuStyle(
+        shadowColor: WidgetStatePropertyAll(Colors.transparent),
           backgroundColor: WidgetStatePropertyAll(
             Colors.grey.shade200,
           ),

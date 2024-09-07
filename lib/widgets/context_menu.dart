@@ -15,14 +15,14 @@ import 'package:structogrammar/riverpod/state.dart';
 import 'package:structogrammar/riverpod/structs.dart';
 import 'package:structogrammar/widgets/struct_builder.dart';
 
-
 // initialize a context menu
 
-
-ContextMenu getContextMenuForStruct(Struct struct,BuildContext context, WidgetRef ref) {
+ContextMenu getContextMenuForStruct(
+    Struct struct, BuildContext context, WidgetRef ref) {
   var translations = ref.read(translationsPod);
   Map<String, dynamic> additionalData = {};
   additionalData["ifValue"] = struct.data["ifValue"];
+  additionalData["case"] = struct.data["case"];
 
   final entries = <ContextMenuEntry>[
     MenuItem(
@@ -47,212 +47,302 @@ ContextMenu getContextMenuForStruct(Struct struct,BuildContext context, WidgetRe
         // implement paste
       },
     ),
-
-   const MenuDivider(),
-    if ((struct.type == StructType.loop || struct.type == StructType.function || struct.type == StructType.repeat))
-      MenuItem.submenu(
-          label: translations["addInside"].toString(), icon: Icons.add, items: [MenuItem(
-        label: translations["instruction"].toString(),
-        value: "instruction",
-        icon: Icons.integration_instructions_outlined,
-        onSelected: () {
-          ref.read(structsPod.notifier).addSubStruct(struct.id,
-              Struct.instruction(
-                  "", additionalData: additionalData));
-          // implement undo
-        },
-      ),
-        MenuItem(
-          label: translations["ifStatement"].toString(),
-          value: 'if',
-          icon: CommunityMaterialIcons.code_parentheses,
-          onSelected: () {
-            ref.read(structsPod.notifier).addSubStruct(struct.id,
-                Struct.ifStatement(
-                    "?",trueSubStructs: [Struct.instruction("", additionalData: {"ifValue": true})], falseSubStructs: [Struct.instruction("", additionalData: {"ifValue": false})], additionalData: additionalData));
-            // implement redo
-          },
-        ),
-        MenuItem(
-          label: translations["caseStatement"].toString(),
-          value: 'case',
-          icon: CommunityMaterialIcons.code_array,
-          onSelected: () {
-            // implement redo
-          },
-        ),
-        MenuItem(
-          label: translations["forLoop"].toString(),
-          value: 'for',
-          icon: Icons.loop_outlined,
-          onSelected: () {
-            ref.read(structsPod.notifier).addSubStruct(struct.id,
-                Struct.loop(
-                    "?","for", [Struct.instruction("")], additionalData: additionalData));
-          },
-        ),
-        MenuItem(
-          label: translations["whileLoop"].toString(),
-          value: 'while',
-          icon: Icons.loop_outlined,
-          onSelected: () {
-            ref.read(structsPod.notifier).addSubStruct(struct.id,
-                Struct.loop(
-                    "?","while", [Struct.instruction("")], additionalData: additionalData));
-          },
-        ),
-        MenuItem(
-          label: translations["doWhileLoop"].toString(),
-          value: 'repeat',
-          icon: Icons.loop_outlined,
-          onSelected: () {
-            ref.read(structsPod.notifier).addSubStruct(struct.id,
-                Struct.until(
-                    "?", [Struct.instruction("")], additionalData: additionalData));
-          },
-        ),
-      ]),
-    if (!(struct.type == StructType.function))  MenuItem.submenu(label: translations["add"].toString(), icon: Icons.add, items: [
-      MenuItem.submenu(
-          label: translations["before"].toString(), icon: Icons.arrow_upward, items: [MenuItem(
-        label: translations["instruction"].toString(),
-        value: "instruction",
-        icon: Icons.integration_instructions_outlined,
-        onSelected: () {
-          ref.read(structsPod.notifier).addStructBefore(struct.id,
-              Struct.instruction(
-                  "", additionalData: additionalData));
-          // implement undo
-        },
-      ),
-        MenuItem(
-          label: translations["ifStatement"].toString(),
-          value: 'if',
-          icon: CommunityMaterialIcons.code_parentheses,
-          onSelected: () {
-            ref.read(structsPod.notifier).addStructBefore(struct.id,
-                Struct.ifStatement(
-                    "?",trueSubStructs: [Struct.instruction("", additionalData: {"ifValue": true})], falseSubStructs: [Struct.instruction("", additionalData: {"ifValue": false})], additionalData: additionalData));
-            // implement redo
-          },
-        ),
-        MenuItem(
-          label: translations["caseStatement"].toString(),
-          value: 'case',
-          icon: CommunityMaterialIcons.code_array,
-          onSelected: () {
-            // implement redo
-          },
-        ),
-        MenuItem(
-          label: translations["forLoop"].toString(),
-          value: 'for',
-          icon: Icons.loop_outlined,
-          onSelected: () {
-            ref.read(structsPod.notifier).addStructAfter(struct.id,
-                Struct.loop(
-                    "?","for", [Struct.instruction("")], additionalData: additionalData));
-          },
-        ),
-        MenuItem(
-          label:translations["whileLoop"].toString(),
-          value: 'while',
-          icon: Icons.loop_outlined,
-          onSelected: () {
-            ref.read(structsPod.notifier).addStructAfter(struct.id,
-                Struct.loop(
-                    "?","while", [Struct.instruction("")], additionalData: additionalData));
-          },
-        ),
-        MenuItem(
-          label: translations["doWhileLoop"].toString(),
-          value: 'repeat',
-          icon: Icons.loop_outlined,
-          onSelected: () {
-            ref.read(structsPod.notifier).addStructAfter(struct.id,
-                Struct.until(
-                    "?", [Struct.instruction("")], additionalData: additionalData));
-          },
-        ),
-      ]),
-      MenuItem.submenu(label: translations["after"].toString(), icon: Icons.arrow_upward, items: [
-        MenuItem(
-          label: translations["instruction"].toString(),
-          value: "instruction",
-          icon: Icons.integration_instructions_outlined,
-          onSelected: () {
-            ref.read(structsPod.notifier).addStructAfter(struct.id,
-                Struct.instruction(
-                    "", additionalData: additionalData));
-            // implement undo
-          },
-        ),
-        MenuItem(
-          label: translations["ifStatement"].toString(),
-          value: 'if',
-          icon: CommunityMaterialIcons.code_parentheses,
-          onSelected: () {
-            ref.read(structsPod.notifier).addStructAfter(struct.id,
-                Struct.ifStatement(
-                    "?", trueSubStructs: [Struct.instruction("", additionalData: {"ifValue": true})], falseSubStructs: [Struct.instruction("", additionalData: {"ifValue": false})], additionalData: additionalData));
-          },
-        ),
-        MenuItem(
-          label: translations["caseStatement"].toString(),
-          value: 'case',
-          icon: CommunityMaterialIcons.code_array,
-          onSelected: () {
-
-          },
-        ),
-        MenuItem(
-          label: translations["forLoop"].toString(),
-          value: 'for',
-          icon: Icons.loop_outlined,
-          onSelected: () {
-            ref.read(structsPod.notifier).addStructAfter(struct.id,
-                Struct.loop(
-                    "?", "for", [Struct.instruction("")], additionalData: additionalData));
-          },
-        ),
-        MenuItem(
-          label: translations["whileLoop"].toString(),
-          value: 'while',
-          icon: Icons.loop_outlined,
-          onSelected: () {
-            ref.read(structsPod.notifier).addStructAfter(struct.id,
-                Struct.loop(
-                    "?", "while", [Struct.instruction("")], additionalData: additionalData));
-          },
-        ),
-        MenuItem(
-          label: translations["doWhileLoop"].toString(),
-          value: 'repeat',
-          icon: Icons.loop_outlined,
-          onSelected: () {
-            ref.read(structsPod.notifier).addStructAfter(struct.id,
-                Struct.until(
-                    "?", [Struct.instruction("")], additionalData: additionalData));
-            // implement redo
-          },
-        ),
-      ]),
-    ],),
     const MenuDivider(),
-    MenuItem(label: translations["exportImage"].toString(),
+    if ((struct.type == StructType.loop ||
+        struct.type == StructType.function ||
+        struct.type == StructType.repeat))
+      MenuItem.submenu(
+          label: translations["addInside"].toString(),
+          icon: Icons.add,
+          items: [
+            MenuItem(
+              label: translations["instruction"].toString(),
+              value: "instruction",
+              icon: Icons.integration_instructions_outlined,
+              onSelected: () {
+                ref.read(structsPod.notifier).addSubStruct(struct.id,
+                    Struct.instruction("", additionalData: additionalData));
+                // implement undo
+              },
+            ),
+            MenuItem(
+              label: translations["ifStatement"].toString(),
+              value: 'if',
+              icon: CommunityMaterialIcons.code_parentheses,
+              onSelected: () {
+                ref.read(structsPod.notifier).addSubStruct(
+                    struct.id,
+                    Struct.ifStatement("?",
+                        trueSubStructs: [
+                          Struct.instruction("",
+                              additionalData: {"ifValue": true})
+                        ],
+                        falseSubStructs: [
+                          Struct.instruction("",
+                              additionalData: {"ifValue": false})
+                        ],
+                        additionalData: additionalData));
+                // implement redo
+              },
+            ),
+            MenuItem(
+              label: translations["caseStatement"].toString(),
+              value: 'case',
+              icon: CommunityMaterialIcons.code_array,
+              onSelected: () {
+                // implement redo
+              },
+            ),
+            MenuItem(
+              label: translations["forLoop"].toString(),
+              value: 'for',
+              icon: Icons.loop_outlined,
+              onSelected: () {
+                ref.read(structsPod.notifier).addSubStruct(
+                    struct.id,
+                    Struct.loop("?", "for", [Struct.instruction("")],
+                        additionalData: additionalData));
+              },
+            ),
+            MenuItem(
+              label: translations["whileLoop"].toString(),
+              value: 'while',
+              icon: Icons.loop_outlined,
+              onSelected: () {
+                ref.read(structsPod.notifier).addSubStruct(
+                    struct.id,
+                    Struct.loop("?", "while", [Struct.instruction("")],
+                        additionalData: additionalData));
+              },
+            ),
+            MenuItem(
+              label: translations["doWhileLoop"].toString(),
+              value: 'repeat',
+              icon: Icons.loop_outlined,
+              onSelected: () {
+                ref.read(structsPod.notifier).addSubStruct(
+                    struct.id,
+                    Struct.until("?", [Struct.instruction("")],
+                        additionalData: additionalData));
+              },
+            ),
+          ]),
+    if (!(struct.type == StructType.function))
+      MenuItem.submenu(
+        label: translations["add"].toString(),
+        icon: Icons.add,
+        items: [
+          MenuItem.submenu(
+              label: translations["before"].toString(),
+              icon: Icons.arrow_upward,
+              items: [
+                MenuItem(
+                  label: translations["instruction"].toString(),
+                  value: "instruction",
+                  icon: Icons.integration_instructions_outlined,
+                  onSelected: () {
+                    ref.read(structsPod.notifier).addStructBefore(struct.id,
+                        Struct.instruction("", additionalData: additionalData));
+                    // implement undo
+                  },
+                ),
+                MenuItem(
+                  label: translations["ifStatement"].toString(),
+                  value: 'if',
+                  icon: CommunityMaterialIcons.code_parentheses,
+                  onSelected: () {
+                    ref.read(structsPod.notifier).addStructBefore(
+                        struct.id,
+                        Struct.ifStatement("?",
+                            trueSubStructs: [
+                              Struct.instruction("",
+                                  additionalData: {"ifValue": true})
+                            ],
+                            falseSubStructs: [
+                              Struct.instruction("",
+                                  additionalData: {"ifValue": false})
+                            ],
+                            additionalData: additionalData));
+                    // implement redo
+                  },
+                ),
+                MenuItem(
+                  label: translations["caseStatement"].toString(),
+                  value: 'case',
+                  icon: CommunityMaterialIcons.code_array,
+                  onSelected: () {
+                    ref.read(structsPod.notifier).addStructAfter(
+                        struct.id,
+                        Struct.caseStatement("?",
+                            additionalData: additionalData,
+                            subStructs: [
+                              Struct.instruction("1",
+                                  additionalData: {"case": "1"}),
+                              Struct.instruction("2", additionalData: {"case": "2"}),
+                              Struct.instruction("3", additionalData: {"case": "3"}),
+                              Struct.instruction("default", additionalData: {"case": "default"})
+                            ]));
+                  },
+                ),
+                MenuItem(
+                  label: translations["forLoop"].toString(),
+                  value: 'for',
+                  icon: Icons.loop_outlined,
+                  onSelected: () {
+                    ref.read(structsPod.notifier).addStructAfter(
+                        struct.id,
+                        Struct.loop("?", "for", [Struct.instruction("")],
+                            additionalData: additionalData));
+                  },
+                ),
+                MenuItem(
+                  label: translations["whileLoop"].toString(),
+                  value: 'while',
+                  icon: Icons.loop_outlined,
+                  onSelected: () {
+                    ref.read(structsPod.notifier).addStructAfter(
+                        struct.id,
+                        Struct.loop("?", "while", [Struct.instruction("")],
+                            additionalData: additionalData));
+                  },
+                ),
+                MenuItem(
+                  label: translations["doWhileLoop"].toString(),
+                  value: 'repeat',
+                  icon: Icons.loop_outlined,
+                  onSelected: () {
+                    ref.read(structsPod.notifier).addStructAfter(
+                        struct.id,
+                        Struct.until("?", [Struct.instruction("")],
+                            additionalData: additionalData));
+                  },
+                ),
+              ]),
+          MenuItem.submenu(
+              label: translations["after"].toString(),
+              icon: Icons.arrow_upward,
+              items: [
+                MenuItem(
+                  label: translations["instruction"].toString(),
+                  value: "instruction",
+                  icon: Icons.integration_instructions_outlined,
+                  onSelected: () {
+                    ref.read(structsPod.notifier).addStructAfter(struct.id,
+                        Struct.instruction("", additionalData: additionalData));
+                    // implement undo
+                  },
+                ),
+                MenuItem(
+                  label: translations["ifStatement"].toString(),
+                  value: 'if',
+                  icon: CommunityMaterialIcons.code_parentheses,
+                  onSelected: () {
+                    ref.read(structsPod.notifier).addStructAfter(
+                        struct.id,
+                        Struct.ifStatement("?",
+                            trueSubStructs: [
+                              Struct.instruction("",
+                                  additionalData: {"ifValue": true})
+                            ],
+                            falseSubStructs: [
+                              Struct.instruction("",
+                                  additionalData: {"ifValue": false})
+                            ],
+                            additionalData: additionalData));
+                  },
+                ),
+                MenuItem(
+                  label: translations["caseStatement"].toString(),
+                  value: 'case',
+                  icon: CommunityMaterialIcons.code_array,
+                  onSelected: () {
+                    ref.read(structsPod.notifier).addStructAfter(
+                        struct.id,
+                        Struct.caseStatement("?",
+                            additionalData: additionalData,
+                            subStructs: [
+                              Struct.instruction("1",
+                                  additionalData: {"case": "1"}),
+                              Struct.instruction("2", additionalData: {"case": "2"}),
+                              Struct.instruction("default", additionalData: {"case": "default"})
+                            ]));
+                  },
+                ),
+                MenuItem(
+                  label: translations["forLoop"].toString(),
+                  value: 'for',
+                  icon: Icons.loop_outlined,
+                  onSelected: () {
+                    ref.read(structsPod.notifier).addStructAfter(
+                        struct.id,
+                        Struct.loop("?", "for", [Struct.instruction("")],
+                            additionalData: additionalData));
+                  },
+                ),
+                MenuItem(
+                  label: translations["whileLoop"].toString(),
+                  value: 'while',
+                  icon: Icons.loop_outlined,
+                  onSelected: () {
+                    ref.read(structsPod.notifier).addStructAfter(
+                        struct.id,
+                        Struct.loop("?", "while", [Struct.instruction("")],
+                            additionalData: additionalData));
+                  },
+                ),
+                MenuItem(
+                  label: translations["doWhileLoop"].toString(),
+                  value: 'repeat',
+                  icon: Icons.loop_outlined,
+                  onSelected: () {
+                    ref.read(structsPod.notifier).addStructAfter(
+                        struct.id,
+                        Struct.until("?", [Struct.instruction("")],
+                            additionalData: additionalData));
+                    // implement redo
+                  },
+                ),
+              ]),
+        ],
+      ),
+    const MenuDivider(),
+    MenuItem(
+        label: translations["exportImage"].toString(),
         icon: Icons.image,
         value: "screenshot",
         onSelected: () async {
-      try {
-      ref.read(selectedStructPod.notifier).state = "";} catch (_) {}
-      Struct? rootStruct = ref.read(structsPod.notifier).findRootStruct(struct.id);
-      if (rootStruct == null) {
-        return;
-      }
-      final container = ProviderScope.containerOf(context);
-      ScreenshotController screenShotController = ScreenshotController();
-          Uint8List? bytes = await screenShotController.captureFromLongWidget(pixelRatio: 4, UncontrolledProviderScope(container: container, child: MediaQuery(data: MediaQueryData(), child: MaterialApp(debugShowCheckedModeBanner: false, theme: ThemeData(textTheme: TextTheme()), home: Material(textStyle: TextStyle(color: Colors.black), child: StructBuilder(struct: rootStruct, screenshot: true, maxWidth: 400,))))));
-          String fileName = (ref.read(structsPod.notifier).findRootStruct(struct.id)?.data["name"] ?? "main") + ".png";
+          try {
+            ref.read(selectedStructPod.notifier).state = "";
+          } catch (_) {}
+          Struct? rootStruct =
+              ref.read(structsPod.notifier).findRootStruct(struct.id);
+          if (rootStruct == null) {
+            return;
+          }
+          final container = ProviderScope.containerOf(context);
+          ScreenshotController screenShotController = ScreenshotController();
+          Uint8List? bytes = await screenShotController.captureFromLongWidget(
+              pixelRatio: 4,
+              UncontrolledProviderScope(
+                  container: container,
+                  child: MediaQuery(
+                      data: MediaQueryData(),
+                      child: MaterialApp(
+                          debugShowCheckedModeBanner: false,
+                          theme: ThemeData(textTheme: TextTheme()),
+                          home: Material(
+                              textStyle: TextStyle(color: Colors.black),
+                              child: StructBuilder(
+                                struct: rootStruct,
+                                screenshot: true,
+                                maxWidth: 400,
+                              ))))));
+          String fileName = (ref
+                      .read(structsPod.notifier)
+                      .findRootStruct(struct.id)
+                      ?.data["name"] ??
+                  "main") +
+              ".png";
 
           if (kIsWeb) {
             download(bytes, downloadName: fileName);
@@ -275,21 +365,20 @@ ContextMenu getContextMenuForStruct(Struct struct,BuildContext context, WidgetRe
         }),
   ];
 
-  if (struct.type == StructType.loop || struct.type == StructType.function || struct.type == StructType.repeat) {
-
-  }
+  if (struct.type == StructType.loop ||
+      struct.type == StructType.function ||
+      struct.type == StructType.repeat) {}
   return ContextMenu(
     entries: entries,
     padding: const EdgeInsets.all(8.0),
   );
 }
 
-
 void download(Uint8List bytes, {required String downloadName}) {
-
   final base64 = base64Encode(bytes);
 
-  final anchor = html.AnchorElement(href: 'data:image/png;base64,$base64')..target = 'blank';
+  final anchor = html.AnchorElement(href: 'data:image/png;base64,$base64')
+    ..target = 'blank';
 
   anchor.download = downloadName;
 
@@ -298,6 +387,4 @@ void download(Uint8List bytes, {required String downloadName}) {
   anchor.click();
 
   anchor.remove();
-
 }
-

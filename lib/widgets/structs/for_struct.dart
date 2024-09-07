@@ -18,7 +18,7 @@ class ForStructWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     String selectedStruct = ref.watch(selectedStructPod);
     Struct? parent = ref.read(structsPod.notifier).findParentStruct(struct.id);
-    bool parentIsIfStruct = (parent?.type ?? StructType.instruction) == StructType.ifSelect || (parent?.type ?? StructType.instruction) == StructType.loop;
+    bool parentIsIfStruct = (parent?.type ?? StructType.instruction) == StructType.ifSelect || (parent?.type ?? StructType.instruction) == StructType.loop || (parent?.type ?? StructType.instruction) == StructType.caseSelect;
     bool showDrag = ref.watch(showDragPod);
     String? color = struct.data["color"];
     return  Container(

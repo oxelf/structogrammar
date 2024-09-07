@@ -12,6 +12,7 @@ import 'package:structogrammar/riverpod/code_notifier.dart';
 import 'package:structogrammar/riverpod/state.dart';
 import 'package:structogrammar/riverpod/structs.dart';
 import 'package:structogrammar/widgets/context_menu.dart';
+import 'package:structogrammar/widgets/structs/case_struct.dart';
 import 'package:structogrammar/widgets/structs/for_struct.dart';
 import 'package:structogrammar/widgets/structs/function_struct.dart';
 import 'package:structogrammar/widgets/structs/if_struct.dart';
@@ -32,10 +33,12 @@ class StructBuilder extends ConsumerWidget {
     this.noTopBorder,
     this.expands,
     this.screenshot,
+    this.onPan,
   });
 
   final Struct struct;
   final int? dragIndex;
+  final Function(DragUpdateDetails)? onPan;
   double maxWidth;
   final bool? screenshot;
   final bool? bottomBorder;
@@ -79,6 +82,10 @@ class StructBuilder extends ConsumerWidget {
               ref.read(cursorPod.notifier).state = SystemMouseCursors.basic;
             },
             child: GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              onPanUpdate: (details) {
+                onPan?.call(details);
+              },
               onHorizontalDragStart: (details) {
                 if (struct.data["size"] == null) return;
                 if (details.localPosition.dx < maxWidth - 10) {
@@ -189,6 +196,9 @@ class StructBuilder extends ConsumerWidget {
                                 );
                               case StructType.ifSelect:
                                 return IFStructWidget(
+                                    struct: struct, maxWidth: maxWidth);
+                              case StructType.caseSelect:
+                                return CaseStructWidget(
                                     struct: struct, maxWidth: maxWidth);
                               case StructType.instruction:
                                 return InstructionStructWidget(

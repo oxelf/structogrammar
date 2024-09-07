@@ -49,8 +49,8 @@ class _RightPanelState extends ConsumerState<RightPanel>with TickerProviderState
             Tab(text: translations["output"].toString(),),
           ]),
           Container(
-            height: (size.height > size.width)? null: MediaQuery.sizeOf(context).height - 88,
-    width: (size.height > size.width)? null: MediaQuery.sizeOf(context).width,
+            height: MediaQuery.sizeOf(context).height - 88,
+    width:  MediaQuery.sizeOf(context).width,
             child: PageView(
               physics: NeverScrollableScrollPhysics(),
               controller: pageController,

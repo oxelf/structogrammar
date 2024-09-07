@@ -15,6 +15,10 @@ final pageControllerPod = StateProvider<PageController>((ref) {
   return PageController();
 });
 
+final mainViewWidthPod = StateProvider<double>((ref) {
+  return 0.0;
+});
+
 final cursorPod = StateProvider<SystemMouseCursor>((ref) {
   return SystemMouseCursors.basic;
 });

@@ -21,6 +21,7 @@ dependencies:
   flutter_riverpod: ^2.5.1
   hexcolor: ^3.0.1
   highlight: ^0.7.0
+  info_popup: ^4.3.1
   menu_bar: ^0.5.3
   path_provider: ^2.1.4
   resizable_widget: ^1.0.5

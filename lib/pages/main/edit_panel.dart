@@ -14,7 +14,7 @@ class EditPanel extends ConsumerStatefulWidget {
 }
 
 class _EditPanelState extends ConsumerState<EditPanel> {
-  List<String> ignoreProps = ["ifValue", "dragging", "size", "startPosition", "loopType"];
+  List<String> ignoreProps = ["ifValue", "dragging", "size", "startPosition", "loopType", "case"];
 
   @override
   Widget build(BuildContext context) {

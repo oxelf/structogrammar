@@ -22,9 +22,19 @@ how to solve this:
 - click open again
 
 ### Roadmap
-- [ ] Case statement
+- [x] Case statement
 - [ ] Resizing of blocks inside an if or case block.
+- [ ] copy paste
+- [ ] Control - Z | Reverse previous action
+- [ ] Custom Appbar | Menubar
+- [ ] Floating Editing Panel
+- [ ] Floating tree view panel
+- [x] Canvas
+- [x] Zoom to fit
+- [ ] Home Page (see previous projects)
 - [ ] Import Structogram from cpp code
+- [ ] UML Diagrams
+- [ ] Database Diagrams
 - [x] Multilanguage
 - [x] Save structogram as json
 - [x] Import Structogram from json
