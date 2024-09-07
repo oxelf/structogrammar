@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_context_menu/flutter_context_menu.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:info_popup/info_popup.dart';
 import 'package:structogrammar/models/struct.dart';
 import 'package:structogrammar/riverpod/state.dart';
 import 'package:structogrammar/riverpod/structs.dart';
