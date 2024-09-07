@@ -247,13 +247,6 @@
             </list>
           </value>
         </entry>
-        <entry key="info_popup">
-          <value>
-            <list>
-              <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/info_popup-4.3.1/lib" />
-            </list>
-          </value>
-        </entry>
         <entry key="json_annotation">
           <value>
             <list>
@@ -654,7 +647,6 @@
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/http-1.2.2/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/http_parser-4.0.2/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/image-4.2.0/lib" />
-      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/info_popup-4.3.1/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/json_annotation-4.9.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/linked_scroll_controller-0.2.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/lints-3.0.0/lib" />
