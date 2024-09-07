@@ -85933,27 +85933,31 @@ case 1:return A.S(q,r)}})
 return A.T($async$$0,r)},
 $S:19}
 A.Ia.prototype={
-hr(a,b){var s,r,q,p,o,n,m,l=null
+hr(a,b){var s,r,q,p,o,n,m,l,k,j,i,h=null,g=" selected"
 b.cJ($.iC(),t.N)
 s=b.cJ($.x0(),t.GU)
-b.cJ($.HQ(),t.m8)
-r=J.ai(s)
-q=A.bL(J.aY(r.i(s,"file")),l,l,l,l,A.c5(l,l,B.j,l,l,l,l,l,l,l,l,l,l,l,l,l,l,!0,l,l,l,l,l,l,l,l),l,l)
-p=A.bL(J.aY(r.i(s,"newFile")),l,l,l,l,l,l,l)
-p=A.A_(A.mV(B.Ee,l,l),new A.a_K(),l,p)
-o=A.bL(J.aY(r.i(s,"import")),l,l,l,l,l,l,l)
-o=A.A_(A.mV(B.Ei,l,l),new A.a_L(b),"",o)
-n=A.bL(J.aY(r.i(s,"save")),l,l,l,l,l,l,l)
-m=t.x1
-q=A.aw3(new A.Ch(A.a([p,o,A.A_(A.mV(B.Ef,l,l),new A.a_M(b),l,n)],m)),q)
-n=A.bL(J.aY(r.i(s,"diagram")),l,l,l,l,A.c5(l,l,B.j,l,l,l,l,l,l,l,l,l,l,l,l,l,l,!0,l,l,l,l,l,l,l,l),l,l)
-o=A.bL(J.aY(r.i(s,"addFunction")),l,l,l,l,l,l,l)
-n=A.aw3(new A.Ch(A.a([A.A_(A.mV(B.fT,l,l),new A.a_N(b),l,o)],m)),n)
-o=A.bL(J.aY(r.i(s,"language")),l,l,l,l,A.c5(l,l,B.j,l,l,l,l,l,l,l,l,l,l,l,l,l,l,!0,l,l,l,l,l,l,l,l),l,l)
-p=A.bL(J.aY(r.i(s,"english")),l,l,l,l,l,l,l)
-p=A.A_(A.bL("\ud83c\uddfa\ud83c\uddf8",l,l,l,l,l,l,l),new A.a_O(b),"default",p)
-r=A.bL(J.aY(r.i(s,"german")),l,l,l,l,l,l,l)
-return new A.zZ(this.e,new A.cj(new A.b4(B.iz,t.rc),l,l,l,l,l,l,l,l,new A.b4(new A.de(B.a9,B.p),t._o),l,l,l),A.a([q,n,A.aw3(new A.Ch(A.a([p,A.A_(A.bL("\ud83c\udde9\ud83c\uddea",l,l,l,l,l,l,l),new A.a_P(b),l,r)],m)),o)],t.Hw),!0,l)}}
+r=b.cJ($.HQ(),t.m8)
+q=J.ai(s)
+p=A.bL(J.aY(q.i(s,"file")),h,h,h,h,A.c5(h,h,B.j,h,h,h,h,h,h,h,h,h,h,h,h,h,h,!0,h,h,h,h,h,h,h,h),h,h)
+o=A.bL(J.aY(q.i(s,"newFile")),h,h,h,h,h,h,h)
+o=A.A_(A.mV(B.Ee,h,h),new A.a_K(),h,o)
+n=A.bL(J.aY(q.i(s,"import")),h,h,h,h,h,h,h)
+n=A.A_(A.mV(B.Ei,h,h),new A.a_L(b),"",n)
+m=A.bL(J.aY(q.i(s,"save")),h,h,h,h,h,h,h)
+l=t.x1
+p=A.aw3(new A.Ch(A.a([o,n,A.A_(A.mV(B.Ef,h,h),new A.a_M(b),h,m)],l)),p)
+m=A.bL(J.aY(q.i(s,"diagram")),h,h,h,h,A.c5(h,h,B.j,h,h,h,h,h,h,h,h,h,h,h,h,h,h,!0,h,h,h,h,h,h,h,h),h,h)
+n=A.bL(J.aY(q.i(s,"addFunction")),h,h,h,h,h,h,h)
+m=A.aw3(new A.Ch(A.a([A.A_(A.mV(B.fT,h,h),new A.a_N(b),h,n)],l)),m)
+n=A.bL(J.aY(q.i(s,"language")),h,h,h,h,A.c5(h,h,B.j,h,h,h,h,h,h,h,h,h,h,h,h,h,h,!0,h,h,h,h,h,h,h,h),h,h)
+o=A.bL(J.aY(q.i(s,"english")),h,h,h,h,h,h,h)
+k=A.bL("\ud83c\uddfa\ud83c\uddf8",h,h,h,h,h,h,h)
+j=r.a
+i=j==="en"?g:""
+o=A.A_(k,new A.a_O(b),i,o)
+q=A.bL(J.aY(q.i(s,"german")),h,h,h,h,h,h,h)
+k=j==="de"?g:""
+return new A.zZ(this.e,new A.cj(new A.b4(B.iz,t.rc),h,h,h,h,h,h,h,h,new A.b4(new A.de(B.a9,B.p),t._o),h,h,h),A.a([p,m,A.aw3(new A.Ch(A.a([o,A.A_(A.bL("\ud83c\udde9\ud83c\uddea",h,h,h,h,h,h,h),new A.a_P(b),k,q)],l)),n)],t.Hw),!0,h)}}
 A.a_K.prototype={
 $0(){var s=0,r=A.U(t.H)
 var $async$$0=A.V(function(a,b){if(a===1)return A.R(b,r)
