@@ -19,8 +19,8 @@ class FunctionStructWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     String selectedStruct = ref.watch(selectedStructPod);
-    TextStyle style = textStyleFromMap(struct.data, "text");
-    TextStyle commentStyle = textStyleFromMap(struct.data, "comment");
+    TextStyle style = textStyleFromMap(struct.data, "text", style: functionTextStyle);
+    TextStyle commentStyle = textStyleFromMap(struct.data, "comment", style: commentTextStyle);
     bool showDrag = ref.watch(showDragPod);
     return Column(
       children: [

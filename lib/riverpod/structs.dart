@@ -31,6 +31,10 @@ class StructsNotifier extends Notifier<List<Struct>> {
     state = structs;
   }
 
+  void replaceStructs(List<Struct> structs) {
+    state = structs;
+  }
+
   void addStruct(Struct struct) {
     state = [...state, struct];
     ref.read(selectedStructPod.notifier).state = struct.id;

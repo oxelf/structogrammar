@@ -95,10 +95,10 @@ class IFStructWidget extends ConsumerWidget {
             ),
             Builder(builder: (context) {
               var trueStructs = struct.subStructs
-                  .where((e) => e.data["ifValue"] == true)
+                  .where((e) => e.data["ifCondition"] == "true")
                   .toList();
               var falseStructs = struct.subStructs
-                  .where((e) => e.data["ifValue"] == false)
+                  .where((e) => e.data["ifCondition"] == "false")
                   .toList();
 
               return Container(

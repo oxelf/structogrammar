@@ -20,9 +20,13 @@ dependencies:
   flutter_context_menu: ^0.2.0
   flutter_highlight: ^0.7.0
 
+  flutter_localizations:
+    sdk: flutter
   flutter_riverpod: ^2.5.1
   hexcolor: ^3.0.1
   highlight: ^0.7.0
+  http: ^1.2.2
+  intl: any
   menu_bar: ^0.5.3
   path_provider: ^2.1.4
   resizable_widget: ^1.0.5
@@ -55,6 +59,4 @@ flutter_launcher_icons:
 
 flutter:
   uses-material-design: true
-  assets:
-    - assets/translation/en.json
-    - assets/translation/de.json
+  generate: true

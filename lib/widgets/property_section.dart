@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:structogrammar/riverpod/translation.dart';
+import 'package:structogrammar/context_extension.dart';
+import 'package:structogrammar/models/struct.dart';
 import 'package:structogrammar/widgets/property_builder.dart';
 
 enum PropertyType { string, color, double, int, dropdown }
@@ -24,10 +25,14 @@ class SectionProperty {
 
 class PropertySectionBuilder extends ConsumerStatefulWidget {
   const PropertySectionBuilder(
-      {super.key, required this.data, required this.onChanged});
+      {super.key,
+      required this.data,
+      required this.onChanged,
+      required this.structType});
 
   final Map<String, dynamic> data;
   final Function(Map<String, dynamic>) onChanged;
+  final StructType structType;
 
   @override
   ConsumerState createState() => _PropertySectionBuilderState();
@@ -37,9 +42,14 @@ class _PropertySectionBuilderState
     extends ConsumerState<PropertySectionBuilder> {
   bool lastWasSmall = false;
   List<String> texts = ["instruction", "condition", "text"];
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    var translations = ref.watch(translationsPod);
     Map<String, List<SectionProperty>> sections = getSections();
     return Column(
       children: [
@@ -60,7 +70,8 @@ class _PropertySectionBuilderState
                   ],
                 ),
                 for (int j = 0;
-                    j < sections.entries.elementAt(i).value.length;j++)
+                    j < sections.entries.elementAt(i).value.length;
+                    j++)
                   Builder(builder: (context) {
                     if (sections.entries.elementAt(i).value[j].propertySize ==
                         PropertySize.small) {
@@ -74,27 +85,29 @@ class _PropertySectionBuilderState
                         children: [
                           Expanded(
                             child: PropertyBuilder(
-                                property: sections.entries.elementAt(i).value[j],
-                                onChanged: (key, value) {
-                                  Map<String, dynamic> newData = widget.data;
-                                  newData[key] = value;
-                                  widget.onChanged.call(newData);
-
-                                }),
-                          ),
-
-                          if (sections.entries.elementAt(i).value.length > j + 1) Expanded(
-                            child: PropertyBuilder(
-                                property: sections.entries.elementAt(i).value[j +1 ],
+                                property:
+                                    sections.entries.elementAt(i).value[j],
                                 onChanged: (key, value) {
                                   Map<String, dynamic> newData = widget.data;
                                   newData[key] = value;
                                   widget.onChanged.call(newData);
                                 }),
                           ),
+                          if (sections.entries.elementAt(i).value.length >
+                              j + 1)
+                            Expanded(
+                              child: PropertyBuilder(
+                                  property: sections.entries
+                                      .elementAt(i)
+                                      .value[j + 1],
+                                  onChanged: (key, value) {
+                                    Map<String, dynamic> newData = widget.data;
+                                    newData[key] = value;
+                                    widget.onChanged.call(newData);
+                                  }),
+                            ),
                         ],
                       );
-
                     } else {
                       return PropertyBuilder(
                           property: sections.entries.elementAt(i).value[j],
@@ -116,6 +129,41 @@ class _PropertySectionBuilderState
   Map<String, List<SectionProperty>> getSections() {
     Map<String, List<SectionProperty>> sections = {};
     for (var entry in widget.data.entries) {
+      if (texts.contains(entry.key)) {
+        List<SectionProperty> properties = [
+          SectionProperty(
+              propertyType: PropertyType.string,
+              propertyKey: entry.key,
+              propertyValue: entry.value.toString()),
+          SectionProperty(
+              propertyType: PropertyType.dropdown,
+              propertyKey: "textWeight",
+              propertyValue: widget.data["textWeight"] ?? "regular",
+              possibleValues: [
+                "regular",
+                "medium",
+                "semibold",
+                "bold",
+                "extrabold"
+              ],
+              propertySize: PropertySize.small),
+          SectionProperty(
+              propertyType: PropertyType.int,
+              propertyKey: "textSize",
+              propertyValue: widget.data["textSize"] ?? 12,
+              propertySize: PropertySize.small),
+          SectionProperty(
+              propertyType: PropertyType.color,
+              propertyKey: "textColor",
+              propertyValue: widget.data["textColor"] ?? "#FFFFFF",
+              propertySize: PropertySize.large),
+        ];
+        String keyName = entry.key;
+        if (keyName == "condition") {
+          keyName = context.l.condition;
+        }
+        sections[keyName] = properties;
+      }
       switch (entry.key) {
         case "comment":
           List<SectionProperty> properties = [
@@ -155,41 +203,11 @@ class _PropertySectionBuilderState
                 propertyValue: entry.value)
           ];
           // properties.add(SectionProperty(propertyType: PropertyType.color, propertyKey: propertyKey, propertyValue: propertyValue));
-          sections["fillColor"] = properties;
+          sections[context.l.fillColor] = properties;
         default:
       }
-      if (texts.contains(entry.key)) {
-        List<SectionProperty> properties = [
-          SectionProperty(
-              propertyType: PropertyType.string,
-              propertyKey: entry.key,
-              propertyValue: entry.value),
-          SectionProperty(
-              propertyType: PropertyType.dropdown,
-              propertyKey: "textWeight",
-              propertyValue: widget.data["textWeight"] ?? "regular",
-              possibleValues: [
-                "regular",
-                "medium",
-                "semibold",
-                "bold",
-                "extrabold"
-              ],
-              propertySize: PropertySize.small),
-          SectionProperty(
-              propertyType: PropertyType.int,
-              propertyKey: "textSize",
-              propertyValue: widget.data["textSize"] ?? 12,
-              propertySize: PropertySize.small),
-          SectionProperty(
-              propertyType: PropertyType.color,
-              propertyKey: "textColor",
-              propertyValue: widget.data["textColor"] ?? "#FFFFFF",
-              propertySize: PropertySize.large),
-        ];
-        sections[entry.key] = properties;
-      }
     }
+
     return sections;
   }
 }

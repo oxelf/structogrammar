@@ -5,12 +5,11 @@
   "caseStatement": "Fall Auswahl",
   "whileLoop": "While Schleife",
   "doWhileLoop": "Do While Schleife",
-  "StructType.loop": "Schleife",
-  "StructType.ifSelect": "Bedingte Verzweigung",
-  "StructType.instruction": "Anweisung",
-  "StructType.caseSelect": "Fall Auswahl",
-  "StructType.repeat": "Do While Schleife",
-  "StructType.function": "Funktion",
+  "loop": "Schleife",
+  "ifSelect": "Bedingte Verzweigung",
+  "caseSelect": "Fall Auswahl",
+  "repeat": "Do While Schleife",
+  "function": "Funktion",
   "copy": "kopieren",
   "paste": "einsetzen",
   "delete": "löschen",
@@ -34,5 +33,6 @@
   "english": "Englisch",
   "german": "Deutsch",
   "color": "Farbe",
-  "importFromCode": "Code importieren"
+  "importFromCode": "Code importieren",
+  "fillColor": "Hintergrundfarbe"
 }

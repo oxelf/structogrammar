@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:structogrammar/context_extension.dart';
+import 'package:structogrammar/models/struct.dart';
 import 'package:structogrammar/riverpod/code_notifier.dart';
 import 'package:structogrammar/riverpod/structs.dart';
-import 'package:structogrammar/riverpod/translation.dart';
 import 'package:structogrammar/widgets/property_section.dart';
-import 'package:structogrammar/widgets/property_textfield.dart';
 
-import '../../widgets/color_picker.dart';
 
 class EditPanel extends ConsumerStatefulWidget {
   const EditPanel({super.key});
@@ -16,12 +15,11 @@ class EditPanel extends ConsumerStatefulWidget {
 }
 
 class _EditPanelState extends ConsumerState<EditPanel> {
-  List<String> ignoreProps = ["ifValue", "dragging", "size", "startPosition", "loopType", "case"];
+  List<String> ignoreProps = ["ifCondition", "dragging", "size", "startPosition", "loopType", "case"];
 
   @override
   Widget build(BuildContext context) {
     var currentStruct = ref.watch(currentStructPod);
-    var translations = ref.watch(translationsPod);
     return (currentStruct == null)
         ? Center(
             child: Text("Select something to edit"),
@@ -31,11 +29,11 @@ class _EditPanelState extends ConsumerState<EditPanel> {
               Row(
                 children: [
                   SizedBox(width: 8,),
-                  Text(translations[currentStruct.type.toString()] ?? currentStruct.type.toString(), style: TextStyle(fontWeight: FontWeight.bold),),
+                  Text(translateStructType(context, currentStruct.type), style: TextStyle(fontWeight: FontWeight.bold),),
                 ],
               ),
               Divider(),
-              PropertySectionBuilder(data: currentStruct.data, onChanged: (data) {
+              PropertySectionBuilder(data: currentStruct.data, structType: currentStruct.type, onChanged: (data) {
                 ref.read(structsPod.notifier).editStructData(currentStruct.id, data);
                 if (ref
                     .read(structsPod.notifier)
@@ -47,5 +45,24 @@ class _EditPanelState extends ConsumerState<EditPanel> {
               }),
             ],
           );
+  }
+}
+
+String translateStructType(BuildContext context, StructType type) {
+  switch (type) {
+    case StructType.repeat:
+      return context.l.repeat;
+    case StructType.caseSelect:
+      return context.l.caseSelect;
+    case StructType.ifSelect:
+      return context.l.ifSelect;
+    case StructType.loop:
+      return context.l.loop;
+    case StructType.function:
+      return context.l.function;
+    case StructType.tryBlock:
+      return "try";
+    default:
+      return context.l.instruction;
   }
 }

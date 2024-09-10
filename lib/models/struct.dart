@@ -138,13 +138,13 @@ class Struct extends Equatable {
     Map<String, dynamic> newData = additionalData ?? {};
     newData["condition"] = condition;
     for (int i = 0; i < trueSubStructs.length; i++) {
-      trueSubStructs[i].data["ifValue"] = true;
+      trueSubStructs[i].data["ifCondition"] = "true";
     }
     for (int i = 0; i < falseSubStructs.length; i++) {
-      falseSubStructs[i].data["ifValue"] = false;
+      falseSubStructs[i].data["ifCondition"] = "false";
     }
-    //Struct trueStruct = Struct.instruction("do on true", additionalData:  {"ifValue": true});
-    //Struct falseStruct = Struct.instruction("do on false", additionalData:  {"ifValue": false});
+    //Struct trueStruct = Struct.instruction("do on true", additionalData:  {"condition": true});
+    //Struct falseStruct = Struct.instruction("do on false", additionalData:  {"condition": false});
     return Struct(
         id: generateUUID(),
         type: StructType.ifSelect,

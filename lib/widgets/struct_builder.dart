@@ -190,7 +190,10 @@ class StructBuilder extends ConsumerWidget {
   }
 }
 
-TextStyle textStyleFromMap(Map<String, dynamic> data, String prefix) {
+TextStyle functionTextStyle = TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold);
+TextStyle commentTextStyle = TextStyle(color: Colors.grey, fontSize: 12);
+TextStyle textStyleFromMap(Map<String, dynamic> data, String prefix, {TextStyle? style}) {
+  style ??= TextStyle();
   FontWeight weight = FontWeight.w400;
   switch (data["${prefix}Weight"]) {
     case "medium":
@@ -202,9 +205,8 @@ TextStyle textStyleFromMap(Map<String, dynamic> data, String prefix) {
     case "extrabold":
       weight = FontWeight.w800;
   }
-  return TextStyle(
-    fontSize: double.tryParse(data["${prefix}Size"].toString()) ?? 14,
-    color: data["${prefix}Color"] != null? HexColor(data["${prefix}Color"]): Colors.black,
-    fontWeight: weight,
+  return style.copyWith(
+    fontSize: double.tryParse(data["${prefix}Size"].toString()),
+    color: data["${prefix}Color"] != null? HexColor(data["${prefix}Color"]): null,
   );
 }

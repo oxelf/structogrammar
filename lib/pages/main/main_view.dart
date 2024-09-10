@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:structogrammar/models/struct.dart';
 import 'package:structogrammar/riverpod/state.dart';
 import 'package:structogrammar/riverpod/structs.dart';
-import 'package:structogrammar/riverpod/translation.dart';
 import 'package:structogrammar/widgets/struct_builder.dart';
 import 'package:universal_html/html.dart' as html;
 
@@ -93,7 +92,6 @@ class MainViewState extends ConsumerState<MainView> {
   Widget build(BuildContext context) {
     var structs = ref.watch(structsPod);
     var cursor = ref.watch(cursorPod);
-    var translations = ref.watch(translationsPod);
     var rightPanelWidth = ref.watch(rightFloatingPanelWidthPod);
     var leftPanelWidth = ref.watch(leftFloatingPanelWidthPod);
     var width = MediaQuery.sizeOf(context).width - rightPanelWidth - 20 - leftPanelWidth;
@@ -245,10 +243,10 @@ class MainViewState extends ConsumerState<MainView> {
     double widthZoomFactor = width / box.size.width;
     if (heightZoomFactor < widthZoomFactor) {
       setExactZoom(heightZoomFactor);
-      jumpToCoordinate(-leftPanelWidth, 0);
+      jumpToCoordinate(-leftPanelWidth - 8, 0);
     } else {
       setExactZoom(widthZoomFactor);
-      jumpToCoordinate(-leftPanelWidth, 0);
+      jumpToCoordinate(-leftPanelWidth - 8, 0);
     }
   }
 }

@@ -1,12 +1,13 @@
+import 'dart:math';
+
 import 'package:community_material_icon/community_material_icon.dart';
-import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:structogrammar/models/struct.dart';
+import 'package:structogrammar/pages/main/edit_panel.dart';
 import 'package:structogrammar/riverpod/hierarchy.dart';
 import 'package:structogrammar/riverpod/state.dart';
 import 'package:structogrammar/riverpod/structs.dart';
-import 'package:structogrammar/riverpod/translation.dart';
 import 'package:structogrammar/widgets/conditional_dotted_border.dart';
 
 class HierachySubWidget extends ConsumerStatefulWidget {
@@ -32,7 +33,6 @@ class _HierachySubWidgetState extends ConsumerState<HierachySubWidget> {
 
   @override
   Widget build(BuildContext context) {
-    var translations = ref.watch(translationsPod);
     var selectedStruct = ref.watch(selectedStructPod);
     var hierarchy = ref.watch(hierarchyPod);
     var width = ref.watch(leftFloatingPanelWidthPod);
@@ -45,20 +45,24 @@ class _HierachySubWidgetState extends ConsumerState<HierachySubWidget> {
       double topBorderY = box.localToGlobal(Offset(0, 0)).dy;
       if (dragPos.dy < bottomBorderY + 10 && dragPos.dy > bottomBorderY - 10) {
         Future.delayed(Duration(milliseconds: 10), () {
-          if (hierarchy[widget.struct.id] == true || (widget.struct.type == StructType.instruction && widget.struct.type !=  StructType.function)) {
+          if (hierarchy[widget.struct.id] == true ||
+              (widget.struct.type == StructType.instruction &&
+                  widget.struct.type != StructType.function)) {
             ref.read(hierarchyDragTargetLocationPod.notifier).state =
-            ("after", widget.struct.id);
+                ("after", widget.struct.id);
           } else {
             ref.read(hierarchyDragTargetLocationPod.notifier).state =
-            ("inside", widget.struct.id);
+                ("inside", widget.struct.id);
           }
         });
 
         dragBelow = true;
-      } else if (dragPos.dy < bottomBorderY - 10 && dragPos.dy > topBorderY + 10 && widget.struct.type != StructType.instruction) {
+      } else if (dragPos.dy < bottomBorderY - 10 &&
+          dragPos.dy > topBorderY + 10 &&
+          widget.struct.type != StructType.instruction) {
         Future.delayed(Duration(milliseconds: 10), () {
           ref.read(hierarchyDragTargetLocationPod.notifier).state =
-          ("inside", widget.struct.id);
+              ("inside", widget.struct.id);
         });
         dragInside = true;
       }
@@ -149,9 +153,14 @@ class _HierachySubWidgetState extends ConsumerState<HierachySubWidget> {
                                         .click(widget.struct.id);
                                     setState(() {});
                                   },
-                                  child: Icon(
-                                    Icons.arrow_drop_down_circle_outlined,
-                                    size: 16,
+                                  child: Transform.rotate(
+                                    angle: (hierarchy[widget.struct.id] == true)
+                                        ? -pi / 2
+                                        : 0,
+                                    child: Icon(
+                                      Icons.arrow_drop_down_circle_outlined,
+                                      size: 16,
+                                    ),
                                   ),
                                 ),
                                 if ((hierarchy[widget.struct.id] == false ||
@@ -186,8 +195,8 @@ class _HierachySubWidgetState extends ConsumerState<HierachySubWidget> {
                               SizedBox(
                                 height: 5,
                               ),
-                              Text(translations[widget.struct.type.toString()]
-                                  .toString()),
+                              Text(translateStructType(
+                                  context, widget.struct.type)),
                             ],
                           ),
                         ],
@@ -225,39 +234,47 @@ class _HierachySubWidgetState extends ConsumerState<HierachySubWidget> {
         ),
       );
     }
-    return (widget.struct.type == StructType.function)?getChild(false): Draggable(
-      child: getChild(false),
-      onDragUpdate: (details) {
-        ref.read(hierarchyDragPositionPod.notifier).state =
-            details.globalPosition;
-      },
-      onDragCompleted: () {
-        ref.read(hierarchyDragPositionPod.notifier).state = null;
-        ref.read(hierarchyDragTargetLocationPod.notifier).state = null;
-      },
-      onDragEnd: (_) {
-        var data = ref.read(hierarchyDragTargetLocationPod);
-        if (data?.$2 == widget.struct.id) {
-          ref.read(hierarchyDragPositionPod.notifier).state = null;
-          ref.read(hierarchyDragTargetLocationPod.notifier).state = null;
-          return;
-        }
-        if (data?.$1 == "after") {
-          ref.read(structsPod.notifier).removeStruct(widget.struct.id);
-         ref.read(structsPod.notifier).addStructAfter(data?.$2 ?? "", widget.struct);
-        } else if (data?.$1 == "inside") {
-          ref.read(structsPod.notifier).removeStruct(widget.struct.id);
-          ref.read(structsPod.notifier).addSubStruct(data?.$2 ?? "", widget.struct);
-        }
-        ref.read(hierarchyDragPositionPod.notifier).state = null;
-        ref.read(hierarchyDragTargetLocationPod.notifier).state = null;
-      },
-      onDraggableCanceled: (v, o) {
-        ref.read(hierarchyDragPositionPod.notifier).state = null;
-        ref.read(hierarchyDragTargetLocationPod.notifier).state = null;
-      },
-      feedback: Material(child: SizedBox(width: width, child: getChild(true))),
-    );
+
+    return (widget.struct.type == StructType.function)
+        ? getChild(false)
+        : Draggable(
+            child: getChild(false),
+            onDragUpdate: (details) {
+              ref.read(hierarchyDragPositionPod.notifier).state =
+                  details.globalPosition;
+            },
+            onDragCompleted: () {
+              ref.read(hierarchyDragPositionPod.notifier).state = null;
+              ref.read(hierarchyDragTargetLocationPod.notifier).state = null;
+            },
+            onDragEnd: (_) {
+              var data = ref.read(hierarchyDragTargetLocationPod);
+              if (data?.$2 == widget.struct.id) {
+                ref.read(hierarchyDragPositionPod.notifier).state = null;
+                ref.read(hierarchyDragTargetLocationPod.notifier).state = null;
+                return;
+              }
+              if (data?.$1 == "after") {
+                ref.read(structsPod.notifier).removeStruct(widget.struct.id);
+                ref
+                    .read(structsPod.notifier)
+                    .addStructAfter(data?.$2 ?? "", widget.struct);
+              } else if (data?.$1 == "inside") {
+                ref.read(structsPod.notifier).removeStruct(widget.struct.id);
+                ref
+                    .read(structsPod.notifier)
+                    .addSubStruct(data?.$2 ?? "", widget.struct);
+              }
+              ref.read(hierarchyDragPositionPod.notifier).state = null;
+              ref.read(hierarchyDragTargetLocationPod.notifier).state = null;
+            },
+            onDraggableCanceled: (v, o) {
+              ref.read(hierarchyDragPositionPod.notifier).state = null;
+              ref.read(hierarchyDragTargetLocationPod.notifier).state = null;
+            },
+            feedback:
+                Material(child: SizedBox(width: width, child: getChild(true))),
+          );
   }
 
   IconData getIcon(StructType type) {

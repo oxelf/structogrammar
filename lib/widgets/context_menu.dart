@@ -5,7 +5,7 @@ import 'package:community_material_icon/community_material_icon.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:structogrammar/riverpod/translation.dart';
+import 'package:structogrammar/context_extension.dart';
 import 'package:universal_html/html.dart' as html;
 import 'package:flutter_context_menu/flutter_context_menu.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,32 +15,31 @@ import 'package:structogrammar/riverpod/state.dart';
 import 'package:structogrammar/riverpod/structs.dart';
 import 'package:structogrammar/widgets/struct_builder.dart';
 
-// initialize a context menu
 
 ContextMenu getContextMenuForStruct(
     Struct struct, BuildContext context, WidgetRef ref) {
-  var translations = ref.read(translationsPod);
   Map<String, dynamic> additionalData = {};
-  additionalData["ifValue"] = struct.data["ifValue"];
+  additionalData["condition"] = struct.data["condition"];
+  additionalData["ifCondition"] = struct.data["ifCondition"];
   additionalData["case"] = struct.data["case"];
 
   final entries = <ContextMenuEntry>[
     MenuItem(
-      label: translations["copy"].toString(),
+      label:  context.l.copy,
       icon: Icons.copy,
       onSelected: () {
         // implement copy
       },
     ),
     MenuItem(
-      label: translations["paste"].toString(),
+      label: context.l.paste,
       icon: Icons.paste,
       onSelected: () {
         // implement paste
       },
     ),
     MenuItem(
-      label: translations["delete"].toString(),
+      label: context.l.delete,
       icon: Icons.delete,
       onSelected: () {
         ref.read(structsPod.notifier).removeStruct(struct.id);
@@ -52,11 +51,11 @@ ContextMenu getContextMenuForStruct(
         struct.type == StructType.function ||
         struct.type == StructType.repeat))
       MenuItem.submenu(
-          label: translations["addInside"].toString(),
+          label: context.l.addInside,
           icon: Icons.add,
           items: [
             MenuItem(
-              label: translations["instruction"].toString(),
+              label: context.l.instruction,
               value: "instruction",
               icon: Icons.integration_instructions_outlined,
               onSelected: () {
@@ -66,7 +65,7 @@ ContextMenu getContextMenuForStruct(
               },
             ),
             MenuItem(
-              label: translations["ifStatement"].toString(),
+              label: context.l.ifSelect,
               value: 'if',
               icon: CommunityMaterialIcons.code_parentheses,
               onSelected: () {
@@ -75,18 +74,18 @@ ContextMenu getContextMenuForStruct(
                     Struct.ifStatement("?",
                         trueSubStructs: [
                           Struct.instruction("",
-                              additionalData: {"ifValue": true})
+                              additionalData: {"ifCondition": "true"})
                         ],
                         falseSubStructs: [
                           Struct.instruction("",
-                              additionalData: {"ifValue": false})
+                              additionalData: {"ifCondition": "false"})
                         ],
                         additionalData: additionalData));
                 // implement redo
               },
             ),
             MenuItem(
-              label: translations["caseStatement"].toString(),
+              label: context.l.caseStatement,
               value: 'case',
               icon: CommunityMaterialIcons.code_array,
               onSelected: () {
@@ -94,7 +93,7 @@ ContextMenu getContextMenuForStruct(
               },
             ),
             MenuItem(
-              label: translations["forLoop"].toString(),
+              label: context.l.forLoop,
               value: 'for',
               icon: Icons.loop_outlined,
               onSelected: () {
@@ -105,7 +104,7 @@ ContextMenu getContextMenuForStruct(
               },
             ),
             MenuItem(
-              label: translations["whileLoop"].toString(),
+              label: context.l.whileLoop,
               value: 'while',
               icon: Icons.loop_outlined,
               onSelected: () {
@@ -116,7 +115,7 @@ ContextMenu getContextMenuForStruct(
               },
             ),
             MenuItem(
-              label: translations["doWhileLoop"].toString(),
+              label: context.l.repeat,
               value: 'repeat',
               icon: Icons.loop_outlined,
               onSelected: () {
@@ -129,15 +128,15 @@ ContextMenu getContextMenuForStruct(
           ]),
     if (!(struct.type == StructType.function))
       MenuItem.submenu(
-        label: translations["add"].toString(),
+        label: context.l.add,
         icon: Icons.add,
         items: [
           MenuItem.submenu(
-              label: translations["before"].toString(),
+              label: context.l.after,
               icon: Icons.arrow_upward,
               items: [
                 MenuItem(
-                  label: translations["instruction"].toString(),
+                  label: context.l.instruction,
                   value: "instruction",
                   icon: Icons.integration_instructions_outlined,
                   onSelected: () {
@@ -147,7 +146,7 @@ ContextMenu getContextMenuForStruct(
                   },
                 ),
                 MenuItem(
-                  label: translations["ifStatement"].toString(),
+                  label: context.l.ifSelect,
                   value: 'if',
                   icon: CommunityMaterialIcons.code_parentheses,
                   onSelected: () {
@@ -156,18 +155,18 @@ ContextMenu getContextMenuForStruct(
                         Struct.ifStatement("?",
                             trueSubStructs: [
                               Struct.instruction("",
-                                  additionalData: {"ifValue": true})
+                                  additionalData: {"ifCondition": "true"})
                             ],
                             falseSubStructs: [
                               Struct.instruction("",
-                                  additionalData: {"ifValue": false})
+                                  additionalData: {"ifCondition": "false"})
                             ],
                             additionalData: additionalData));
                     // implement redo
                   },
                 ),
                 MenuItem(
-                  label: translations["caseStatement"].toString(),
+                  label: context.l.caseStatement,
                   value: 'case',
                   icon: CommunityMaterialIcons.code_array,
                   onSelected: () {
@@ -185,7 +184,7 @@ ContextMenu getContextMenuForStruct(
                   },
                 ),
                 MenuItem(
-                  label: translations["forLoop"].toString(),
+                  label: context.l.forLoop,
                   value: 'for',
                   icon: Icons.loop_outlined,
                   onSelected: () {
@@ -196,7 +195,7 @@ ContextMenu getContextMenuForStruct(
                   },
                 ),
                 MenuItem(
-                  label: translations["whileLoop"].toString(),
+                  label: context.l.whileLoop,
                   value: 'while',
                   icon: Icons.loop_outlined,
                   onSelected: () {
@@ -207,7 +206,7 @@ ContextMenu getContextMenuForStruct(
                   },
                 ),
                 MenuItem(
-                  label: translations["doWhileLoop"].toString(),
+                  label: context.l.doWhileLoop,
                   value: 'repeat',
                   icon: Icons.loop_outlined,
                   onSelected: () {
@@ -219,11 +218,11 @@ ContextMenu getContextMenuForStruct(
                 ),
               ]),
           MenuItem.submenu(
-              label: translations["after"].toString(),
+              label: context.l.after,
               icon: Icons.arrow_downward,
               items: [
                 MenuItem(
-                  label: translations["instruction"].toString(),
+                  label: context.l.instruction,
                   value: "instruction",
                   icon: Icons.integration_instructions_outlined,
                   onSelected: () {
@@ -233,7 +232,7 @@ ContextMenu getContextMenuForStruct(
                   },
                 ),
                 MenuItem(
-                  label: translations["ifStatement"].toString(),
+                  label: context.l.ifSelect,
                   value: 'if',
                   icon: CommunityMaterialIcons.code_parentheses,
                   onSelected: () {
@@ -242,17 +241,17 @@ ContextMenu getContextMenuForStruct(
                         Struct.ifStatement("?",
                             trueSubStructs: [
                               Struct.instruction("",
-                                  additionalData: {"ifValue": true})
+                                  additionalData: {"ifCondition": "true"})
                             ],
                             falseSubStructs: [
                               Struct.instruction("",
-                                  additionalData: {"ifValue": false})
+                                  additionalData: {"ifCondition": "false"})
                             ],
                             additionalData: additionalData));
                   },
                 ),
                 MenuItem(
-                  label: translations["caseStatement"].toString(),
+                  label: context.l.caseStatement,
                   value: 'case',
                   icon: CommunityMaterialIcons.code_array,
                   onSelected: () {
@@ -269,7 +268,7 @@ ContextMenu getContextMenuForStruct(
                   },
                 ),
                 MenuItem(
-                  label: translations["forLoop"].toString(),
+                  label: context.l.forLoop,
                   value: 'for',
                   icon: Icons.loop_outlined,
                   onSelected: () {
@@ -280,7 +279,7 @@ ContextMenu getContextMenuForStruct(
                   },
                 ),
                 MenuItem(
-                  label: translations["whileLoop"].toString(),
+                  label: context.l.whileLoop,
                   value: 'while',
                   icon: Icons.loop_outlined,
                   onSelected: () {
@@ -291,7 +290,7 @@ ContextMenu getContextMenuForStruct(
                   },
                 ),
                 MenuItem(
-                  label: translations["doWhileLoop"].toString(),
+                  label: context.l.doWhileLoop,
                   value: 'repeat',
                   icon: Icons.loop_outlined,
                   onSelected: () {
@@ -307,7 +306,7 @@ ContextMenu getContextMenuForStruct(
       ),
     const MenuDivider(),
     MenuItem(
-        label: translations["exportImage"].toString(),
+        label: context.l.exportImage,
         icon: Icons.image,
         value: "screenshot",
         onSelected: () async {

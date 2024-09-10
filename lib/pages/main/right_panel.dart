@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_code_editor/flutter_code_editor.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:structogrammar/context_extension.dart';
 import 'package:structogrammar/pages/main/edit_panel.dart';
-import 'package:structogrammar/parser/cpp_parser.dart';
 import 'package:structogrammar/riverpod/code_notifier.dart';
 import 'package:structogrammar/riverpod/settings.dart';
 import 'package:structogrammar/riverpod/state.dart';
-import 'package:structogrammar/riverpod/structs.dart';
-import 'package:structogrammar/riverpod/translation.dart';
-import 'package:structogrammar/widgets/actions_button.dart';
 import 'package:structogrammar/widgets/simple_tabbar.dart';
 
-import '../../models/struct.dart';
 
 class RightPanel extends ConsumerStatefulWidget {
   const RightPanel({super.key});
@@ -22,16 +18,20 @@ class RightPanel extends ConsumerStatefulWidget {
 class _RightPanelState extends ConsumerState<RightPanel>with TickerProviderStateMixin {
   @override
   void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(rightPanelTabPod.notifier).state = context.l.edit;
+    });
     super.initState();
   }
   @override
   Widget build(BuildContext context) {
     var codeController = ref.watch(codePod);
     var codeInputController = ref.watch(codeInputPod);
-    var translations = ref.watch(translationsPod);
     var settings = ref.watch(settingsPod);
     var pageController = PageController();
     Size size = MediaQuery.sizeOf(context);
+    String tab = ref.watch(rightPanelTabPod);
+    double width = ref.watch(rightFloatingPanelWidthPod);
     return LayoutBuilder(
       builder: (context, constraints) {
         return Container(
@@ -47,7 +47,7 @@ class _RightPanelState extends ConsumerState<RightPanel>with TickerProviderState
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        SimpleTabbar(tabs: [translations["edit"].toString(), "code"], currentTabpod: rightPanelTabPod),
+                        SimpleTabbar(tabs: [context.l.edit, "code"], currentTabpod: rightPanelTabPod),
                       ],
                     ),
                     ],
@@ -58,29 +58,30 @@ class _RightPanelState extends ConsumerState<RightPanel>with TickerProviderState
                 child: Container(
                         width:  MediaQuery.sizeOf(context).width,
                   child:
-                      SingleChildScrollView(child: EditPanel()),
-                      // CodeTheme(
-                      //   data: CodeThemeData( quoteStyle: TextStyle(color: Colors.green), variableStyle: TextStyle(color: Colors.black), classStyle: TextStyle(color: Colors.black), keywordStyle: TextStyle(color: Colors.orange), functionStyle: TextStyle(color: Colors.red), titleStyle: TextStyle(color: Colors.blue), paramsStyle: TextStyle(color: Colors.black), commentStyle: TextStyle(color: Colors.black), ),
-                      //   child: Container(
-                      //     height: MediaQuery.sizeOf(context).height - 88,
-                      //     child: SingleChildScrollView(
-                      //       child: CodeField(
-                      //         gutterStyle: GutterStyle(
-                      //           showErrors: false,
-                      //           showFoldingHandles: false,
-                      //           showLineNumbers: false,
-                      //         ),
-                      //         textStyle: TextStyle(color: Colors.black),
-                      //         cursorColor: Colors.black,
-                      //         background: Colors.grey.shade200,
-                      //         maxLines: 10000,
-                      //         minLines: 1000,
-                      //         readOnly: true,
-                      //         controller: codeController,
-                      //       ),
-                      //     ),
-                      //   ),
-                      // ),
+                  (tab != "code")? SingleChildScrollView(child: EditPanel()):
+                      CodeTheme(
+                        data: CodeThemeData( quoteStyle: TextStyle(color: Colors.green), variableStyle: TextStyle(color: Colors.black), classStyle: TextStyle(color: Colors.black), keywordStyle: TextStyle(color: Colors.orange), functionStyle: TextStyle(color: Colors.red), titleStyle: TextStyle(color: Colors.blue), paramsStyle: TextStyle(color: Colors.black), commentStyle: TextStyle(color: Colors.black), ),
+                        child: Container(
+                          width: width,
+                          height: MediaQuery.sizeOf(context).height - 88,
+                          child: SingleChildScrollView(
+                            child: CodeField(
+                              gutterStyle: GutterStyle(
+                                showErrors: false,
+                                showFoldingHandles: false,
+                                showLineNumbers: false,
+                              ),
+                              textStyle: TextStyle(color: Colors.black),
+                              cursorColor: Colors.black,
+                              background: Colors.white,
+                              maxLines: 10000,
+                              minLines: 1000,
+                              readOnly: true,
+                              controller: codeController,
+                            ),
+                          ),
+                        ),
+                      ),
                       // CodeTheme(
                       //   data: CodeThemeData( quoteStyle: TextStyle(color: Colors.green), variableStyle: TextStyle(color: Colors.black), classStyle: TextStyle(color: Colors.black), keywordStyle: TextStyle(color: Colors.orange), functionStyle: TextStyle(color: Colors.red), titleStyle: TextStyle(color: Colors.blue), paramsStyle: TextStyle(color: Colors.black), commentStyle: TextStyle(color: Colors.black), ),
                       //   child: Container(

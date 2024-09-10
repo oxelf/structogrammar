@@ -15,41 +15,45 @@ class _LeftPanelState extends ConsumerState<LeftPanel> {
   @override
   Widget build(BuildContext context) {
     var width = ref.watch(leftFloatingPanelWidthPod);
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return Container(
-          height: constraints.maxHeight,
-          width: width,
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    ActionsButton(),
-                  ],
-                ),
-              ),
-              Divider(),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    Text("Hierarchy", style: TextStyle(fontWeight: FontWeight.bold),),
-                  ],
-                ),
-              ),
-            Expanded(
-              child: SingleChildScrollView(
-                child: HierarchyWidget(onMoved: (oldStruct, newStruct) {
-
-                }),
+    return LayoutBuilder(builder: (context, constraints) {
+      return Container(
+        height: constraints.maxHeight,
+        width: width,
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  ActionsButton(),
+                ],
               ),
             ),
-            ],
-          ),
-        );
-      }
-    );
+            Divider(),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  Text(
+                    "Hierarchy",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: SingleChildScrollView(
+                  child: SizedBox(
+                      width: 1000,
+                      child: HierarchyWidget(onMoved: (oldStruct, newStruct) {})),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    });
   }
 }

@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:highlight/languages/cpp.dart';
 import 'package:structogrammar/models/struct.dart';
 
-
 class CodeNotifier extends Notifier<CodeController> {
   @override
   CodeController build() {
@@ -18,9 +17,13 @@ class CodeNotifier extends Notifier<CodeController> {
         case StructType.instruction:
           return (struct.data["instruction"] ?? "").toString();
         case StructType.ifSelect:
-          code = "if (${struct.data["condition"]}) \n\t\t{";
-          List<Struct> trueStructs = struct.subStructs.where((e) => e.data["ifValue"] == true).toList();
-          List<Struct> falseStructs = struct.subStructs.where((e) => e.data["ifValue"] == false).toList();
+          code = "if (${struct.data["condition"]}) {";
+          List<Struct> trueStructs = struct.subStructs
+              .where((e) => e.data["ifCondition"] == "true")
+              .toList();
+          List<Struct> falseStructs = struct.subStructs
+              .where((e) => e.data["ifCondition"] == "false")
+              .toList();
           for (int i = 0; i < trueStructs.length; i++) {
             code += "\n\t\t\t${getCodeFromStruct(trueStructs[i])}";
           }
@@ -30,13 +33,14 @@ class CodeNotifier extends Notifier<CodeController> {
             elseCode += "\n\t\t\t${getCodeFromStruct(falseStructs[i])}";
           }
           if (elseCode.replaceAll("\n", "").replaceAll("\t", "").isNotEmpty) {
-            code += " else \n\t\t{";
+            code += " else {";
             code += elseCode;
             code += "\n\t\t}";
           }
           return code;
         case StructType.loop:
-          code = "${struct.data["loopType"] ?? ""} (${struct.data["condition"]}) \n{";
+          code =
+              "${struct.data["loopType"] ?? ""} (${struct.data["condition"]}) \n{";
           for (int i = 0; i < struct.subStructs.length; i++) {
             code += "\n\t${getCodeFromStruct(struct.subStructs[i])}";
           }
@@ -48,10 +52,10 @@ class CodeNotifier extends Notifier<CodeController> {
             code += "\n\t${getCodeFromStruct(struct.subStructs[i])}";
           }
           code += "\n}";
-          code += "while (${struct.data["condition"]});";
+          code += " while (${struct.data["condition"]});";
           return code;
         case StructType.function:
-          code = "int ${struct.data["name"] ?? ""}() \n{";
+          code = "int ${struct.data["text"] ?? ""} \n{";
           for (int i = 0; i < struct.subStructs.length; i++) {
             code += "\n\t${getCodeFromStruct(struct.subStructs[i])}";
           }
@@ -61,16 +65,16 @@ class CodeNotifier extends Notifier<CodeController> {
           return "";
       }
     }
+
     generatedCode += getCodeFromStruct(struct);
     state.fullText = generatedCode;
   }
 }
 
-
-final codePod = NotifierProvider<CodeNotifier, CodeController>((){
+final codePod = NotifierProvider<CodeNotifier, CodeController>(() {
   return CodeNotifier();
 });
 
-final codeInputPod = NotifierProvider<CodeNotifier, CodeController>((){
+final codeInputPod = NotifierProvider<CodeNotifier, CodeController>(() {
   return CodeNotifier();
 });

@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:structogrammar/models/settings.dart';
-import 'package:structogrammar/riverpod/translation.dart';
 
 
 
@@ -15,7 +14,6 @@ class SettingsNotifier extends Notifier<Settings> {
 
   void setLanguage(String language) {
     Settings newSettings = Settings(language: language);
-    ref.read(translationsPod.notifier).loadTranslation(language);
     state = newSettings;
     saveToFile();
   }
@@ -39,7 +37,6 @@ class SettingsNotifier extends Notifier<Settings> {
 
     Settings settings = Settings.fromJson(jsonDecode(jsonString));
     state = settings;
-    ref.read(translationsPod.notifier).loadTranslation(settings.language);
   }
 }
 
