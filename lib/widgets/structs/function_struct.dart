@@ -19,6 +19,8 @@ class FunctionStructWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     String selectedStruct = ref.watch(selectedStructPod);
+    TextStyle style = textStyleFromMap(struct.data, "text");
+    TextStyle commentStyle = textStyleFromMap(struct.data, "comment");
     bool showDrag = ref.watch(showDragPod);
     return Column(
       children: [
@@ -30,7 +32,7 @@ class FunctionStructWidget extends ConsumerWidget {
                 padding: const EdgeInsets.only(left: 8, top: 4),
                 child: Text(
                   struct.data["comment"].toString(),
-                  style: TextStyle(color: Colors.grey),
+                  style: commentStyle,
                 ),
               ),
             ],
@@ -41,8 +43,8 @@ class FunctionStructWidget extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Text(
-                struct.data["name"].toString(),
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                struct.data["text"].toString(),
+                style: style,
               ),
             ],
           ),
@@ -63,11 +65,7 @@ class FunctionStructWidget extends ConsumerWidget {
                         children: [
                           StructDragTarget(
                               width: maxWidth - 20, structId: struct.id, index: i),
-                          StructDraggable(
-                              data: struct.subStructs[i],
-                              index: i,
-                              parentStructId: struct.id,
-                              child: StructBuilder(
+                           StructBuilder(
                                 struct: struct.subStructs[i],
                                 maxWidth: maxWidth - 20,
                                 bottomBorder: (showDrag)
@@ -75,7 +73,7 @@ class FunctionStructWidget extends ConsumerWidget {
                                     : (i + 1 == struct.subStructs.length)
                                         ? true
                                         : null,
-                              )),
+                              )
                         ],
                       ),
                     StructDragTarget(

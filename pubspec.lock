@@ -41,6 +41,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.1"
+  box_transform:
+    dependency: transitive
+    description:
+      name: box_transform
+      sha256: "99744e5f5edb2056128d3846894bfa6d4a02b5a4ef42657cf957a345731cff2c"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.4.4"
   characters:
     dependency: transitive
     description:
@@ -158,6 +166,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_box_transform:
+    dependency: "direct main"
+    description:
+      name: flutter_box_transform
+      sha256: "81463cd2793c78f5507316beb831f2c90366f9fb2d89c89d7ef23e5dc13a18fc"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.4.5"
   flutter_code_editor:
     dependency: "direct main"
     description:
@@ -166,6 +182,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.3.2"
+  flutter_colorpicker:
+    dependency: "direct main"
+    description:
+      name: flutter_colorpicker
+      sha256: "969de5f6f9e2a570ac660fb7b501551451ea2a1ab9e2097e89475f60e07816ea"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0"
   flutter_context_menu:
     dependency: "direct main"
     description:

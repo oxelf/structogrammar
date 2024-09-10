@@ -16,6 +16,7 @@ class UntilStructWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     String selectedStruct = ref.watch(selectedStructPod);
     Struct? parent = ref.read(structsPod.notifier).findParentStruct(struct.id);
+    TextStyle style = textStyleFromMap(struct.data, "text");
     bool parentIsIfStruct = (parent?.type ?? StructType.instruction) == StructType.ifSelect || (parent?.type ?? StructType.instruction) == StructType.loop || (parent?.type ?? StructType.instruction) == StructType.caseSelect;
     return  Container(
       width: maxWidth,
@@ -29,11 +30,10 @@ class UntilStructWidget extends ConsumerWidget {
               color: Colors.white,
               child: Column(
                 children: [
-
                   for (int i = 0; i < struct.subStructs.length; i++) Column(
                     children: [
                       StructDragTarget(width: maxWidth - ((parentIsIfStruct)? 20: 24), structId: struct.id, index: i),
-                      StructDraggable(data: struct.subStructs[i], index: i, parentStructId: struct.id, child: StructBuilder(struct: struct.subStructs[i], maxWidth: maxWidth - ((parentIsIfStruct)? 20: 24), noTopBorder: true, noRightBorder: true, bottomBorder: true, )),
+                      StructBuilder(struct: struct.subStructs[i], maxWidth: maxWidth - ((parentIsIfStruct)? 20: 24), noTopBorder: true, noRightBorder: true, bottomBorder: true, ),
                     ],
                   ),
                   StructDragTarget(width: maxWidth - 24, structId: struct.id, index: struct.subStructs.length),
@@ -49,7 +49,7 @@ class UntilStructWidget extends ConsumerWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Expanded(child: Text(struct.data["condition"].toString(), textAlign: TextAlign.center, overflow: TextOverflow.visible, style: TextStyle(fontSize: 12),)),
+                Expanded(child: Text(struct.data["condition"].toString(), textAlign: TextAlign.center, overflow: TextOverflow.visible, style: style,)),
               ],
             ),
           ),

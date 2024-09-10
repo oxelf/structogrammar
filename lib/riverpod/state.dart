@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final selectedStructPod = StateProvider<String>((ref) {
-  return "entry_instruction";
+  return "main";
 });
 
 
@@ -17,6 +17,22 @@ final pageControllerPod = StateProvider<PageController>((ref) {
 
 final mainViewWidthPod = StateProvider<double>((ref) {
   return 0.0;
+});
+
+final rightFloatingPanelWidthPod = StateProvider<double>((ref) {
+  return 250;
+});
+
+final leftFloatingPanelWidthPod = StateProvider<double>((ref) {
+  return 250;
+});
+final rightPanelTabPod = StateProvider<String>((ref) {
+  return "edit";
+});
+
+
+final colorPickerPod = StateProvider<Color?>((ref) {
+  return null;
 });
 
 final cursorPod = StateProvider<SystemMouseCursor>((ref) {

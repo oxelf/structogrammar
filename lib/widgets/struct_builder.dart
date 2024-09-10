@@ -53,12 +53,12 @@ class StructBuilder extends ConsumerWidget {
     var cursor = ref.watch(cursorPod);
     var draggedStruct = ref.watch(dragStructIdPod);
     String? color = struct.data["color"];
-    if (struct.data["size"] != null) {
-      double? newSize = double.tryParse(struct.data["size"]);
-      if (newSize != null) {
-        maxWidth = newSize;
-      }
-    }
+    // if (struct.data["size"] != null) {
+    //   double? newSize = double.tryParse(struct.data["size"]);
+    //   if (newSize != null && newSize > maxWidth) {
+    //     maxWidth = newSize;
+    //   }
+    // }
 
     return Padding(
         padding: (struct.data["size"] != null)
@@ -82,44 +82,7 @@ class StructBuilder extends ConsumerWidget {
               ref.read(cursorPod.notifier).state = SystemMouseCursors.basic;
             },
             child: GestureDetector(
-              behavior: HitTestBehavior.translucent,
-              onPanUpdate: (details) {
-                onPan?.call(details);
-              },
-              onHorizontalDragStart: (details) {
-                if (struct.data["size"] == null) return;
-                if (details.localPosition.dx < maxWidth - 10) {
-                  return;
-                }
-                Map<String, dynamic> newData = struct.data;
-                newData["dragging"] = true;
-                ref.read(cursorPod.notifier).state =
-                    SystemMouseCursors.resizeLeftRight;
-                ref
-                    .read(structsPod.notifier)
-                    .editStructData(struct.id, newData);
-              },
-              // onHorizontalDragCancel: () {
-              //   dragging = false;
-              //   startPosition = null;
-              // },
-              onHorizontalDragUpdate: (details) {
-                if (struct.data["dragging"] == null) return;
-                Map<String, dynamic> newData = struct.data;
-                double size = double.parse(struct.data["size"].toString());
-                newData["size"] = (size + details.delta.dx).toString();
-                ref
-                    .read(structsPod.notifier)
-                    .editStructData(struct.id, newData);
-              },
-              onHorizontalDragEnd: (details) {
-                Map<String, dynamic> newData = struct.data;
-                newData["dragging"] = null;
-                ref.read(cursorPod.notifier).state = SystemMouseCursors.basic;
-                ref
-                    .read(structsPod.notifier)
-                    .editStructData(struct.id, newData);
-              },
+
               onTap: () async {
                 if (selectedStruct == struct.id) {
                   ref.read(selectedStructPod.notifier).state = "";
@@ -178,7 +141,7 @@ class StructBuilder extends ConsumerWidget {
                                   : BorderSide(
                                       width: 0, color: Colors.transparent)),
                       color: (selectedStruct == struct.id && screenshot == null)
-                          ? Colors.orangeAccent
+                          ? Colors.blue[200]
                           : (color != null)
                               ? HexColor(color)
                               : Colors.white),
@@ -225,4 +188,23 @@ class StructBuilder extends ConsumerWidget {
           )
         ]));
   }
+}
+
+TextStyle textStyleFromMap(Map<String, dynamic> data, String prefix) {
+  FontWeight weight = FontWeight.w400;
+  switch (data["${prefix}Weight"]) {
+    case "medium":
+      weight = FontWeight.w500;
+    case "semibold":
+      weight = FontWeight.w500;
+    case "bold":
+      weight = FontWeight.w700;
+    case "extrabold":
+      weight = FontWeight.w800;
+  }
+  return TextStyle(
+    fontSize: double.tryParse(data["${prefix}Size"].toString()) ?? 14,
+    color: data["${prefix}Color"] != null? HexColor(data["${prefix}Color"]): Colors.black,
+    fontWeight: weight,
+  );
 }

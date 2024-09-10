@@ -20,6 +20,7 @@ class IFStructWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     String selectedStruct = ref.watch(selectedStructPod);
     Struct? parent = ref.read(structsPod.notifier).findParentStruct(struct.id);
+    TextStyle style = textStyleFromMap(struct.data, "text");
     return Container(
       child: IntrinsicHeight(
         child: Column(
@@ -54,8 +55,7 @@ class IFStructWidget extends ConsumerWidget {
                             child: Text(
                               overflow: TextOverflow.visible,
                               struct.data["condition"].toString(),
-                              style: TextStyle( fontSize: 14,
-                              ),
+                              style:style,
                             ),
                           ),
                         ],

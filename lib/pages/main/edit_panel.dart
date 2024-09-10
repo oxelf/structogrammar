@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:structogrammar/riverpod/code_notifier.dart';
 import 'package:structogrammar/riverpod/structs.dart';
 import 'package:structogrammar/riverpod/translation.dart';
+import 'package:structogrammar/widgets/property_section.dart';
+import 'package:structogrammar/widgets/property_textfield.dart';
 
 import '../../widgets/color_picker.dart';
 
@@ -26,58 +28,23 @@ class _EditPanelState extends ConsumerState<EditPanel> {
           )
         : Column(
             children: [
-              for (int i = 0; i < currentStruct.data.length; i++)
-                if (!ignoreProps.contains(currentStruct.data.keys.elementAt(i)))
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SizedBox(
-                      child: TextField(
-                        textAlignVertical: TextAlignVertical.top,
-                        minLines:  1,
-                        maxLines: 5,
-                        autofocus: (i == 0),
-                        onChanged: (value) {
-                          Map<String, dynamic> newData = currentStruct.data;
-                          newData[currentStruct.data.keys.elementAt(i)] = value;
-                          ref
-                              .read(structsPod.notifier)
-                              .editStructData(currentStruct.id, newData);
-                          if (ref
-                                  .read(structsPod.notifier)
-                                  .findRootStruct(currentStruct.id) !=
-                              null)
-                            ref.read(codePod.notifier).generate(ref
-                                .read(structsPod.notifier)
-                                .findRootStruct(currentStruct.id)!);
-                        },
-                        controller: TextEditingController(
-                            text: currentStruct.data.values
-                                .elementAt(i)
-                                .toString()),
-                        decoration: InputDecoration(
-                            label: Text(
-                                 translations[ currentStruct.data.keys.elementAt(i).toString()] ?? currentStruct.data.keys.elementAt(i).toString()),
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8))),
-                      ),
-                    ),
-                  ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ColorPicker(
-                    color: currentStruct.data["color"] ?? "#000000",
-                    onChanged: (value) {
-                      Map<String, dynamic> newData = currentStruct.data;
-                      newData["color"] = value;
-                      ref
-                          .read(structsPod.notifier)
-                          .editStructData(currentStruct.id, newData);
-                      setState(() {});
-                    },
-                  ),
-                ),
+              Row(
+                children: [
+                  SizedBox(width: 8,),
+                  Text(translations[currentStruct.type.toString()] ?? currentStruct.type.toString(), style: TextStyle(fontWeight: FontWeight.bold),),
+                ],
               ),
+              Divider(),
+              PropertySectionBuilder(data: currentStruct.data, onChanged: (data) {
+                ref.read(structsPod.notifier).editStructData(currentStruct.id, data);
+                if (ref
+                    .read(structsPod.notifier)
+                    .findRootStruct(currentStruct.id) !=
+                    null)
+                  ref.read(codePod.notifier).generate(ref
+                      .read(structsPod.notifier)
+                      .findRootStruct(currentStruct.id)!);
+              }),
             ],
           );
   }

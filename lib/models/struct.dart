@@ -32,7 +32,11 @@ class Struct extends Equatable {
       {required this.id,
       required this.type,
       required this.data,
-      required this.subStructs});
+      required this.subStructs}) {
+    if (data["color"] == null) {
+      data["color"] = "#FFFFFF";
+    }
+  }
 
   @override
   List<Object> get props => [id, type, data, subStructs];
@@ -64,10 +68,10 @@ class Struct extends Equatable {
   }
 
   factory Struct.function(
-      String name, String returnType, List<Struct> subStructs,
+      String text, String returnType, List<Struct> subStructs,
       {Map<String, dynamic>? additionalData}) {
     Map<String, dynamic> newData = additionalData ?? {};
-    newData["name"] = name;
+    newData["text"] = text;
     newData["returnType"] = returnType;
     newData["comment"] = "";
     return Struct(
@@ -93,7 +97,6 @@ class Struct extends Equatable {
       {Map<String, dynamic>? additionalData}) {
     Map<String, dynamic> newData = additionalData ?? {};
     newData["condition"] = condition;
-    newData["comment"] = "";
     newData["loopType"] = loopType;
     return Struct(
         id: generateUUID(),
@@ -106,7 +109,6 @@ class Struct extends Equatable {
       {Map<String, dynamic>? additionalData}) {
     Map<String, dynamic> newData = additionalData ?? {};
     newData["condition"] = condition;
-    newData["comment"] = "";
     return Struct(
         id: generateUUID(),
         type: StructType.repeat,
@@ -135,7 +137,6 @@ class Struct extends Equatable {
       Map<String, dynamic>? additionalData}) {
     Map<String, dynamic> newData = additionalData ?? {};
     newData["condition"] = condition;
-    newData["comment"] = "";
     for (int i = 0; i < trueSubStructs.length; i++) {
       trueSubStructs[i].data["ifValue"] = true;
     }

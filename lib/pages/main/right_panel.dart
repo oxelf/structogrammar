@@ -8,6 +8,8 @@ import 'package:structogrammar/riverpod/settings.dart';
 import 'package:structogrammar/riverpod/state.dart';
 import 'package:structogrammar/riverpod/structs.dart';
 import 'package:structogrammar/riverpod/translation.dart';
+import 'package:structogrammar/widgets/actions_button.dart';
+import 'package:structogrammar/widgets/simple_tabbar.dart';
 
 import '../../models/struct.dart';
 
@@ -20,10 +22,6 @@ class RightPanel extends ConsumerStatefulWidget {
 class _RightPanelState extends ConsumerState<RightPanel>with TickerProviderStateMixin {
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      TabController tabController = TabController(length: 2, vsync: this);
-      ref.read(tabControllerPod.notifier).state = tabController;
-    });
     super.initState();
   }
   @override
@@ -33,94 +31,101 @@ class _RightPanelState extends ConsumerState<RightPanel>with TickerProviderState
     var translations = ref.watch(translationsPod);
     var settings = ref.watch(settingsPod);
     var pageController = PageController();
-    var tabController = ref.watch(tabControllerPod);
     Size size = MediaQuery.sizeOf(context);
-    return Container(
-      height: MediaQuery.sizeOf(context).height,
-      decoration: BoxDecoration(
-        border: Border(left: BorderSide(width: 2, color: Colors.black)),
-      ),
-      child: Column(
-        children: [
-          if (tabController != null) TabBar(controller: tabController,onTap: (index) {
-            pageController.jumpToPage(index);
-          }, tabs: [
-            Tab(text: translations["edit"].toString(),),
-            Tab(text: translations["output"].toString(),),
-          ]),
-          Container(
-            height: MediaQuery.sizeOf(context).height - 88,
-    width:  MediaQuery.sizeOf(context).width,
-            child: PageView(
-              physics: NeverScrollableScrollPhysics(),
-              controller: pageController,
-              children: [
-                EditPanel(),
-                CodeTheme(
-                  data: CodeThemeData( quoteStyle: TextStyle(color: Colors.green), variableStyle: TextStyle(color: Colors.black), classStyle: TextStyle(color: Colors.black), keywordStyle: TextStyle(color: Colors.orange), functionStyle: TextStyle(color: Colors.red), titleStyle: TextStyle(color: Colors.blue), paramsStyle: TextStyle(color: Colors.black), commentStyle: TextStyle(color: Colors.black), ),
-                  child: Container(
-                    height: MediaQuery.sizeOf(context).height - 88,
-                    child: SingleChildScrollView(
-                      child: CodeField(
-                        gutterStyle: GutterStyle(
-                          showErrors: false,
-                          showFoldingHandles: false,
-                          showLineNumbers: false,
-                        ),
-                        textStyle: TextStyle(color: Colors.black),
-                        cursorColor: Colors.black,
-                        background: Colors.grey.shade200,
-                        maxLines: 10000,
-                        minLines: 1000,
-                        readOnly: true,
-                        controller: codeController,
-                      ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Container(
+          height: constraints.maxHeight,
+          child: Column(
+            children: [
+              SizedBox(
+                height: 50,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SimpleTabbar(tabs: [translations["edit"].toString(), "code"], currentTabpod: rightPanelTabPod),
+                      ],
                     ),
-                  ),
+                    ],
                 ),
-                // CodeTheme(
-                //   data: CodeThemeData( quoteStyle: TextStyle(color: Colors.green), variableStyle: TextStyle(color: Colors.black), classStyle: TextStyle(color: Colors.black), keywordStyle: TextStyle(color: Colors.orange), functionStyle: TextStyle(color: Colors.red), titleStyle: TextStyle(color: Colors.blue), paramsStyle: TextStyle(color: Colors.black), commentStyle: TextStyle(color: Colors.black), ),
-                //   child: Container(
-                //     height: MediaQuery.sizeOf(context).height - 90,
-                //     child: Stack(
-                //       children: [
-                //         SingleChildScrollView(
-                //           child: CodeField(
-                //             gutterStyle: GutterStyle(
-                //               showErrors: false,
-                //               showFoldingHandles: false,
-                //               showLineNumbers: false,
-                //             ),
-                //             textStyle: TextStyle(color: Colors.black),
-                //             cursorColor: Colors.black,
-                //             background: Colors.grey.shade200,
-                //             maxLines: 10000,
-                //             minLines: 1000,
-                //             controller: codeInputController,
-                //           ),
-                //         ),
-                //         Align(
-                //           alignment: Alignment.bottomCenter,
-                //           child: Padding(
-                //             padding: const EdgeInsets.all(8.0),
-                //             child: ElevatedButton(onPressed: () {
-                //               // Struct parsed = CppParser.parseCode(codeInputController.fullText);
-                //               // print("parsed: $parsed");
-                //               // ref.read(structsPod.notifier).addStruct(parsed);
-                //             }, style: ButtonStyle(
-                //               shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
-                //             ), child: Text("Generate")),
-                //           ),
-                //         ),
-                //       ],
-                //     ),
-                //   ),
-                // ),
-              ],
-            ),
+              ),
+              Divider(),
+              Expanded(
+                child: Container(
+                        width:  MediaQuery.sizeOf(context).width,
+                  child:
+                      SingleChildScrollView(child: EditPanel()),
+                      // CodeTheme(
+                      //   data: CodeThemeData( quoteStyle: TextStyle(color: Colors.green), variableStyle: TextStyle(color: Colors.black), classStyle: TextStyle(color: Colors.black), keywordStyle: TextStyle(color: Colors.orange), functionStyle: TextStyle(color: Colors.red), titleStyle: TextStyle(color: Colors.blue), paramsStyle: TextStyle(color: Colors.black), commentStyle: TextStyle(color: Colors.black), ),
+                      //   child: Container(
+                      //     height: MediaQuery.sizeOf(context).height - 88,
+                      //     child: SingleChildScrollView(
+                      //       child: CodeField(
+                      //         gutterStyle: GutterStyle(
+                      //           showErrors: false,
+                      //           showFoldingHandles: false,
+                      //           showLineNumbers: false,
+                      //         ),
+                      //         textStyle: TextStyle(color: Colors.black),
+                      //         cursorColor: Colors.black,
+                      //         background: Colors.grey.shade200,
+                      //         maxLines: 10000,
+                      //         minLines: 1000,
+                      //         readOnly: true,
+                      //         controller: codeController,
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
+                      // CodeTheme(
+                      //   data: CodeThemeData( quoteStyle: TextStyle(color: Colors.green), variableStyle: TextStyle(color: Colors.black), classStyle: TextStyle(color: Colors.black), keywordStyle: TextStyle(color: Colors.orange), functionStyle: TextStyle(color: Colors.red), titleStyle: TextStyle(color: Colors.blue), paramsStyle: TextStyle(color: Colors.black), commentStyle: TextStyle(color: Colors.black), ),
+                      //   child: Container(
+                      //     height: MediaQuery.sizeOf(context).height - 90,
+                      //     child: Stack(
+                      //       children: [
+                      //         SingleChildScrollView(
+                      //           child: CodeField(
+                      //             gutterStyle: GutterStyle(
+                      //               showErrors: false,
+                      //               showFoldingHandles: false,
+                      //               showLineNumbers: false,
+                      //             ),
+                      //             textStyle: TextStyle(color: Colors.black),
+                      //             cursorColor: Colors.black,
+                      //             background: Colors.grey.shade200,
+                      //             maxLines: 10000,
+                      //             minLines: 1000,
+                      //             controller: codeInputController,
+                      //           ),
+                      //         ),
+                      //         Align(
+                      //           alignment: Alignment.bottomCenter,
+                      //           child: Padding(
+                      //             padding: const EdgeInsets.all(8.0),
+                      //             child: ElevatedButton(onPressed: () {
+                      //               // Struct parsed = CppParser.parseCode(codeInputController.fullText);
+                      //               // print("parsed: $parsed");
+                      //               // ref.read(structsPod.notifier).addStruct(parsed);
+                      //             }, style: ButtonStyle(
+                      //               shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
+                      //             ), child: Text("Generate")),
+                      //           ),
+                      //         ),
+                      //       ],
+                      //     ),
+                      //   ),
+                      // ),
+                
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      }
     );
   }
 }

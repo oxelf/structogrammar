@@ -11,7 +11,7 @@ class StructsNotifier extends Notifier<List<Struct>> {
   @override
   List<Struct> build() {
     return [
-      Struct(id: "main", type: StructType.function, data: {"name": "main", "comment": "", "size": "400"}, subStructs: [ Struct(id: "entry_instruction", type: StructType.instruction, data: {"instruction": "", "comment": ""}, subStructs: []),]),
+      Struct(id: "main", type: StructType.function, data: {"text": "main", "comment": "", "size": "400", "textSize": 20, "textWeight": "bold"}, subStructs: [ Struct(id: "entry_instruction", type: StructType.instruction, data: {"instruction": "", "comment": ""}, subStructs: []),]),
     ];
   }
 

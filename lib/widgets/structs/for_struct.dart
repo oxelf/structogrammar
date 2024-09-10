@@ -18,6 +18,7 @@ class ForStructWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     String selectedStruct = ref.watch(selectedStructPod);
     Struct? parent = ref.read(structsPod.notifier).findParentStruct(struct.id);
+    TextStyle style = textStyleFromMap(struct.data, "text");
     bool parentIsIfStruct = (parent?.type ?? StructType.instruction) == StructType.ifSelect || (parent?.type ?? StructType.instruction) == StructType.loop || (parent?.type ?? StructType.instruction) == StructType.caseSelect;
     bool showDrag = ref.watch(showDragPod);
     String? color = struct.data["color"];
@@ -35,27 +36,27 @@ class ForStructWidget extends ConsumerWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Expanded(child: Text(struct.data["condition"].toString(), textAlign: TextAlign.center, overflow: TextOverflow.visible, style: TextStyle(fontSize: 12),)),
+                Expanded(child: Text(struct.data["condition"].toString(), textAlign: TextAlign.center, overflow: TextOverflow.visible, style: style,)),
               ],
             ),
           ),
           Row(
             children: [
               Container(width: 20,),
-              Expanded(child: Container( height: 2, color: Colors.black,)),
+              if (struct.subStructs.isNotEmpty) Expanded(child: Container( height: 2, color: Colors.black,)),
             ],
           ),
           Container(
             width: maxWidth,
             color: ((selectedStruct == struct.id)
-    ? Colors.orangeAccent
+    ? Colors.blue[200]
         : (color != null)? HexColor(color): Colors.white),
             child: IntrinsicHeight(
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                Container(width: 20,),
-                Container(width: 2, color: Colors.black,),
+                  if (struct.subStructs.isNotEmpty) Container(width: 20,),
+                if (struct.subStructs.isNotEmpty) Container(width: 2, color: Colors.black,),
                 Expanded(
                   child: Column(
                     children: [
@@ -63,7 +64,7 @@ class ForStructWidget extends ConsumerWidget {
                         children: [
                           StructDragTarget(
                               width: maxWidth - ((parentIsIfStruct)? 22: 26), structId: struct.id, index: i),
-                          StructDraggable(index: i, data: struct.subStructs[i], parentStructId: struct.id, child: StructBuilder(struct: struct.subStructs[i], maxWidth: maxWidth- ((parentIsIfStruct)? 22: 26), noTopBorder: (showDrag || i == 0), noRightBorder: true, noLeftBorder: true, bottomBorder: showDrag,)),
+                           StructBuilder(struct: struct.subStructs[i], maxWidth: maxWidth- ((parentIsIfStruct)? 22: 26), noTopBorder: (showDrag || i == 0), noRightBorder: true, noLeftBorder: true, bottomBorder: showDrag,),
                         ],
                       ),
                       StructDragTarget(

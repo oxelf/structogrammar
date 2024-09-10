@@ -12,7 +12,8 @@ class InstructionStructWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     String selectedStruct = ref.watch(selectedStructPod);
-
+    TextStyle style = textStyleFromMap(struct.data, "text");
+    TextStyle commentStyle = textStyleFromMap(struct.data, "comment");
     return  Container(
       width: maxWidth,
       child: Column(
@@ -20,14 +21,14 @@ class InstructionStructWidget extends ConsumerWidget {
         children: [
           if ((struct.data["comment"] ?? "") != "") Padding(
           padding: const EdgeInsets.only(bottom: 2.0, left: 2),
-          child: Text(struct.data["comment"].toString(), style: TextStyle(color: Colors.grey, fontSize: 12),),
+          child: Text(struct.data["comment"].toString(), style: commentStyle,),
         ),
           Padding(
             padding: const EdgeInsets.only(left: 4.0, top: 2, bottom: 2),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Expanded(child: Text(struct.data["instruction"].toString(), overflow: TextOverflow.visible, style: TextStyle(fontSize: 12),)),
+                Expanded(child: Text(struct.data["instruction"].toString(), overflow: TextOverflow.visible, style: style)),
               ],
             ),
           ),

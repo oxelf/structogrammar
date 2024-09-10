@@ -21,10 +21,18 @@ class MainViewState extends ConsumerState<MainView> {
   double _currentScale = 1.0;
   double offset = 0.0;
   Map<String, GlobalKey> structKeys = {};
+  double? resizeWidth;
 
   @override
   void initState() {
     html.document.onContextMenu.listen((event) => event.preventDefault());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      var rightPanelWidth = ref.read(rightFloatingPanelWidthPod);
+      var leftPanelWidth = ref.read(leftFloatingPanelWidthPod);
+      var width = MediaQuery.sizeOf(context).width - rightPanelWidth - 20 - leftPanelWidth;
+      var selectedStructId = ref.read(selectedStructPod);
+      zoomToFit(width, leftPanelWidth);
+    });
     super.initState();
   }
 
@@ -79,12 +87,16 @@ class MainViewState extends ConsumerState<MainView> {
     });
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     var structs = ref.watch(structsPod);
     var cursor = ref.watch(cursorPod);
     var translations = ref.watch(translationsPod);
-    var width = ref.watch(mainViewWidthPod);
+    var rightPanelWidth = ref.watch(rightFloatingPanelWidthPod);
+    var leftPanelWidth = ref.watch(leftFloatingPanelWidthPod);
+    var width = MediaQuery.sizeOf(context).width - rightPanelWidth - 20 - leftPanelWidth;
     var selectedStructId = ref.watch(selectedStructPod);
 
     return MouseRegion(
@@ -111,65 +123,96 @@ class MainViewState extends ConsumerState<MainView> {
                           double width = (structs[i].data["size"] != null)
                               ? (double.tryParse(structs[i].data["size"]) ?? 300)
                               : 300 + (getMaxDepth(structs[i]) * 50);
+
                           if (i == 0) {
                             structKeys = {};
                             offset = width;
                             structKeys[structs[i].id] = key;
                           }
-                          return Positioned(
-                            left: offset - width,
-                            top: 0,
-                            child: Column(
-                              key: key,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: StructBuilder(
-                                    onPan: _handlePanUpdate,
-                                    dragIndex: i,
-                                    struct: structs[i],
-                                    bottomBorder: true,
-                                    maxWidth: width,
-                                  ),
+
+                          return StatefulBuilder(
+                            builder: (context, setState) {
+                              return Positioned(
+                                left: 0,
+                                top: 0,
+                                child: Column(
+                                  key: key,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    GestureDetector(
+                                      onHorizontalDragUpdate: (details) {
+                                          width += details.delta.dx;
+                                          setState(() {
+                                            resizeWidth = width;
+                                          });
+                                          },
+                                      onHorizontalDragCancel: () {
+                                        if (resizeWidth == null) return;
+                                        Map<String, dynamic> newData = structs[i].data;
+                                        newData["size"] = (resizeWidth).toString();
+                                        ref.read(structsPod.notifier).editStructData(structs[i].id, newData);
+                                        resizeWidth = null;
+                                      },
+                                      onHorizontalDragEnd: (_) {
+                                        if (resizeWidth == null) return;
+                                        Map<String, dynamic> newData = structs[i].data;
+                                        newData["size"] = (resizeWidth).toString();
+                                        ref.read(structsPod.notifier).editStructData(structs[i].id, newData);
+                                        resizeWidth = null;
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Stack(
+                                          children: [
+                                            StructBuilder(
+                                              onPan: _handlePanUpdate,
+                                              dragIndex: i,
+                                              struct: structs[i],
+                                              bottomBorder: true,
+                                              maxWidth: resizeWidth ?? width, // Dynamically update the width
+                                            ),
+                                            // Resize handle at the right edge
+                                            Positioned(
+                                              right: 0,
+                                              top: 0,
+                                              bottom: 0,
+                                              child: MouseRegion(
+                                                cursor: SystemMouseCursors.resizeLeftRight,
+                                                child: Container(
+                                                  width: 10, // Make the resize handle clickable
+                                                  color: Colors.transparent, // Transparent handle
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
+                              );
+                            },
                           );
                         },
-                      ),
+                      )
                   ],
                 ),
               ),
             ),
 
           Positioned(
-            left: 8,
+            left: leftPanelWidth +  16,
             bottom: 8,
             child: InkWell(
               onTap: () {
                 showContextMenu(context, contextMenu: ContextMenu(
-                    position: Offset(8, MediaQuery.sizeOf(context).height - 40),
+                    position: Offset(leftPanelWidth +  16, MediaQuery.sizeOf(context).height - 40),
                     entries: [
                       MenuItem(label: "Zoom in", onSelected: () => zoomCanvas(1.2)),
                       MenuItem(label: "Zoom out", onSelected: () => zoomCanvas(0.8)),
                       MenuItem(label: "Zoom to fit", onSelected: () {
-                        Struct? rootStruct = ref.read(structsPod.notifier).findRootStruct(selectedStructId);
-                        if (rootStruct == null) return;
-                        GlobalKey? key = structKeys[rootStruct.id];
-                        if (key == null) return;
-                        final box = key.currentContext?.findRenderObject() as RenderBox?;
-                        if (box == null) return;
-                        double heightZoomFactor = widget.height / box.size.height;
-                        double widthZoomFactor = width / box.size.width;
-                        if (heightZoomFactor < widthZoomFactor) {
-                          setExactZoom(heightZoomFactor);
-                          jumpToCoordinate(-(width - box.size.width) / 2, 0);
-                        } else {
-                          setExactZoom(widthZoomFactor);
-                          jumpToCoordinate(0, -(widget.height - box.size.height) / 2);
-                        }
+                        zoomToFit(width, leftPanelWidth);
                       }),
                     ]
                 ));
@@ -188,6 +231,25 @@ class MainViewState extends ConsumerState<MainView> {
         ],
       ),
     );
+  }
+
+  void zoomToFit(double width, double leftPanelWidth) {
+    var selectedStructId = ref.read(selectedStructPod);
+    Struct? rootStruct = ref.read(structsPod.notifier).findRootStruct(selectedStructId);
+    if (rootStruct == null) return;
+    GlobalKey? key = structKeys[rootStruct.id];
+    if (key == null) return;
+    final box = key.currentContext?.findRenderObject() as RenderBox?;
+    if (box == null) return;
+    double heightZoomFactor = widget.height / box.size.height;
+    double widthZoomFactor = width / box.size.width;
+    if (heightZoomFactor < widthZoomFactor) {
+      setExactZoom(heightZoomFactor);
+      jumpToCoordinate(-leftPanelWidth, 0);
+    } else {
+      setExactZoom(widthZoomFactor);
+      jumpToCoordinate(-leftPanelWidth, 0);
+    }
   }
 }
 

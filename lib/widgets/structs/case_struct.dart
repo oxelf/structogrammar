@@ -20,6 +20,8 @@ class CaseStructWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     String selectedStruct = ref.watch(selectedStructPod);
     Struct? parent = ref.read(structsPod.notifier).findParentStruct(struct.id);
+
+    TextStyle style = textStyleFromMap(struct.data, "text");
     double topHeight = 60;
     Map<String, List<Struct>> cases = {};
    struct.subStructs.forEach((s) {
@@ -64,10 +66,9 @@ class CaseStructWidget extends ConsumerWidget {
                             ),
                           Expanded(
                             child: Text(
-                              overflow: TextOverflow.visible,
+                              overflow: TextOverflow.clip,
                               struct.data["condition"].toString(),
-                              style: TextStyle( fontSize: 14,
-                              ),
+                              style: style,
                             ),
                           ),
                         ],
@@ -108,7 +109,7 @@ class CaseStructWidget extends ConsumerWidget {
                     color: Colors.white,
                     child: IntrinsicHeight(
                       child: SizedBox(
-                        width: maxWidth - 2,
+                        width: maxWidth,
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
@@ -145,7 +146,7 @@ class CaseStructWidget extends ConsumerWidget {
                   ),
 
                   for (int i = 0; i < cases.length; i++) Positioned(
-                    left:  caseWidth * i - 1,
+                    left:  caseWidth * i - (((parent?.type ?? StructType.function) == StructType.function)?1: 1),
                     child: (i == 0)?SizedBox(): Container(width: 2, color: Colors.black, height: 10000),
                   ),
                 ],

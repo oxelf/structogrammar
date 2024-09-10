@@ -5,6 +5,12 @@
   "caseStatement": "case statement",
   "whileLoop": "while loop",
   "doWhileLoop": "do while loop",
+  "StructType.loop": "loop",
+  "StructType.ifSelect": "if statement",
+  "StructType.instruction": "instruction",
+  "StructType.caseSelect": "case statement",
+  "StructType.repeat": "do while loop",
+  "StructType.function": "function",
   "copy": "copy",
   "paste": "paste",
   "delete": "delete",
@@ -27,5 +33,6 @@
   "language": "language",
   "english": "english",
   "german": "german",
-  "color": "color"
+  "color": "color",
+  "importFromCode": "import from code"
 }

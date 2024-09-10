@@ -93,6 +93,7 @@ class _MainAppState extends ConsumerState<MainApp> {
     scrollBehavior:  const MaterialScrollBehavior().copyWith(
       dragDevices: PointerDeviceKind.values.toSet(),
     ),
+    theme: ThemeData(primaryColor: Colors.blue),
     debugShowCheckedModeBanner: false,
     home: MainPage(),
   );

@@ -220,7 +220,7 @@ ContextMenu getContextMenuForStruct(
               ]),
           MenuItem.submenu(
               label: translations["after"].toString(),
-              icon: Icons.arrow_upward,
+              icon: Icons.arrow_downward,
               items: [
                 MenuItem(
                   label: translations["instruction"].toString(),
