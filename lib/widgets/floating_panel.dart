@@ -64,10 +64,12 @@ class FloatingPanelState extends ConsumerState<FloatingPanel> {
           width: resizeWidth ?? width,
           decoration: BoxDecoration(
             color: Colors.white,
-            border: Border.all(color: Colors.black, width: 2),
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
-              BoxShadow(
+              if (widget.left == true) BoxShadow(
+                  blurRadius: 10,
+                  color: Colors.black.withOpacity(0.3),
+                  offset: Offset(5, 0)) else  BoxShadow(
                   blurRadius: 10,
                   color: Colors.black.withOpacity(0.3),
                   offset: Offset(-5, 0))

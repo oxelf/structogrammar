@@ -87,8 +87,14 @@ class _ActionsButtonState extends ConsumerState<ActionsButton> {
                     if (result == null) {
                       return;
                     } else {
-                      File file = File(result.files.first.path ?? "");
-                      String data = file.readAsStringSync();
+                      String data = "";
+                      if (kIsWeb) {
+                        data = utf8.decode(result.files.first.bytes?.toList() ?? []);
+                      } else {
+                        File file = File(result.files.first.path ?? "");
+                         data = file.readAsStringSync();
+                      }
+
                       List<Struct> parsed = await CodeParser.parseCppCode(data);
                       if (parsed.isEmpty) {
                         return;

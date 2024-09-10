@@ -109,7 +109,7 @@ class MainViewState extends ConsumerState<MainView> {
               constrained: false,
               onInteractionUpdate: _onInteractionUpdate,
               child: Container(
-                color: Theme.of(context).scaffoldBackgroundColor,
+                color: Colors.grey.shade200,
                 width: 10000,  // Arbitrarily large width for the canvas
                 height: 10000,  // Arbitrarily large height for the canvas
                 child: Stack(
@@ -217,7 +217,7 @@ class MainViewState extends ConsumerState<MainView> {
               },
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.grey.shade200,
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(4),
                 ),
                 width: 50,

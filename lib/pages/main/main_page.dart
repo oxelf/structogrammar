@@ -29,6 +29,7 @@ class MainPageState extends ConsumerState<MainPage> {
     Size size = MediaQuery.sizeOf(context);
   var colorPicker = ref.watch(colorPickerPod);
     return Scaffold(
+      backgroundColor: Colors.grey.shade200,
       body: SizedBox(
         height: MediaQuery.sizeOf(context).height,
         width: MediaQuery.sizeOf(context).width,
