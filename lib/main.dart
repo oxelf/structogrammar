@@ -58,6 +58,7 @@
 
 
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -70,6 +71,7 @@ import 'package:structogrammar/riverpod/translation.dart';
 void main() {
   usePathUrlStrategy();
   WidgetsFlutterBinding.ensureInitialized();
+  if (kIsWeb) print("is web");
   runApp(const ProviderScope( child:  MainApp()));
 }
 
