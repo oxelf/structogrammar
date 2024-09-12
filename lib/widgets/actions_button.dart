@@ -163,6 +163,7 @@ class _ActionsButtonState extends ConsumerState<ActionsButton> {
                                             children: [
                                               ElevatedButton(
                                                 onPressed: () {
+                                                  Navigator.pop(navigatorKey.currentContext!);
                                                   ref
                                                       .read(structsPod.notifier)
                                                       .replaceStructs([
@@ -172,7 +173,7 @@ class _ActionsButtonState extends ConsumerState<ActionsButton> {
                                                   ref.read(codePod.notifier).generate(
                                                       parsed.firstWhere((e) =>
                                                           e.id == selectedStruct));
-                                                  Navigator.pop(navigatorKey.currentContext!);
+
                                                 },
                                                 child: Text(context.l.import, style: TextStyle(color: Colors.white),),
                                                 style: ButtonStyle(
