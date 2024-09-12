@@ -332,6 +332,7 @@ ContextMenu getContextMenuForStruct(
           }
           final container = ProviderScope.containerOf(context);
           ScreenshotController screenShotController = ScreenshotController();
+         double maxWidth = double.tryParse(rootStruct.data["size"]) ?? 400;
           Uint8List? bytes = await screenShotController.captureFromLongWidget(
               pixelRatio: 4,
               UncontrolledProviderScope(
@@ -346,7 +347,7 @@ ContextMenu getContextMenuForStruct(
                               child: StructBuilder(
                                 struct: rootStruct,
                                 screenshot: true,
-                                maxWidth: 400,
+                                maxWidth: maxWidth,
                               ))))));
 
 
