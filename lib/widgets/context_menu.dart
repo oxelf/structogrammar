@@ -6,6 +6,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:structogrammar/context_extension.dart';
+import 'package:structogrammar/main.dart';
 import 'package:universal_html/html.dart' as html;
 import 'package:flutter_context_menu/flutter_context_menu.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,7 +18,11 @@ import 'package:structogrammar/widgets/struct_builder.dart';
 
 
 ContextMenu getContextMenuForStruct(
-    Struct struct, BuildContext context, WidgetRef ref) {
+    Struct struct, WidgetRef ref) {
+  if (navigatorKey.currentContext == null) {
+    throw Exception("");
+  }
+  BuildContext context = navigatorKey.currentContext!;
   Map<String, dynamic> additionalData = {};
   additionalData["condition"] = struct.data["condition"];
   additionalData["ifCondition"] = struct.data["ifCondition"];
@@ -310,6 +315,12 @@ ContextMenu getContextMenuForStruct(
         icon: Icons.image,
         value: "screenshot",
         onSelected: () async {
+          String fileName = (ref
+              .read(structsPod.notifier)
+              .findRootStruct(struct.id)
+              ?.data["name"] ??
+              "main") +
+              ".png";
           try {
             ref.read(selectedStructPod.notifier).state = "";
           } catch (_) {}
@@ -336,12 +347,7 @@ ContextMenu getContextMenuForStruct(
                                 screenshot: true,
                                 maxWidth: 400,
                               ))))));
-          String fileName = (ref
-                      .read(structsPod.notifier)
-                      .findRootStruct(struct.id)
-                      ?.data["name"] ??
-                  "main") +
-              ".png";
+
 
           if (kIsWeb) {
             download(bytes, downloadName: fileName);

@@ -101,7 +101,7 @@ class _ActionsButtonState extends ConsumerState<ActionsButton> {
                       if (parsed.isEmpty) {
                         return;
                       }
-                      if (navigatorKey.currentContext == null) {
+                      if (navigatorKey.currentContext == null || parsed.length == 1) {
                         ref
                             .read(structsPod.notifier)
                             .replaceStructs([parsed.first]);

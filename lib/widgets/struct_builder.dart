@@ -108,7 +108,7 @@ class StructBuilder extends ConsumerWidget {
                         .read(structsPod.notifier)
                         .findRootStruct(struct.id)!);
                 },
-                contextMenu: getContextMenuForStruct(struct, context, ref),
+                contextMenu: getContextMenuForStruct(struct, ref),
                 child: Container(
                   width: maxWidth,
                   padding: EdgeInsets.zero,
