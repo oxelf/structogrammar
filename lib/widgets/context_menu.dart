@@ -24,9 +24,10 @@ ContextMenu getContextMenuForStruct(
   }
   BuildContext context = navigatorKey.currentContext!;
   Map<String, dynamic> additionalData = {};
+  if (struct.data["condition"] != null)
   additionalData["condition"] = struct.data["condition"];
-  additionalData["ifCondition"] = struct.data["ifCondition"];
-  additionalData["case"] = struct.data["case"];
+  if (struct.data["ifCondition"] != null) additionalData["ifCondition"] = struct.data["ifCondition"];
+  if (struct.data["case"] != null) additionalData["case"] = struct.data["case"];
 
   final entries = <ContextMenuEntry>[
     MenuItem(
