@@ -66,6 +66,8 @@ import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:structogrammar/riverpod/settings.dart';
 
 
+GlobalKey<NavigatorState> navigatorKey = GlobalKey();
+
 void main() {
   usePathUrlStrategy();
   WidgetsFlutterBinding.ensureInitialized();
@@ -89,6 +91,7 @@ class _MainAppState extends ConsumerState<MainApp> {
   }
   @override
   Widget build(BuildContext context) {return  MaterialApp(
+    navigatorKey: navigatorKey,
     localizationsDelegates: AppLocalizations.localizationsDelegates,
     supportedLocales: AppLocalizations.supportedLocales,
     scrollBehavior:  const MaterialScrollBehavior().copyWith(

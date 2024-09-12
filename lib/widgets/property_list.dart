@@ -35,8 +35,16 @@ class _PropertyColorPickerState extends ConsumerState<PropertyListWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return PropertyTextfield(onlyColor: true, onChanged: (value) {
-      print("new: $value");
-    }, fieldName: "", value: selectedValue.first);
+    return Column(
+      children: [
+        for (int i = 0; i < widget.value.length; i++)
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: PropertyTextfield(onlyColor: true, onChanged: (value) {
+            print("new: $value");
+          },  fieldName: "", value: selectedValue[i]),
+        ),
+      ],
+    );
   }
 }

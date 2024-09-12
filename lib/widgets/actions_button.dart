@@ -8,9 +8,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_context_menu/flutter_context_menu.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:structogrammar/context_extension.dart';
+import 'package:structogrammar/main.dart';
 import 'package:structogrammar/models/struct.dart';
 import 'package:structogrammar/parser/code_parser.dart';
-
 
 import '../riverpod/code_notifier.dart';
 import '../riverpod/structs.dart';
@@ -79,29 +79,116 @@ class _ActionsButtonState extends ConsumerState<ActionsButton> {
                     }
                   }),
               MenuItem(
-                  label:context.l.importFromCode,
+                  label: context.l.importFromCode,
                   icon: Icons.code,
                   onSelected: () async {
                     FilePickerResult? result = await FilePicker.platform
-                        .pickFiles(allowedExtensions: ["cpp"], type: FileType.custom);
+                        .pickFiles(
+                            allowedExtensions: ["cpp"], type: FileType.custom);
                     if (result == null) {
                       return;
                     } else {
                       String data = "";
                       if (kIsWeb) {
-                        data = utf8.decode(result.files.first.bytes?.toList() ?? []);
+                        data = utf8
+                            .decode(result.files.first.bytes?.toList() ?? []);
                       } else {
                         File file = File(result.files.first.path ?? "");
-                         data = file.readAsStringSync();
+                        data = file.readAsStringSync();
                       }
 
                       List<Struct> parsed = await CodeParser.parseCppCode(data);
                       if (parsed.isEmpty) {
                         return;
                       }
-                      ref.read(structsPod.notifier).replaceStructs(parsed);
-
+                      if (navigatorKey.currentContext == null) {
+                        ref
+                            .read(structsPod.notifier)
+                            .replaceStructs([parsed.first]);
                         ref.read(codePod.notifier).generate(parsed[0]);
+                      } else {
+                        String selectedStruct = parsed[0].id;
+                        showDialog(
+                            context: navigatorKey.currentContext!,
+                            builder: (context) =>
+                                StatefulBuilder(builder: (context, setState) {
+                                  return Dialog(
+                                    shape: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            "which function do you want to import?",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 20),
+                                          ),
+                                        ),
+                                        for (int i = 0; i < parsed.length; i++)
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                setState(() {
+                                                  selectedStruct = parsed[i].id;
+                                                });
+                                              },
+                                              child: Container(
+                                                width: 300,
+                                                height: 40,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                  border: Border.all(
+                                                    color: (selectedStruct ==
+                                                            parsed[i].id)
+                                                        ? Colors.blue.shade400
+                                                        : Colors.black,
+                                                  ),
+                                                ),
+                                                child:
+                                                    Center(child: Text(parsed[i].data["text"])),
+                                              ),
+                                            ),
+                                          ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            mainAxisAlignment: MainAxisAlignment.end,
+                                            children: [
+                                              ElevatedButton(
+                                                onPressed: () {
+                                                  ref
+                                                      .read(structsPod.notifier)
+                                                      .replaceStructs([
+                                                    parsed.firstWhere(
+                                                        (e) => e.id == selectedStruct)
+                                                  ]);
+                                                  ref.read(codePod.notifier).generate(
+                                                      parsed.firstWhere((e) =>
+                                                          e.id == selectedStruct));
+                                                  Navigator.pop(navigatorKey.currentContext!);
+                                                },
+                                                child: Text(context.l.import, style: TextStyle(color: Colors.white),),
+                                                style: ButtonStyle(
+                                                  backgroundColor: WidgetStatePropertyAll(Colors.blue.shade400),
+                                                  fixedSize: WidgetStatePropertyAll(Size(150, 40)),
+                                                  shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }));
+                      }
                     }
                   }),
             ]));

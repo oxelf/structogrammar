@@ -119,8 +119,9 @@ class _PropertyTextfieldState extends State<PropertyTextfield> {
             if (widget.onlyColor == true) FilteringTextInputFormatter.allow(RegExp(r'[a-fA-F0-9#]')),
           ],
           decoration: InputDecoration(
+            suffixIcon: widget.suffix,
+            suffixIconConstraints: BoxConstraints(maxHeight: 14, maxWidth: 14),
             prefix: widget.prefix,
-            suffix: widget.suffix,
             contentPadding: EdgeInsets.symmetric(horizontal: 4, vertical: 0),
             focusedBorder: OutlineInputBorder(
               borderSide: BorderSide(color: Colors.blue, width: 0),
