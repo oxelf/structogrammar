@@ -33,7 +33,7 @@ class _EditPanelState extends ConsumerState<EditPanel> {
                 ],
               ),
               Divider(),
-              PropertySectionBuilder(data: currentStruct.data, structType: currentStruct.type, onChanged: (data) {
+              PropertySectionBuilder(data: currentStruct.data, struct: currentStruct, onChanged: (data) {
                 ref.read(structsPod.notifier).editStructData(currentStruct.id, data);
                 if (ref
                     .read(structsPod.notifier)

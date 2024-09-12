@@ -4,7 +4,7 @@ import 'package:structogrammar/context_extension.dart';
 import 'package:structogrammar/models/struct.dart';
 import 'package:structogrammar/widgets/property_builder.dart';
 
-enum PropertyType { string, color, double, int, dropdown }
+enum PropertyType { string, color, double, int, dropdown, list }
 
 enum PropertySize { small, large }
 
@@ -14,13 +14,15 @@ class SectionProperty {
   dynamic propertyValue;
   String propertyKey;
   List<String>? possibleValues;
+  List<String>? nonDeletableItems;
+  Function(dynamic)? onChanged;
 
   SectionProperty(
       {required this.propertyType,
       required this.propertyKey,
       required this.propertyValue,
       this.possibleValues,
-      this.propertySize = PropertySize.large});
+      this.propertySize = PropertySize.large, this.nonDeletableItems, this.onChanged});
 }
 
 class PropertySectionBuilder extends ConsumerStatefulWidget {
@@ -28,11 +30,11 @@ class PropertySectionBuilder extends ConsumerStatefulWidget {
       {super.key,
       required this.data,
       required this.onChanged,
-      required this.structType});
+      required this.struct});
 
   final Map<String, dynamic> data;
   final Function(Map<String, dynamic>) onChanged;
-  final StructType structType;
+  final Struct struct;
 
   @override
   ConsumerState createState() => _PropertySectionBuilderState();
@@ -206,6 +208,28 @@ class _PropertySectionBuilderState
           sections[context.l.fillColor] = properties;
         default:
       }
+
+    }
+
+    if (widget.struct.type == StructType.caseSelect) {
+      List<String> cases = [];
+      for (int i = 0; i < widget.struct.subStructs.length; i++) {
+        if (!cases.contains(widget.struct.subStructs[i].data["case"])) {
+          cases.add(widget.struct.subStructs[i].data["case"]?? "");
+        }
+      }
+      print("parsed cases: $cases");
+      List<SectionProperty> properties = [
+        SectionProperty(
+            propertyType: PropertyType.list,
+            propertyKey: "case",
+            propertyValue: cases, onChanged: (value) {
+              List<String> list = value;
+              print("changed called: $list");
+        }),
+      ];
+      // properties.add(SectionProperty(propertyType: PropertyType.color, propertyKey: propertyKey, propertyValue: propertyValue));
+      sections[context.l.caseStatement] = properties;
     }
 
     return sections;

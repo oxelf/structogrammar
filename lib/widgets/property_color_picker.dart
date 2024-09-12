@@ -79,7 +79,6 @@ class _PropertyColorPickerState extends ConsumerState<PropertyColorPicker> {
         ),
       ),
     ), onChanged: (value) {
-      print("new: $value");
       if (isValidHexColor(value)) {
         widget.onChanged.call(value);
         if (colorPicker != null) {
