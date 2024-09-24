@@ -1,0 +1,11 @@
+# The value of AppId uniquely identifies this application.
+# Do not use the same AppId value in installers for other applications.
+app_id: 5B599538-42B2-4826-A479-AF079F21A65D
+publisher: structogrammar
+publisher_url: https://github.com/oxelf/structogrammar
+display_name: structogrammar
+create_desktop_icon: true
+# See: https://jrsoftware.org/ishelp/index.php?topic=setup_defaultdirname
+# install_dir_name: "D:\\HELLO-WORLD"
+locales:
+  - en

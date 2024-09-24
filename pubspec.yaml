@@ -1,0 +1,76 @@
+name: structogrammar
+description: "The first truly multiplatform structogram editor."
+publish_to: 'none'
+version: 0.0.1
+
+environment:
+  sdk: '>=3.4.4 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  flutter_web_plugins:
+    sdk: flutter
+  intl: any
+  tree_sitter:
+    path: ./lib/packages/tree_sitter/
+  flutter_riverpod: ^2.5.1
+  path_provider: ^2.1.4
+  bitsdojo_window: ^0.1.6
+  cupertino_icons: ^1.0.8
+  uuid: ^4.5.0
+  font_awesome_flutter: ^10.7.0
+  url_launcher: ^6.3.0
+  universal_html: ^2.2.4
+  package_info_plus: ^8.0.2
+  version: ^3.0.2
+  http: ^1.2.2
+  screenshot: ^3.0.0
+  flutter_material_design_icons: ^1.1.7447
+  super_context_menu: ^0.8.22
+  isar: ^3.1.0
+  isar_flutter_libs: ^3.1.0
+  hexcolor: ^3.0.1
+  ffi: ^2.1.3
+  path: ^1.9.0
+  file_picker: ^8.1.2
+  hash: ^1.0.4
+  community_material_icon: ^5.9.55
+  toastification: ^2.2.0
+
+
+dev_dependencies:
+  flutter_lints: ^3.0.0
+  flutter_launcher_icons: ^0.13.1
+  build_runner: ^2.4.11
+  isar_generator: ^3.1.0+1
+  ffigen: ^14.0.1
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icon.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+  web:
+    generate: true
+    image_path: "assets/icon.png"
+    background_color: "#FFFFFF"
+    theme_color: "#FFFFFF"
+  windows:
+    generate: true
+    image_path: "assets/icon.png"
+    icon_size: 48 # min:48, max:256, default: 48
+  macos:
+    generate: true
+    image_path: "assets/icon.png"
+
+ffigen:
+
+
+
+flutter:
+  uses-material-design: true
+  generate: true
+

@@ -1,0 +1,14 @@
+name: 'tree_sitter_bindings'
+description: 'FFI bindings for Tree-sitter'
+output: 'lib/tree_sitter_bindings.dart'
+
+headers:
+  entry-points:
+    - 'ts-api/api.h'
+  include-directives:
+    - '/Users/joscha/Documents/dev/tree-sitter/lib/src/'
+
+
+compiler-opts-automatic:
+  macos:
+    include-c-standard-library: true
