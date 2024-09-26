@@ -44,16 +44,16 @@ class _UpdaterWidgetState extends State<UpdaterWidget> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text(context.l.newVersionAvailable, style: TextStyle(fontWeight: FontWeight.bold),),
+                      Text(context.l.newVersionAvailable, style: const TextStyle(fontWeight: FontWeight.bold),),
                       TextButton(onPressed: () {
                         launchUrlString(updateUrl ?? "https://github.com/oxelf/structogrammar/releases");
-                      }, child:  Text(context.l.downloadNow, style: TextStyle(fontSize: 16, color: Colors.blue),),),
+                      }, child:  Text(context.l.downloadNow, style: const TextStyle(fontSize: 16, color: Colors.blue),),),
                     ],
                   ),
                 ),
               );
           }
         )
-        : SizedBox();
+        : const SizedBox();
   }
 }

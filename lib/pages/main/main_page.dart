@@ -5,7 +5,6 @@ import 'package:structogrammar/pages/overlay/overlay_page.dart';
 import 'package:structogrammar/pages/project/project_page.dart';
 import 'package:structogrammar/riverpod/tabs.dart';
 import 'package:structogrammar/widgets/app_bar/app_bar.dart';
-import 'package:toastification/toastification.dart';
 
 class MainPage extends ConsumerStatefulWidget {
   const MainPage({super.key});
@@ -46,7 +45,7 @@ class _MainPageState extends ConsumerState<MainPage> {
           Expanded(
             child: PageView(
               controller: pageController,
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               children: [
                 for (int i = 0; i < tabs.length; i++)
                   Builder(builder: (context) {

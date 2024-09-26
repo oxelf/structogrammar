@@ -44,7 +44,7 @@ class _OverlayPageState extends ConsumerState<OverlayPage> {
                                   children: [
                                     Text(
                                       downloads[i].name,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
@@ -55,8 +55,8 @@ class _OverlayPageState extends ConsumerState<OverlayPage> {
                       ],
                     ));
               },
-              error: (e, s) => SizedBox(),
-              loading: () => SizedBox()),
+              error: (e, s) => const SizedBox(),
+              loading: () => const SizedBox()),
         ],
       ),
     );

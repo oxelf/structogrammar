@@ -65,7 +65,7 @@ class _ActionCardState extends State<ActionCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  SizedBox(),
+                  const SizedBox(),
                   Text(
                     widget.title,
                     style: TextStyle(color: hovered ? Colors.white : null, fontSize: 12, fontWeight: FontWeight.bold),
@@ -74,7 +74,7 @@ class _ActionCardState extends State<ActionCard> {
                     widget.subTitle,
                     style: TextStyle(color: hovered ? Colors.white : null, fontSize: 12),
                   ),
-                  SizedBox(),
+                  const SizedBox(),
                 ],
               ),
             ],

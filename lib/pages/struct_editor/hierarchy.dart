@@ -30,7 +30,7 @@ class _StructHierarchyState extends ConsumerState<StructHierarchy> {
       projectId =
           tabs.firstWhere((element) => element.tabId == selected).projectId;
     } catch (_) {}
-    if (projectId == null) return SizedBox();
+    if (projectId == null) return const SizedBox();
     var projectStream = ref.watch(projectPod(projectId));
     return projectStream.when(
         data: (project) {
@@ -57,7 +57,7 @@ class _StructHierarchyState extends ConsumerState<StructHierarchy> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
+                          const Text(
                             "Hierarchy",
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
@@ -69,11 +69,11 @@ class _StructHierarchyState extends ConsumerState<StructHierarchy> {
                                 });
                               },
                               padding: EdgeInsets.zero,
-                              icon: Icon(CupertinoIcons.sidebar_left)),
+                              icon: const Icon(CupertinoIcons.sidebar_left)),
                         ],
                       ),
                     ),
-                    if (expanded) Divider(),
+                    if (expanded) const Divider(),
                     if (expanded)
                       Expanded(
                         child: SingleChildScrollView(
@@ -92,8 +92,8 @@ class _StructHierarchyState extends ConsumerState<StructHierarchy> {
             ),
           );
         },
-        error: (e, s) => SizedBox(),
-        loading: () => CircularProgressIndicator());
+        error: (e, s) => const SizedBox(),
+        loading: () => const CircularProgressIndicator());
   }
 
   List<HierarchyTileData> generateHierarchyTileTree(List<Struct> structs) {

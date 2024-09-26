@@ -50,10 +50,10 @@ class _OptionsSubSectionState extends State<OptionsSubSection> {
               border: Border(
                 top: !widget.bottomBorder
                     ? BorderSide(color: AppColors.borderColor)
-                    : BorderSide(color: Colors.transparent),
+                    : const BorderSide(color: Colors.transparent),
                 bottom: widget.bottomBorder
                     ? BorderSide(color: AppColors.borderColor)
-                    : BorderSide(color: Colors.transparent),
+                    : const BorderSide(color: Colors.transparent),
               )),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -61,12 +61,12 @@ class _OptionsSubSectionState extends State<OptionsSubSection> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 widget.icon ??
-                    SizedBox(
+                    const SizedBox(
                       width: 8,
                     ),
                 widget.child,
                 widget.suffix ??
-                    SizedBox(
+                    const SizedBox(
                       width: 8,
                     ),
               ],
@@ -91,7 +91,7 @@ class _OptionsSectionState extends ConsumerState<OptionsSection> {
     return Container(
       width: 250,
       height: context.height,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         border: Border(right: BorderSide(color: Colors.grey)),
       ),
       child: Column(
@@ -99,28 +99,28 @@ class _OptionsSectionState extends ConsumerState<OptionsSection> {
         children: [
           Column(
             children: [
-              UpdaterWidget(),
+              const UpdaterWidget(),
               OptionsSubSection(
                 onTap: () {
                   launchUrlString("http://github.com/oxelf/structogrammar");
                 },
-                icon: Icon(FontAwesomeIcons.github),
-                child: Text(context.l.giveUsAStar),
-                suffix: Icon(
+                icon: const Icon(FontAwesomeIcons.github),
+                suffix: const Icon(
                   Icons.open_in_new,
                   size: 16,
                 ),
+                child: Text(context.l.giveUsAStar),
               ),
               OptionsSubSection(
                 onTap: () {
                   launchUrlString("https://github.com/oxelf/structogrammar/issues");
                 },
-                icon: Icon(Icons.report_problem_outlined),
-                child: Text(context.l.reportAnIssue),
-                suffix: Icon(
+                icon: const Icon(Icons.report_problem_outlined),
+                suffix: const Icon(
                   Icons.open_in_new,
                   size: 16,
                 ),
+                child: Text(context.l.reportAnIssue),
               ),
             ],
           ),
@@ -128,11 +128,11 @@ class _OptionsSectionState extends ConsumerState<OptionsSection> {
             children: [
               OptionsSubSection(
                   onTap: () {},
-                  icon: Icon(Icons.settings_outlined),
+                  icon: const Icon(Icons.settings_outlined),
                   bottomBorder: false,
                   child: Text(
                     context.l.settings,
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ))
             ],
           )

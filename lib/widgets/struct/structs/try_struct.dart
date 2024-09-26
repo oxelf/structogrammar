@@ -74,7 +74,7 @@ class TryStruct extends StatelessWidget {
           Row(
             children: [
 
-              Icon(Icons.chevron_right, size: 24),
+              const Icon(Icons.chevron_right, size: 24),
               Column(
                 children: [
                   for (int i = 0; i < catchStructs.length; i++)
@@ -94,7 +94,7 @@ class TryStruct extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 16,),
+          const SizedBox(height: 16,),
         ],
       ),
     );

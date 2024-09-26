@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:structogrammar/widgets/canvas/controller.dart';
-import 'package:structogrammar/widgets/canvas/drag_handles.dart';
 import 'package:universal_html/html.dart' as html;
 
 class CanvasItem {
@@ -49,7 +48,7 @@ class _InfiniteCanvasState extends State<InfiniteCanvas> {
             InteractiveViewer(
               transformationController:
                   widget.controller.transformationController,
-              boundaryMargin: EdgeInsets.all(double.infinity),
+              boundaryMargin: const EdgeInsets.all(double.infinity),
               minScale: 0.1,
               maxScale: 10,
               constrained: false,

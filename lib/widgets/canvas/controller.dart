@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/gestures.dart';
 import 'package:structogrammar/widgets/canvas/canvas.dart';
 
 class CanvasController {

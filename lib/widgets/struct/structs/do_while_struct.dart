@@ -14,7 +14,7 @@ class DoWhileStruct extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var subStructs = struct.subStructs?.toList() ?? [];
+    var subStructs = struct.subStructs.toList() ?? [];
     return IntrinsicHeight(
       child: Column(
         mainAxisSize: MainAxisSize.min,

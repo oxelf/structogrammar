@@ -65,8 +65,6 @@ class DownloadManager {
 
   Future<DownloadObject?> addDownload(
       String name, String filePath, String hash) async {
-    //check if exists and return if exists with name
-    DownloadObject? existingDownload;
     List<DownloadObject?> downloads = await getDownloads();
     try {
       return downloads.firstWhere((e) => e!.name == name);

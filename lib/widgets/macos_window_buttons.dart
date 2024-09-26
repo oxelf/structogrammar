@@ -1,7 +1,5 @@
 import 'package:bitsdojo_window/bitsdojo_window.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:structogrammar/main.dart';
 
 final buttonColors = WindowButtonColors(
     iconNormal: const Color(0xFF805306),
@@ -34,7 +32,7 @@ class _MacosWindowButtonsState extends State<MacosWindowButtons> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(width: 60, height: 15,);
+    return const SizedBox(width: 60, height: 15,);
     // return MouseRegion(
     //   onHover: (_) {
     //     setState(() {

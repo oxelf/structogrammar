@@ -21,7 +21,11 @@ class FunctionStruct extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4),
           child: Row(
             children: [
-              Text(struct.primaryValue, style: struct.structTextStyle?.toTextStyle(),),
+              Expanded(
+                  child: Text(
+                struct.primaryValue,
+                style: struct.structTextStyle?.toTextStyle(),
+              )),
             ],
           ),
         ),
@@ -52,7 +56,7 @@ class FunctionStruct extends StatelessWidget {
             ],
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 16,
         ),
       ],

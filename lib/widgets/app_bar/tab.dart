@@ -55,7 +55,7 @@ class _SAppBarTabState extends State<SAppBarTab> {
               right: BorderSide(color: AppColors.borderColor),
               left: widget.leftBorder
                   ? BorderSide(color: AppColors.borderColor)
-                  : BorderSide(color: Colors.transparent),
+                  : const BorderSide(color: Colors.transparent),
             ),
           ),
           child: Padding(
@@ -79,11 +79,11 @@ class _SAppBarTabState extends State<SAppBarTab> {
                     child: IconButton(
                         padding: EdgeInsets.zero,
                         constraints:
-                            BoxConstraints(maxHeight: 30, maxWidth: 30),
+                            const BoxConstraints(maxHeight: 30, maxWidth: 30),
                         onPressed: () {
                           widget.onClosed?.call();
                         },
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.close,
                           size: 18,
                         )),

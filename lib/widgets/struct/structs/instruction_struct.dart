@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:structogrammar/models/struct.dart';
 
-class InstructionStruct extends StatelessWidget {
+class InstructionStruct extends StatefulWidget {
   const InstructionStruct({
     super.key,
     required this.struct,
@@ -12,20 +12,26 @@ class InstructionStruct extends StatelessWidget {
   final double width;
 
   @override
+  State<InstructionStruct> createState() => _InstructionStructState();
+}
+
+class _InstructionStructState extends State<InstructionStruct> {
+  TextEditingController textEditingController = TextEditingController();
+  bool editing = false;
+  @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: width,
+      width: widget.width,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 8.0),
             child: Row(
-
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Expanded(
-                  child: Text(struct.primaryValue,  overflow: TextOverflow.visible, ),
+                  child: Text(widget.struct.primaryValue,  overflow: TextOverflow.visible, ),
                 ),
               ],
             ),

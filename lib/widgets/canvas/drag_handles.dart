@@ -18,7 +18,7 @@ class DragHandles extends StatefulWidget {
 }
 
 class _DragHandlesState extends State<DragHandles> {
-  double _initialHorizontalPosition = 0.0;
+  final double _initialHorizontalPosition = 0.0;
   double _currentHorizontalPosition = 0.0;
 
   void _onHorizontalDragUpdate(DragUpdateDetails details) {

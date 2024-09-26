@@ -2,17 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:structogrammar/main.dart';
 import 'package:structogrammar/managers/structs_manager.dart';
-import 'package:structogrammar/models/project.dart';
-import 'package:structogrammar/riverpod/downloads.dart';
 import 'package:structogrammar/riverpod/managers.dart';
-import 'package:structogrammar/riverpod/projects.dart';
 import 'package:structogrammar/riverpod/structs.dart';
 
 import 'managers/download_manager.dart';
 
 Future<ProviderContainer> appBootstrap() async {
-  final binding = WidgetsFlutterBinding.ensureInitialized();
-
+   WidgetsFlutterBinding.ensureInitialized();
   // Cache images in assets folder via using the Flutter Engine binding
   // lifecycle.
   // binding.deferFirstFrame();

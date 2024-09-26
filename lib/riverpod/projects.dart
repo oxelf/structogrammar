@@ -1,11 +1,8 @@
-import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:structogrammar/riverpod/managers.dart';
 
 import '../models/project.dart';
-import '../util/project.dart';
 
 // class ProjectsNotifier extends Notifier<List<Project>> {
 //   @override

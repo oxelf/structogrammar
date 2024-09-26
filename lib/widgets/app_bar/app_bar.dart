@@ -13,7 +13,6 @@ import 'package:structogrammar/riverpod/tabs.dart';
 import 'package:structogrammar/util/project.dart';
 import 'package:structogrammar/util/tabs.dart';
 import 'package:structogrammar/widgets/app_bar/tab.dart';
-import 'package:structogrammar/widgets/macos_window_buttons.dart';
 
 class SAppBar extends ConsumerStatefulWidget {
   const SAppBar({super.key});
@@ -32,15 +31,15 @@ class _SAppBarState extends ConsumerState<SAppBar> {
         data: (projects) => Container(
               width: context.width,
               height: 40,
-              decoration: BoxDecoration(
-                border: const Border(bottom: BorderSide(color: Colors.grey)),
+              decoration: const BoxDecoration(
+                border: Border(bottom: BorderSide(color: Colors.grey)),
               ),
               child: Row(
                 children: [
                   if (!kIsWeb && Platform.isMacOS)
                     MoveWindow(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
+                      child: const Padding(
+                        padding: EdgeInsets.all(8.0),
                         child: SizedBox(
                           width: 60,
                           height: 40,
@@ -96,7 +95,7 @@ class _SAppBarState extends ConsumerState<SAppBar> {
                                       tab.tabId;
                                 }
                               },
-                              icon: Icon(Icons.add),
+                              icon: const Icon(Icons.add),
                             )
                           ],
                         ),
@@ -106,8 +105,8 @@ class _SAppBarState extends ConsumerState<SAppBar> {
                 ],
               ),
             ),
-        error: (e, s) => Text("something went wrong"),
-        loading: () => Center(
+        error: (e, s) => const Text("something went wrong"),
+        loading: () => const Center(
               child: CircularProgressIndicator(),
             ));
   }

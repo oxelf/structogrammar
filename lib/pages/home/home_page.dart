@@ -1,17 +1,13 @@
 import 'dart:math';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_material_design_icons/flutter_material_design_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:structogrammar/context_extension.dart';
 import 'package:structogrammar/managers/download_manager.dart';
 import 'package:structogrammar/models/project.dart';
-import 'package:structogrammar/models/tab.dart';
 import 'package:structogrammar/pages/home/action_card.dart';
 import 'package:structogrammar/pages/home/options_section.dart';
-import 'package:structogrammar/riverpod/downloads.dart';
 import 'package:structogrammar/riverpod/managers.dart';
 import 'package:structogrammar/riverpod/tabs.dart';
 import 'package:structogrammar/util/app_colors.dart';
@@ -55,13 +51,13 @@ class _HomePageState extends ConsumerState<HomePage>
                       color: AppColors.primary,
                       icon: Transform.rotate(
                           angle: pi / 2,
-                          child: Icon(
+                          child: const Icon(
                             FontAwesomeIcons.penFancy,
                             color: Colors.white,
                             size: 20,
                           )),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 32,
                     ),
                     ActionCard(
@@ -92,35 +88,35 @@ class _HomePageState extends ConsumerState<HomePage>
                       title: "Import Code",
                       subTitle: "generate a structogram",
                       color: Colors.orange,
-                      icon: Icon(
+                      icon: const Icon(
                         MdiIcons.codeBlockBraces,
                         color: Colors.white,
                         size: 20,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 32,
                     ),
-                    ActionCard(
-                      onTap: () {},
-                      title: "Import Project",
-                      subTitle: "import a project",
-                      color: Colors.grey,
-                      icon: Icon(
-                        Icons.file_open_outlined,
-                        color: Colors.white,
-                        size: 20,
-                      ),
-                    ),
+                    // ActionCard(
+                    //   onTap: () {},
+                    //   title: "Import Project",
+                    //   subTitle: "import a project",
+                    //   color: Colors.grey,
+                    //   icon: Icon(
+                    //     Icons.file_open_outlined,
+                    //     color: Colors.white,
+                    //     size: 20,
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
-              Divider(),
+              const Divider(),
               projectsStream.when(
-                  loading: () => Center(
+                  loading: () => const Center(
                         child: CircularProgressIndicator(),
                       ),
-                  error: (e, s) => Center(
+                  error: (e, s) => const Center(
                         child: Text("Something went wrong"),
                       ),
                   data: (projects) {
@@ -132,7 +128,7 @@ class _HomePageState extends ConsumerState<HomePage>
                           gridDelegate:
                               const SliverGridDelegateWithMaxCrossAxisExtent(
                                   maxCrossAxisExtent: 300,
-                                  childAspectRatio: 1.20 / 1,
+                                  childAspectRatio: 1.10 / 1,
                                   crossAxisSpacing: 20,
                                   mainAxisSpacing: 20),
                           itemCount: projects.length,

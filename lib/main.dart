@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:isolate';
 
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/foundation.dart';
@@ -27,7 +26,7 @@ void main() async{
 
   runApp( UncontrolledProviderScope(
       container: await appBootstrap(),
-    child: MainApp(),
+    child: const MainApp(),
   ),);
   if (!kIsWeb && (Platform.isMacOS || Platform.isWindows || Platform.isLinux)) {
     doWhenWindowReady(() {

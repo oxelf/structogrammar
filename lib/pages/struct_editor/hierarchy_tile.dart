@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:structogrammar/main.dart';
-import 'package:structogrammar/managers/structs_manager.dart';
 import 'package:structogrammar/riverpod/structs.dart';
 import 'package:structogrammar/util/app_colors.dart';
 
@@ -74,7 +73,7 @@ class HierarchyTileState extends ConsumerState<HierarchyTile>
             location = StructDragLocation.before;
             dragTargetId = widget.data.children.first.value;
           }
-          Future.delayed(Duration(milliseconds: 10), () {
+          Future.delayed(const Duration(milliseconds: 10), () {
             ref.read(structDragTargetLocationPod.notifier).state =
                 (dragTargetId, location);
           });
@@ -100,15 +99,15 @@ class HierarchyTileState extends ConsumerState<HierarchyTile>
                     height: 24,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(6),
-                          topRight: Radius.circular(6),
+                          topLeft: const Radius.circular(6),
+                          topRight: const Radius.circular(6),
                           bottomLeft:
                               (widget.data.children.isEmpty || !expanded)
-                                  ? Radius.circular(6)
+                                  ? const Radius.circular(6)
                                   : Radius.zero,
                           bottomRight:
                               (widget.data.children.isEmpty || !expanded)
-                                  ? Radius.circular(6)
+                                  ? const Radius.circular(6)
                                   : Radius.zero),
                       color:
                           (selected) ? AppColors.primary : Colors.transparent,
@@ -127,7 +126,7 @@ class HierarchyTileState extends ConsumerState<HierarchyTile>
                                       expanded = !expanded;
                                     });
                                   },
-                                  child: Icon(
+                                  child: const Icon(
                                     Icons.arrow_drop_down_circle_outlined,
                                     size: 14,
                                   ),
@@ -156,7 +155,7 @@ class HierarchyTileState extends ConsumerState<HierarchyTile>
                   ),
                 ),
               ),
-              if (!drag && dragBelow) Divider(),
+              if (!drag && dragBelow) const Divider(),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 4),
                 child: Container(
@@ -164,7 +163,7 @@ class HierarchyTileState extends ConsumerState<HierarchyTile>
                     color: (selectedStruct == widget.data.value)
                         ? AppColors.primary.withAlpha(200)
                         : Colors.transparent,
-                    borderRadius: BorderRadius.only(
+                    borderRadius: const BorderRadius.only(
                       bottomLeft: Radius.circular(6),
                       bottomRight: Radius.circular(6),
                     ),
@@ -187,7 +186,6 @@ class HierarchyTileState extends ConsumerState<HierarchyTile>
       });
     }
 
-    ;
     return Draggable(
       feedback:
           Material(child: SizedBox(width: 250, child: getHierarchyTile(true))),

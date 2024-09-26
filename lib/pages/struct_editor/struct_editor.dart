@@ -6,18 +6,17 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:structogrammar/context_extension.dart';
 import 'package:structogrammar/managers/projects_manager.dart';
-import 'package:structogrammar/managers/structs_manager.dart';
 import 'package:structogrammar/models/struct.dart';
 import 'package:structogrammar/pages/struct_editor/hierarchy.dart';
 import 'package:structogrammar/pages/struct_editor/struct_shortcuts.dart';
 import 'package:structogrammar/riverpod/managers.dart';
+import 'package:structogrammar/riverpod/state.dart';
 import 'package:structogrammar/util/screenshot.dart';
 import 'package:structogrammar/widgets/canvas/canvas.dart';
 import 'package:structogrammar/widgets/canvas/controller.dart';
-import 'package:structogrammar/widgets/canvas/drag_handles.dart';
+import 'package:structogrammar/widgets/panel/panel.dart';
 import 'package:structogrammar/widgets/struct/struct_widget.dart';
 
-import '../../main.dart';
 import '../../riverpod/structs.dart';
 
 class StructEditor extends ConsumerStatefulWidget {
@@ -36,16 +35,16 @@ class StructEditor extends ConsumerStatefulWidget {
 
 class _StructEditorState extends ConsumerState<StructEditor> {
   CanvasController canvasController =
-      CanvasController(startCoordinates: Offset(4700, 5000));
+      CanvasController(startCoordinates: const Offset(4700, 5000));
 
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Future.delayed(Duration(milliseconds: 10), () {
+      Future.delayed(const Duration(milliseconds: 10), () {
         canvasController.zoomToFit(context.width, context.height - 50, 0,
-            padding: Offset(550, 32));
+            padding: const Offset(550, 32));
       });
-      Timer.periodic(Duration(seconds: 30), (t) async {
+      Timer.periodic(const Duration(seconds: 30), (t) async {
         if (!mounted) t.cancel();
         Uint8List? bytes =
             await screenshotWidget(StructWidget(struct: widget.struct));
@@ -71,7 +70,7 @@ class _StructEditorState extends ConsumerState<StructEditor> {
         StructShortcutsWidget(
           onZoomToFit: () {
             canvasController.zoomToFit(context.width, context.height - 50, 0,
-                padding: Offset(564, 32));
+                padding: const Offset(564, 32));
           },
           child: InfiniteCanvas(controller: canvasController, items: [
             CanvasItem(
@@ -88,7 +87,21 @@ class _StructEditorState extends ConsumerState<StructEditor> {
                 )),
           ]),
         ),
-        StructHierarchy(),
+        const StructHierarchy(),
+        Positioned(
+          right: 0,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: SidePanel(
+              widthPod: structEditSidePanelPod,
+              content: const Text("content"),
+              header: const Text(
+                "Edit",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }

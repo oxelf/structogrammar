@@ -11,11 +11,11 @@ enum ProjectType { structogram }
 
 ProjectType projectTypeFromString(String type) {
   ProjectType value = ProjectType.structogram;
-  ProjectType.values.forEach((e) {
+  for (var e in ProjectType.values) {
     if (e.toString() == type) {
       value = e;
     }
-  });
+  }
   return value;
 }
 

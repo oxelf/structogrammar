@@ -18,11 +18,11 @@ class IfStruct extends StatelessWidget {
     var falseStructs = [];
     try {
       trueStructs = struct.subStructs
-         ?.firstWhere((e) =>
+         .firstWhere((e) =>
               e.type == StructType.ifCondition && e.primaryValue == "true")
           .subStructs ?? [];
       falseStructs = struct.subStructs
-          ?.firstWhere((e) =>
+          .firstWhere((e) =>
               e.type == StructType.ifCondition && e.primaryValue == "false")
           .subStructs ?? [];
     } catch (e) {}
@@ -45,18 +45,31 @@ class IfStruct extends StatelessWidget {
                   Padding(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          struct.primaryValue,
-                          style: struct.structTextStyle?.toTextStyle(),
-                        ),
-                      ],
+                    child: SizedBox(
+                      width: width - 16,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                width: width - 16,
+                                height: 20,
+                                child: Text(
+                                  struct.primaryValue,
+                                  style: struct.structTextStyle?.toTextStyle(),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8.0),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
@@ -142,7 +155,7 @@ class IfLinePainter extends CustomPainter {
 
     // Draw line from top-left to bottom-center
     canvas.drawLine(
-      Offset(0, 0), // Top-left corner
+      const Offset(0, 0), // Top-left corner
       Offset(size.width / 2, size.height), // Bottom-center
       paint,
     );

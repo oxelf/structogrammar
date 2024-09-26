@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:structogrammar/managers/structs_manager.dart';
 import 'package:structogrammar/models/struct.dart';
@@ -20,7 +18,7 @@ import '../../riverpod/managers.dart';
 enum StructBorder { left, bottom, right, top }
 
 class StructWidget extends ConsumerStatefulWidget {
-  StructWidget({
+  const StructWidget({
     super.key,
     required this.struct,
     this.borders = const [],
@@ -37,8 +35,8 @@ class StructWidget extends ConsumerStatefulWidget {
 
 class StructWidgetState extends ConsumerState<StructWidget> {
   double? resizeWidth;
-  BorderSide border = BorderSide(color: Colors.grey, width: 1);
-  BorderSide emptyBorder = BorderSide(color: Colors.transparent, width: 0);
+  BorderSide border = const BorderSide(color: Colors.grey, width: 1);
+  BorderSide emptyBorder = const BorderSide(color: Colors.transparent, width: 0);
 
   @override
   Widget build(BuildContext context) {
@@ -123,16 +121,19 @@ class StructWidgetState extends ConsumerState<StructWidget> {
                   StructsManager mgr = await ref.read(structManagerPod.future);
                   mgr.resizeStruct(
                       widget.struct.id ?? -1, resizeWidth ?? width);
-                  Future.delayed(Duration(milliseconds: 25), () {
-                    if (mounted) setState(() {
+                  Future.delayed(const Duration(milliseconds: 25), () {
+                    if (mounted) {
+                      setState(() {
                       resizeWidth = null;
                     });
+                    }
                   });
                 },
                 onHorizontalDragUpdate: (details) {
                   setState(() {
                     resizeWidth ??= width;
                     resizeWidth = resizeWidth! + details.delta.dx;
+                    if (resizeWidth! < 250) resizeWidth = width;
                   });
 
                   //print("resize: ${details.delta.dx}");

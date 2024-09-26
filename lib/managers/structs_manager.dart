@@ -40,9 +40,9 @@ class StructsManager {
       }
 
       // Recursively check substructs
-      struct.subStructs.forEach((subStruct) {
+      for (var subStruct in struct.subStructs) {
         findHighestId(subStruct);
-      });
+      }
     }
 
     // Iterate through each project
@@ -214,7 +214,6 @@ class StructsManager {
         break;
         // case StructDragLocation.inside:
         //   await addStructInside(targetStruct, struct);
-        break;
     }
   }
 
@@ -438,7 +437,6 @@ class StructsManager {
       return null;
     }
 
-    bool found = false;
 
     final projects = await isar.projects.where().findAll();
 
@@ -447,6 +445,7 @@ class StructsManager {
 
       if (structHead != null) {
         var subStructs = structHead.subStructs.toList();
+        bool found = false;
         for (int i = 0; i < subStructs.length; i++) {
           if (subStructs[i].id == structId) {
             subStructs.removeAt(i);

@@ -1,14 +1,10 @@
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:structogrammar/main.dart';
 import 'package:structogrammar/models/struct.dart';
 import 'package:structogrammar/pages/struct_editor/struct_editor.dart';
 import 'package:structogrammar/riverpod/projects.dart';
 import 'package:structogrammar/util/app_colors.dart';
-import 'package:path/path.dart' as path;
-import "package:tree_sitter/tree_sitter.dart";
 
 class ProjectPage extends ConsumerStatefulWidget {
   const ProjectPage({super.key, required this.projectId});
@@ -55,10 +51,10 @@ class _ProjectPageState extends ConsumerState<ProjectPage>
             ),
           );
         },
-        error: (e, s) => Center(
+        error: (e, s) => const Center(
               child: Text("Something went wrong"),
             ),
-        loading: () => Center(
+        loading: () => const Center(
               child: CircularProgressIndicator(),
             ));
   }

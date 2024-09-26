@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:structogrammar/models/project.dart';
 import 'package:super_context_menu/super_context_menu.dart';
 
@@ -112,7 +111,7 @@ class _ProjectCardState extends State<ProjectCard> {
                             gaplessPlayback: true,
                             base64Decode(widget.project.imageData ?? ""),
                             errorBuilder: (context, e, s) {
-                              return Center(
+                              return const Center(
                                 child: Icon(Icons.image),
                               );
                             },
@@ -137,11 +136,11 @@ class _ProjectCardState extends State<ProjectCard> {
                                       rename = false;
                                     });
                                   },
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 14,
                                   ),
                                   decoration: InputDecoration(
-                                    constraints: BoxConstraints(maxHeight: 35),
+                                    constraints: const BoxConstraints(maxHeight: 35),
                                     focusedBorder: UnderlineInputBorder(
                                       borderSide:
                                           BorderSide(color: AppColors.primary),
@@ -149,10 +148,12 @@ class _ProjectCardState extends State<ProjectCard> {
                                   ),
                                 ),
                               )
-                            : Text(
-                                widget.project.projectName ?? "",
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
+                            : Expanded(
+                              child: Text(
+                                  widget.project.projectName ?? "",
+                                  style: const TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                            ),
                       ],
                     ),
                   ),
@@ -163,7 +164,7 @@ class _ProjectCardState extends State<ProjectCard> {
                         Text(
                           getLastEdited(
                               widget.project.lastEdited ?? DateTime.now()),
-                          style: TextStyle(fontSize: 14, color: Colors.grey),
+                          style: const TextStyle(fontSize: 14, color: Colors.grey),
                         ),
                       ],
                     ),
@@ -178,7 +179,7 @@ class _ProjectCardState extends State<ProjectCard> {
   }
 
   String getLastEdited(DateTime date) {
-    if (date.isAfter(DateTime.now().subtract(Duration(minutes: 1)))) {
+    if (date.isAfter(DateTime.now().subtract(const Duration(minutes: 1)))) {
       return "Edited just now";
     }
     int days = DateTime.now().difference(date).inDays;

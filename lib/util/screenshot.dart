@@ -16,12 +16,12 @@ Future<Uint8List?> screenshotWidget(Widget widget) async {
     UncontrolledProviderScope(
       container: container,
       child: MediaQuery(
-        data: MediaQueryData(),
+        data: const MediaQueryData(),
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
-          theme: ThemeData(textTheme: TextTheme()),
+          theme: ThemeData(textTheme: const TextTheme()),
           home: Material(
-              textStyle: TextStyle(color: Colors.black), child: widget),
+              textStyle: const TextStyle(color: Colors.black), child: widget),
         ),
       ),
     ),
