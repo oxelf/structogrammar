@@ -217,6 +217,65 @@ class StructsManager {
     }
   }
 
+  Future<void> changeStructPrimaryValue(int structId, String newValue) async {
+    Struct? changePrimaryValueById(Struct struct, int structId, String newValue) {
+      struct.subStructs = struct.subStructs.toList();
+
+      for (int i = 0; i < struct.subStructs.length; i++) {
+        if (struct.subStructs[i].id == structId) {
+          struct.subStructs[i].subStructs =
+              struct.subStructs[i].subStructs.toList();
+          struct.subStructs[i].primaryValue = newValue;
+          return struct;
+        }
+
+        Struct? result =
+        changePrimaryValueById(struct.subStructs[i], structId, newValue);
+        if (result != null) {
+          struct.subStructs[i] = result;
+          return struct;
+        }
+      }
+
+      return null;
+    }
+
+    final projects = await isar.projects.where().findAll();
+
+    for (final project in projects) {
+      final structHead = project.struct.value; // Get the StructHead
+
+      if (structHead != null) {
+        var subStructs = structHead.subStructs.toList();
+        for (int i = 0; i < subStructs.length; i++) {
+          if (subStructs[i].id == structId) {
+            subStructs[i].subStructs = subStructs[i].subStructs.toList();
+            subStructs[i].primaryValue = newValue;
+            structHead.subStructs = subStructs;
+            project.struct.value = structHead;
+            isar.writeTxnSync(() {
+              isar.structs.putSync(structHead);
+              isar.projects.putSync(project);
+            });
+            return;
+          } else {
+            Struct? added = changePrimaryValueById(subStructs[i], structId, newValue);
+            if (added != null) {
+              subStructs[i] = added;
+              structHead.subStructs = subStructs;
+              project.struct.value = structHead;
+              isar.writeTxnSync(() {
+                isar.structs.putSync(structHead);
+                isar.projects.putSync(project);
+                return;
+              });
+            }
+          }
+        }
+      }
+    }
+  }
+
   Future<void> addStructInside(int structId, Struct newStruct) async {
     Struct? addStructById(Struct struct, int structId, Struct newStruct) {
       struct.subStructs = struct.subStructs.toList();

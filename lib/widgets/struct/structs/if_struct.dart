@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:structogrammar/models/struct.dart';
+import 'package:structogrammar/util/app_colors.dart';
 import 'package:structogrammar/widgets/struct/struct_widget.dart';
 
 class IfStruct extends StatelessWidget {
@@ -52,14 +53,20 @@ class IfStruct extends StatelessWidget {
                         children: [
                           Column(
                             mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               SizedBox(
                                 width: width - 16,
                                 height: 20,
-                                child: Text(
-                                  struct.primaryValue,
-                                  style: struct.structTextStyle?.toTextStyle(),
-                                  overflow: TextOverflow.ellipsis,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      struct.primaryValue,
+                                      style: struct.structTextStyle?.toTextStyle(),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],
@@ -88,7 +95,7 @@ class IfStruct extends StatelessWidget {
                 Expanded(
                     child: Container(
                   height: 1,
-                  color: Colors.black,
+                  color: AppColors.borderColor,
                 )),
               ],
             ),
@@ -116,7 +123,7 @@ class IfStruct extends StatelessWidget {
                         ),
                         Container(
                           width: 1,
-                          color: Colors.black,
+                          color: AppColors.borderColor,
                         ),
                         Expanded(
                           child: Column(
@@ -150,7 +157,7 @@ class IfLinePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = Colors.black
+      ..color = AppColors.borderColor
       ..strokeWidth = 1.0;
 
     // Draw line from top-left to bottom-center

@@ -1,6 +1,7 @@
 import 'package:community_material_icon/community_material_icon.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_fancy_tree_view/flutter_fancy_tree_view.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:structogrammar/context_extension.dart';
 import 'package:structogrammar/pages/struct_editor/hierarchy_tile.dart';
@@ -9,6 +10,16 @@ import 'package:structogrammar/riverpod/structs.dart';
 import 'package:structogrammar/riverpod/tabs.dart';
 
 import '../../models/struct.dart';
+
+class MyTreeNode {
+  const MyTreeNode({
+    required this.title,
+    this.children = const <MyTreeNode>[],
+  });
+
+  final String title;
+  final List<MyTreeNode> children;
+}
 
 class StructHierarchy extends ConsumerStatefulWidget {
   const StructHierarchy({super.key});
@@ -20,6 +31,27 @@ class StructHierarchy extends ConsumerStatefulWidget {
 class _StructHierarchyState extends ConsumerState<StructHierarchy> {
   double minWidth = 250;
   bool expanded = true;
+  TreeController treeController = TreeController(roots: <MyTreeNode>[
+    MyTreeNode(
+      title: 'Root',
+      children: [
+        MyTreeNode(
+          title: 'Child 1',
+          children: [
+            MyTreeNode(title: 'Grandchild 1'),
+            MyTreeNode(title: 'Grandchild 2'),
+          ],
+        ),
+        MyTreeNode(
+          title: 'Child 2',
+          children: [
+            MyTreeNode(title: 'Grandchild 3'),
+            MyTreeNode(title: 'Grandchild 4'),
+          ],
+        ),
+      ],
+    ),
+  ],  childrenProvider: (dynamic node) => node.children,);
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +70,7 @@ class _StructHierarchyState extends ConsumerState<StructHierarchy> {
               project.struct.value == null
                   ? []
                   : [project.struct.value!.toStruct()]);
+
           return Padding(
             padding: const EdgeInsets.all(12.0),
             child: Container(
@@ -75,17 +108,17 @@ class _StructHierarchyState extends ConsumerState<StructHierarchy> {
                     ),
                     if (expanded) const Divider(),
                     if (expanded)
-                      Expanded(
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.vertical,
-                          child: Column(
-                            children: [
-                              for (int i = 0; i < hierarchy.length; i++)
-                                HierarchyTile(data: hierarchy[i]),
-                            ],
-                          ),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.vertical,
+                        child: Column(
+                          children: [
+                            for (int i = 0; i < hierarchy.length; i++)
+                              HierarchyTile(data: hierarchy[i]),
+                          ],
                         ),
                       ),
+                    ),
                   ],
                 ),
               ),

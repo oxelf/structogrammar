@@ -11,9 +11,9 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
+  intl: any
   flutter_web_plugins:
     sdk: flutter
-  intl: any
   tree_sitter:
     path: ./lib/packages/tree_sitter/
   flutter_riverpod: ^2.5.1
@@ -39,9 +39,10 @@ dependencies:
   hash: ^1.0.4
   community_material_icon: ^5.9.55
   toastification: ^2.2.0
+  flutter_fancy_tree_view: ^1.6.0
 
 
-  flutter_gen: any
+  #flutter_gen: any
 dev_dependencies:
   flutter_lints: ^3.0.0
   flutter_launcher_icons: ^0.13.1

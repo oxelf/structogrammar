@@ -6,8 +6,8 @@ import 'package:structogrammar/models/struct.dart';
 import 'package:tree_sitter/tree_sitter.dart';
 import 'package:path/path.dart' as path;
 
-String treeSitterLibName = (Platform.isMacOS)? "libtree-sitter.dylib": "libtree-sitter.so";
-String cppLibName = (Platform.isMacOS)? "cpp.dylib": "cpp.so";
+String treeSitterLibName = (Platform.isMacOS)? "libtree-sitter.dylib": "libtree-sitter.dll";
+String cppLibName = (Platform.isMacOS)? "cpp.dylib": "cpp.dll";
 
 class CppParser {
   late Parser _parser;

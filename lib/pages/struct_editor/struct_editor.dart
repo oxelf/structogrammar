@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:structogrammar/context_extension.dart';
 import 'package:structogrammar/managers/projects_manager.dart';
 import 'package:structogrammar/models/struct.dart';
+import 'package:structogrammar/pages/struct_editor/edit_panel.dart';
 import 'package:structogrammar/pages/struct_editor/hierarchy.dart';
 import 'package:structogrammar/pages/struct_editor/struct_shortcuts.dart';
 import 'package:structogrammar/riverpod/managers.dart';
@@ -65,14 +66,14 @@ class _StructEditorState extends ConsumerState<StructEditor> {
   @override
   Widget build(BuildContext context) {
     var selectedStruct = ref.watch(selectedStructPod);
-    return Stack(
-      children: [
-        StructShortcutsWidget(
-          onZoomToFit: () {
-            canvasController.zoomToFit(context.width, context.height - 50, 0,
-                padding: const Offset(564, 32));
-          },
-          child: InfiniteCanvas(controller: canvasController, items: [
+    return StructShortcutsWidget(
+      onZoomToFit: () {
+        canvasController.zoomToFit(context.width, context.height - 50, 0,
+            padding: const Offset(564, 32));
+      },
+      child: Stack(
+        children: [
+          InfiniteCanvas(controller: canvasController, items: [
             CanvasItem(
                 x: 5000,
                 y: 5000,
@@ -86,23 +87,16 @@ class _StructEditorState extends ConsumerState<StructEditor> {
                   ],
                 )),
           ]),
-        ),
-        const StructHierarchy(),
-        Positioned(
-          right: 0,
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: SidePanel(
-              widthPod: structEditSidePanelPod,
-              content: const Text("content"),
-              header: const Text(
-                "Edit",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
+          const StructHierarchy(),
+          Positioned(
+            right: 0,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: EditPanel(),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
