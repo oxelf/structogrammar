@@ -1,4 +1,4 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {};
+const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 
-module.exports = nextConfig;
+
+return {};
