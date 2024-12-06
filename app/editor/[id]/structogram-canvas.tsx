@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {Background, BackgroundVariant, ColorMode, Controls, MiniMap, ReactFlow} from '@xyflow/react';
+import {Background, BackgroundVariant, ColorMode, Controls, MiniMap, ReactFlow, ReactFlowProvider} from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import { useTheme } from 'next-themes';
 import { DrawStructogram } from '@/app/editor/[id]/structogram';
@@ -14,6 +14,14 @@ const nodeTypes = {
 const defaultViewport = { x: 0, y: 0, zoom: 1.5, maxZoom: 3 };
 
 interface StructogramCanvasProps {
+}
+
+export function StructogramCanvasWithProvider({}: StructogramCanvasProps) {
+    return (
+        <ReactFlowProvider>
+           <StructogramCanvas  />
+        </ReactFlowProvider>
+    )
 }
 
 export default function StructogramCanvas({}: StructogramCanvasProps) {
@@ -40,6 +48,7 @@ export default function StructogramCanvas({}: StructogramCanvasProps) {
                 fitViewOptions={{ duration: 250 }}
                 proOptions={{ hideAttribution: true }}
                 nodeTypes={nodeTypes}
+                nodeOrigin={[0.5, 0.5]}
                 colorMode={colorMode as ColorMode}  // Use the client-side theme dynamically
                 panOnScroll={true}
                 fitView={true}

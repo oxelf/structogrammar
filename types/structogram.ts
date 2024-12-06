@@ -16,4 +16,11 @@ export class StructogramNode {
     public type: structogramNodeType = "instruction";
     public data: Map<string, any> = new Map();
     public children: StructogramNode[] = [];
+
+    constructor(type:structogramNodeType, data:Map<string, any>, children:StructogramNode[]) {
+        this.id = crypto.randomUUID();
+        this.type = type;
+        this.data = data;
+        this.children = children;
+    }
 }

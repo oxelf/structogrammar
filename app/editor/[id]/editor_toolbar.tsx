@@ -17,6 +17,7 @@ import {ModeToggle} from "@/components/theme_toggle";
 import {ToggleGroup, ToggleGroupItem} from "@/components/ui/toggle-group";
 import {useAppDispatch, useAppSelector} from "@/app/editor/store";
 import {setWindows} from "@/app/editor/windows-slice";
+import {SaveButton} from "@/app/editor/[id]/save-button";
 
 interface HeaderProps {
     projectName: string
@@ -49,10 +50,7 @@ export function EditorToolbar({ projectName, user }: HeaderProps) {
             </div>
             <h1 className="text-xl font-semibold">{projectName}</h1>
             <div className="flex items-center space-x-2">
-                <Button variant="outline" size="icon">
-                    <ShareIcon className="h-5 w-5" />
-                    <span className="sr-only">Settings</span>
-                </Button>
+                <SaveButton />
                 <ModeToggle />
                 <Button variant="outline" size="icon">
                     <Settings className="h-5 w-5" />

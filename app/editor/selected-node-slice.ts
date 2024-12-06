@@ -16,13 +16,13 @@ export const selectedNodeSlice = createSlice({
     name: 'selectedNode',
     initialState,
     reducers: {
-        set: (state, action: PayloadAction<StructogramNode | null>) => {
+        setSelectedNode: (state, action: PayloadAction<StructogramNode | null>) => {
             state.value = action.payload
         },
     },
 })
 
-export const { set } = selectedNodeSlice.actions
+export const { setSelectedNode } = selectedNodeSlice.actions
 
 export const selectCount = (state: RootState) => state.selectedNode.value
 

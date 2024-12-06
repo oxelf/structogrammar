@@ -2,11 +2,12 @@
 
 import {ResizableHandle, ResizablePanel, ResizablePanelGroup} from "@/components/ui/resizable";
 import {EditorTreeView} from "@/app/editor/[id]/tree-view";
-import StructogramCanvas from "@/app/editor/[id]/structogram-canvas";
+import StructogramCanvas, {StructogramCanvasWithProvider} from "@/app/editor/[id]/structogram-canvas";
 import MonacoEditorComponent from "@/app/editor/[id]/code_editor";
 import {EditorToolbar} from "@/app/editor/[id]/editor_toolbar";
 import {Provider} from "react-redux";
 import {store, useAppDispatch, useAppSelector} from "@/app/editor/store";
+import {ReactFlowProvider} from "@xyflow/react";
 
 
 interface EditorViewProps {
@@ -31,7 +32,9 @@ export default function EditorView({projectData}: EditorViewProps) {
             </ResizablePanel>,
         ];
     return (
+        <ReactFlowProvider>
         <div className="flex flex-col h-screen">
+
             <EditorToolbar  projectName="" user=""/>
             <div className="flex-grow flex">
                 < ResizablePanelGroup
@@ -47,5 +50,6 @@ export default function EditorView({projectData}: EditorViewProps) {
                 </ResizablePanelGroup>
             </div>
         </div>
+        </ReactFlowProvider>
     );
 }

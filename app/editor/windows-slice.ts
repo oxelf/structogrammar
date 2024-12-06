@@ -9,7 +9,7 @@ interface WindowsState {
 
 // Define the initial state using that type
 const initialState: WindowsState = {
-    value: ["code"],
+    value: [],
 }
 
 export const windowSlice = createSlice({

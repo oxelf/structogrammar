@@ -5,7 +5,8 @@ import windowReducer from './windows-slice';
 import structogramReducer from './structogram-slice';
 import codeLanguageReducer from './language-slice';
 import codeReducer from './code-slice';
-import {useDispatch, useSelector} from "react-redux"; // Import the reducer
+import {useDispatch, useSelector} from "react-redux";
+import {enableMapSet} from "immer"; // Import the reducer
 
 const forceUpdateMiddleware = (storeAPI: any) => (next: any) => (action: any) => {
     if (action.type === 'setNode') {
@@ -17,6 +18,7 @@ const forceUpdateMiddleware = (storeAPI: any) => (next: any) => (action: any) =>
     return next(action);
 };
 
+enableMapSet();
 // Configure the store
 export const store = configureStore({
     reducer: {
