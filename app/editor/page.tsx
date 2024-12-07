@@ -19,15 +19,16 @@ type Params = {
     id: string;
 };
 
-const fetchData = async () => {
+const fetchData = async (id: string) => {
     const supabase = await createClient();
-    const { data: structograms, error } = await supabase.from("structograms").select("*");
+    const { data: structograms, error } = await supabase.from("structograms").select("*").eq("id", id);
     const { data: user } = await supabase.auth.getUser();
     return { user, structograms, error };
 };
 
-const EditorPage = async ({ params }: { params: Params }) => {
-    const { user, structograms, error } = await fetchData();
+const EditorPage = async ({ params }: { params: Promise<Params> }) => {
+    const { id } = await params;
+    const { user, structograms, error } = await fetchData(id);
 
     if (error) {
         console.error(error);
