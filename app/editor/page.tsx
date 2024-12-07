@@ -15,6 +15,10 @@ type Props = {
     error: any;
 };
 
+type Params = {
+    id: string;
+};
+
 const fetchData = async () => {
     const supabase = await createClient();
     const { data: structograms, error } = await supabase.from("structograms").select("*");
@@ -22,7 +26,7 @@ const fetchData = async () => {
     return { user, structograms, error };
 };
 
-const EditorPage = async () => {
+const EditorPage = async ({ params }: { params: Params }) => {
     const { user, structograms, error } = await fetchData();
 
     if (error) {
