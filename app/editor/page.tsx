@@ -26,7 +26,7 @@ const fetchData = async (id: string) => {
     return { user, structograms, error };
 };
 
-const EditorPage = async ({ params }: { params: Promise<Params> }) => {
+const EditorPage = async ({ params }: { params: Params }) => {
     const { id } = await params;
     const { user, structograms, error } = await fetchData(id);
 
