@@ -1,10 +1,7 @@
 import {Structogram, StructogramNode} from "@/types/structogram";
 
 export function structogramNewIds(node: StructogramNode) {
-    let newNode = new StructogramNode();
-    newNode.type = node.type;
-    newNode.children = [...node.children];
-    newNode.data = node.data;
+    let newNode = new StructogramNode(node.type, new Map(node.data), node.children);
     let id = crypto.randomUUID();
     let children = newNode.children;
     for (let i = 0; i < children.length; i++) {
@@ -12,4 +9,9 @@ export function structogramNewIds(node: StructogramNode) {
     }
     newNode.id = id;
     return newNode;
+}
+
+
+export async function updateStructogram(structogram: Structogram) {
+
 }

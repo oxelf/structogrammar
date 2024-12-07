@@ -1,16 +1,17 @@
-import {ContextMenu, ContextMenuTrigger} from "@/components/ui/context-menu";
+import {ContextMenuTrigger} from "@/components/ui/context-menu";
 import {setNode} from "@/app/editor/structogram-slice";
 import {
-    blockStyleNormal, blockStyleSelected,
+    blockStyleNormal,
+    blockStyleSelected,
     childrenStyle,
-    getBorderStyle,
     inputStyle,
-    titleStyleNormal, titleStyleSelected
-} from "@/app/editor/[id]/(structogram-components)/style";
+    titleStyleNormal,
+    titleStyleSelected
+} from "@/components/structogram/style";
 import {useState} from "react";
-import {useAppDispatch, useAppSelector} from "@/app/editor/store";
+import {useAppDispatch} from "@/app/editor/store";
 import {StructogramNode} from "@/types/structogram";
-import {StructogramBlock} from "@/app/editor/[id]/structogram-node";
+import {StructogramBlock} from "@/components/structogram/structogram-node";
 import {setSelectedNode} from "@/app/editor/selected-node-slice";
 
 interface IfComponentProps {
@@ -19,14 +20,14 @@ interface IfComponentProps {
     readOnly: boolean;
 }
 
-export function LoopComponent({data, readOnly, selectedNode}: IfComponentProps) {
+export function IfComponent({data, readOnly, selectedNode}: IfComponentProps) {
     const [localData, setLocalData] = useState(data.data);
     let [editing, setEditing] = useState(false);
     const dispatch = useAppDispatch();
 
     let titleStyle = titleStyleNormal;
     let blockStyle = blockStyleNormal;
-    if (selectedNode?.id == data.id ) {
+    if (selectedNode?.id == data.id) {
         titleStyle = titleStyleSelected;
         blockStyle = blockStyleSelected;
     } else {
@@ -78,19 +79,22 @@ export function LoopComponent({data, readOnly, selectedNode}: IfComponentProps) 
                 <ContextMenuTrigger>
                     <div onClick={onSelected} onDoubleClick={onEdit} className={titleStyle}>
                         {
-                            (editing)?<input  onChange={onChange}
-                                             onBlur={onBlur}
-                                             onKeyDown={onKeyDown}
-                                             className={inputStyle} value={localData.get("condition")}>
+                            (editing) ? <input onChange={onChange}
+                                               onBlur={onBlur}
+                                               onKeyDown={onKeyDown}
+                                               className={inputStyle} value={localData.get("condition")}>
                                 </input>
-                                :<div>{localData.get("condition")}</div>
+                                : <div>{localData.get("condition")}</div>
                         }
                     </div>
                 </ContextMenuTrigger>
                 <div className="flex flex-row">
                     <div className={childrenStyle}>
                         {trueChildren.map((node, index) => {
-                            return <StructogramBlock readOnly={readOnly} selectedNode={selectedNode} nonDeletable={trueChildren.length <= 1}  borders={[false, false, index % 2 == 0, (index % 2== 0 && index != trueChildren.length - 1)]} key={node.id} data={node}/>
+                            return <StructogramBlock readOnly={readOnly} selectedNode={selectedNode}
+                                                     nonDeletable={trueChildren.length <= 1}
+                                                     borders={[false, false, index % 2 == 0, (index % 2 == 0 && index != trueChildren.length - 1)]}
+                                                     key={node.id} data={node}/>
                         })}
                     </div>
                     <div className="w-0.5 flex flex-col">
@@ -98,11 +102,14 @@ export function LoopComponent({data, readOnly, selectedNode}: IfComponentProps) 
                     </div>
                     <div className={childrenStyle}>
                         {falseChildren.map((node, index) => {
-                            return <StructogramBlock nonDeletable={(falseChildren.length <= 1)} selectedNode={selectedNode} readOnly={readOnly} borders={[false, false, index % 2 == 0, (index % 2== 0 && index != falseChildren.length - 1)]} key={node.id} data={node}/>
+                            return <StructogramBlock nonDeletable={(falseChildren.length <= 1)}
+                                                     selectedNode={selectedNode} readOnly={readOnly}
+                                                     borders={[false, false, index % 2 == 0, (index % 2 == 0 && index != falseChildren.length - 1)]}
+                                                     key={node.id} data={node}/>
                         })}
                     </div>
                 </div>
-                </div>
+            </div>
         </>
     );
 }

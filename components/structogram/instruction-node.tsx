@@ -1,14 +1,8 @@
-import {ContextMenu, ContextMenuTrigger} from "@/components/ui/context-menu";
+import {ContextMenuTrigger} from "@/components/ui/context-menu";
 import {setNode} from "@/app/editor/structogram-slice";
-import {
-    blockStyleNormal, blockStyleSelected,
-    childrenStyle,
-    getBorderStyle,
-    inputStyle,
-    titleStyleNormal, titleStyleSelected
-} from "@/app/editor/[id]/(structogram-components)/style";
+import {inputStyle, titleStyleNormal, titleStyleSelected} from "@/components/structogram/style";
 import {useState} from "react";
-import {useAppDispatch, useAppSelector} from "@/app/editor/store";
+import {useAppDispatch} from "@/app/editor/store";
 import {StructogramNode} from "@/types/structogram";
 import {setSelectedNode} from "@/app/editor/selected-node-slice";
 
@@ -24,7 +18,7 @@ export function InstructionComponent({data, selectedNode, readOnly}: Instruction
     const dispatch = useAppDispatch();
 
     let titleStyle = titleStyleNormal;
-    if (selectedNode?.id == data.id ) {
+    if (selectedNode?.id == data.id) {
         titleStyle = titleStyleSelected;
     } else {
         editing = false

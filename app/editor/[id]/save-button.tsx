@@ -2,46 +2,59 @@ import { Button } from "@/components/ui/button";
 import { ShareIcon } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { getNodesBounds, getViewportForBounds, useReactFlow } from "@xyflow/react";
-import { toPng } from "html-to-image";
+import { toBlob } from "html-to-image";
 
 export function SaveButton() {
-    const { getNodes } = useReactFlow();
+    const { getNodes, fitView } = useReactFlow();
 
-    function onExport() {
+    async function onExport() {
         const nodesBounds = getNodesBounds(getNodes());
-        const imageWidth = 1024;
-        const imageHeight = 768;
+        const contentWidth = nodesBounds.width;
+        const contentHeight = nodesBounds.height;
+
+        await fitView({ padding: 0 });
+        await new Promise((resolve) => setTimeout(resolve, 500));
 
         const transform = getViewportForBounds(
             nodesBounds,
-            imageWidth,
-            imageHeight,
+            contentWidth,
+            contentHeight,
             0,
             2,
             0,
         );
 
         const reactFlowContainer = document.querySelector('.react-flow__viewport') as HTMLElement;
-        const backgroundColor = "rgba(0,0,0,0)";
+        const backgroundColor = window.getComputedStyle(reactFlowContainer).backgroundColor;
 
-        toPng(reactFlowContainer, {
-            filter: node =>
-                !(
-                    node?.classList?.contains('react-flow__minimap') ||
-                    node?.classList?.contains('react-flow__controls')
-                ),
-            backgroundColor: backgroundColor,
-            width: imageWidth,
-            height: imageHeight,
-            style: {
-                transform: `translate(${transform.x}px, ${transform.y}px) scale(${transform.zoom})`,
-            },
-        }).then(dataUrl => {
-            const a = document.createElement('a');
-            a.setAttribute('download', 'struktogramm.png');
-            a.setAttribute('href', dataUrl);
-            a.click();
-        });
+        try {
+            const blob = await toBlob(reactFlowContainer, {
+                filter: node =>
+                    !(
+                        node?.classList?.contains('react-flow__minimap') ||
+                        node?.classList?.contains('react-flow__controls')
+                    ),
+                backgroundColor: backgroundColor,
+                width: contentWidth,
+                height: contentHeight,
+                style: {
+                    width: `${contentWidth}px`,
+                    height: `${contentHeight}px`,
+                    transform: `translate(${transform.x}px, ${transform.y}px) scale(${transform.zoom})`,
+                },
+            });
+
+            if (blob) {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.setAttribute('download', 'struktogramm.png');
+                a.setAttribute('href', url);
+                a.click();
+                URL.revokeObjectURL(url);
+            }
+        } catch (error) {
+            console.error('Error exporting image:', error);
+        }
     }
 
     return (

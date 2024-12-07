@@ -1,5 +1,4 @@
-import {useAppSelector} from "@/app/editor/store";
-import {StructogramBlock} from "@/app/editor/[id]/structogram-node";
+import {StructogramBlock} from "@/components/structogram/structogram-node";
 import React from "react";
 import {Structogram, StructogramNode} from "@/types/structogram";
 
@@ -10,7 +9,6 @@ interface StructogramComponentProps {
 }
 
 export function StructogramComponent({structogram, selectedNode, readOnly}: StructogramComponentProps) {
-    console.log("drawing structogram: ", structogram);
     return (
         <>
             <div className="bg-white cursor-default dark:bg-zinc-800 rounded-lg px-4 pb-4 pt-2 border dark:border-white border-black">

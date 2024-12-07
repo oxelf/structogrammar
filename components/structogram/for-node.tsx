@@ -1,17 +1,17 @@
-import {ContextMenu, ContextMenuTrigger} from "@/components/ui/context-menu";
+import {ContextMenuTrigger} from "@/components/ui/context-menu";
 import {setNode} from "@/app/editor/structogram-slice";
 import {
     blockStyleNormal, blockStyleSelected,
     childrenStyle,
-    getBorderStyle,
     inputStyle,
     titleStyleNormal, titleStyleSelected
-} from "@/app/editor/[id]/(structogram-components)/style";
+} from "@/components/structogram/style";
 import {useState} from "react";
-import {useAppDispatch, useAppSelector} from "@/app/editor/store";
+import {useAppDispatch} from "@/app/editor/store";
 import {StructogramNode} from "@/types/structogram";
-import {StructogramBlock} from "@/app/editor/[id]/structogram-node";
+import {StructogramBlock} from "@/components/structogram/structogram-node";
 import {setSelectedNode} from "@/app/editor/selected-node-slice";
+import saveStructogram from "@/app/editor/[id]/save-structogram";
 
 interface LoopComponentProps {
     data: StructogramNode;
@@ -34,7 +34,7 @@ export function LoopComponent({data, readOnly, selectedNode}: LoopComponentProps
     }
 
     function onSelected() {
-        if (readOnly) {
+        if (!readOnly) {
             dispatch(setSelectedNode(data));
         }
     }
@@ -43,7 +43,12 @@ export function LoopComponent({data, readOnly, selectedNode}: LoopComponentProps
         setEditing(true);
     }
 
-    function onBlur(input: any) {
+    async function onBlur(input: any) {
+        try {
+            console.log('Structogram saved successfully');
+        } catch (error) {
+            console.error('Error saving structogram:', error);
+        }
         let value = input.value;
         onChange(value);
         setEditing(false)

@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import {Structogram, StructogramNode} from "@/types/structogram";
 import {RootState} from "@/app/editor/store";
-import {structogramNewIds} from "@/app/editor/structogram-util";
+import {structogramNewIds} from "@/app/editor/structogram-util"
 
 // Define a type for the slice state
 interface StructogramState {
@@ -69,10 +69,11 @@ export const structogramSlice = createSlice({
     name: 'structograms',
     initialState,
     reducers: {
-        set: (state, action: PayloadAction<Structogram[]>) => {
+        setStructograms: (state, action: PayloadAction<Structogram[]>) => {
             state.value = action.payload
         },
         setNode: (state, action: PayloadAction<StructogramNode>) => {
+
             const id = action.payload.id;
             const newNode = action.payload;
             const copy = state.value.map(structogram => ({
@@ -209,7 +210,7 @@ export const structogramSlice = createSlice({
     }
 })
 
-export const { setNode,deleteNode, set, insertAfter, insertBefore } = structogramSlice.actions
+export const { setNode,deleteNode, setStructograms, insertAfter, insertBefore } = structogramSlice.actions
 
 export const structograms = (state: RootState) => state.structograms.value
 

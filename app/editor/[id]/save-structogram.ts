@@ -1,10 +1,9 @@
 "use server"
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
-import { EditorProvider } from "@/app/editor/[id]/editor-provider";
-import EditorView from "@/app/editor/[id]/editor-view";
+import { Structogram } from "@/types/structogram";
 
-async function fetchProjectData(id: string) {
+async function saveStructogram(structogram: Structogram) {
     const cookieObject = await cookies();
     const supabase = createServerClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -25,25 +24,13 @@ async function fetchProjectData(id: string) {
 
     const { data, error } = await supabase
         .from('structograms')
-        .select('*')
-        .eq('id', id)
-        .single();
+        .update(structogram, {});
 
     if (error) {
-        throw new Error(`Error fetching project data: ${error.message}`);
+        throw new Error(`Error saving structogram: ${error.message}`);
     }
 
     return data;
 }
 
-export default async function EditorPage({ params }: { params: { id: string } }) {
-    const projectData = await fetchProjectData(params.id);
-
-    console.log("project data: ", projectData);
-
-    return (
-        <EditorProvider>
-            <EditorView projectData={projectData} />
-        </EditorProvider>
-    );
-}
+export default saveStructogram;

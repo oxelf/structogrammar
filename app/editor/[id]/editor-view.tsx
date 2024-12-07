@@ -8,6 +8,10 @@ import {EditorToolbar} from "@/app/editor/[id]/editor_toolbar";
 import {Provider} from "react-redux";
 import {store, useAppDispatch, useAppSelector} from "@/app/editor/store";
 import {ReactFlowProvider} from "@xyflow/react";
+import {useEffect} from "react";
+import {Structogram} from "@/types/structogram";
+import {setStructograms} from "@/app/editor/structogram-slice";
+import {getInstructionTemplate} from "@/components/structogram/templates";
 
 
 interface EditorViewProps {
@@ -17,6 +21,16 @@ interface EditorViewProps {
 export default function EditorView({projectData}: EditorViewProps) {
     "use client"
     const dispatch = useAppDispatch();
+    useEffect(() => {
+        let structogramData = projectData.data;
+        let structograms = structogramData.structograms;
+        if (structograms == null) {
+            structograms =[new Structogram("main", [
+                getInstructionTemplate(),
+            ])];
+        }
+        dispatch(setStructograms(structograms));
+    });
     const windows = useAppSelector((state) => state.windows.value);
         let treeView = [
         <ResizablePanel className={(!windows.includes("tree"))?"hidden":"visible"} defaultSize={20} minSize={10} maxSize={30}>
