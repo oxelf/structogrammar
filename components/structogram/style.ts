@@ -15,11 +15,13 @@ export function getBorderStyle(borders: boolean[]) {
     return borderStyle;
 }
 
-export const inputStyle = "flex text-center justify-center bg-blue-200 dark:bg-blue-800 ml-4 mr-4 w-full !outline-none";
+export const inputStyle = "flex text-center justify-center auto-focus bg-blue-200 dark:bg-blue-800  w-full !outline-none";
 export const titleStyleNormal =
-    "w-full h-6  flex flex-row justify-center justify-items-center justify-self-center ";
+    "w-full h-6 flex flex-row justify-center justify-items-center justify-self-center ";
 export const titleStyleSelected =
     "w-full h-6 flex flex-row justify-center justify-items-center justify-self-center  bg-blue-200 dark:bg-blue-800";
 export const childrenStyle = " flex flex-col flex-grow";
 export const blockStyleNormal = "flex flex-col  w-6 ";
 export const blockStyleSelected = "flex flex-col  w-6  bg-blue-200 dark:bg-blue-800";
+
+export const titleSpacerStyle = "w-4 h-1";

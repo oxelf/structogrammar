@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import {createSlice, PayloadAction} from '@reduxjs/toolkit'
 import {Structogram, StructogramNode} from "@/types/structogram";
 import {RootState} from "@/app/editor/store";
 import {structogramNewIds} from "@/app/editor/structogram-util"
@@ -72,6 +72,9 @@ export const structogramSlice = createSlice({
         setStructograms: (state, action: PayloadAction<Structogram[]>) => {
             state.value = action.payload
         },
+       addStructogram: (state, action: PayloadAction<Structogram>) => {
+            state.value = [...state.value, action.payload];
+       },
         setNode: (state, action: PayloadAction<StructogramNode>) => {
 
             const id = action.payload.id;
@@ -171,6 +174,21 @@ export const structogramSlice = createSlice({
             }
             state.value = copy;
         },
+        setNodePosition: (state, action: PayloadAction<{ id: String, x: number, y: number }>) => {
+            state.value = state.value.map(structogram => ({
+                ...structogram,
+                nodes: structogram.nodes.map(node => {
+                    if (node.id == action.payload.id) {
+                        return {
+                            ...node,
+                            x: action.payload.x,
+                            y: action.payload.y
+                        }
+                    }
+                    return node;
+                })
+            }));
+        },
         deleteNode: (state, action: PayloadAction<String>) => {
             let id = action.payload;
             let copy = state.value.map(structogram => ({
@@ -210,7 +228,7 @@ export const structogramSlice = createSlice({
     }
 })
 
-export const { setNode,deleteNode, setStructograms, insertAfter, insertBefore } = structogramSlice.actions
+export const { setNode, setNodePosition, addStructogram, deleteNode, setStructograms, insertAfter, insertBefore } = structogramSlice.actions
 
 export const structograms = (state: RootState) => state.structograms.value
 

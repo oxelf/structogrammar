@@ -108,11 +108,25 @@ export function StructogramBlock({data, nonDeletable, selectedNode, borders, rea
                         Anweisung
                     </ContextMenuItem>
                     <ContextMenuSeparator/>
-                    <ContextMenuItem>Bedingte Verzweigung</ContextMenuItem>
-                    <ContextMenuItem>Fall Auswahl</ContextMenuItem>
+                    <ContextMenuItem
+                        onSelect={
+                                                 () => {
+                                                     dispatch(insertAfter({after: data.id, node: getIfTemplate()}))
+                                                 }
+                                             }>Bedingte Verzweigung</ContextMenuItem>
+                    <ContextMenuItem >Fall Auswahl</ContextMenuItem>
                     <ContextMenuSeparator/>
-                    <ContextMenuItem>Zählschleife</ContextMenuItem>
-                    <ContextMenuItem>Solange Schleife</ContextMenuItem>
+                    <ContextMenuItem
+                        onSelect={
+                                                 () => {
+                                                     dispatch(insertAfter({after: data.id, node: getForTemplate()}))
+                                                 }
+                                             }>Zählschleife</ContextMenuItem>
+                    <ContextMenuItem onSelect={
+                        () => {
+                            dispatch(insertAfter({after: data.id, node: getWhileTemplate()}))
+                        }
+                    }>Solange Schleife</ContextMenuItem>
                     <ContextMenuItem>Bis Schleife</ContextMenuItem>
                 </ContextMenuSubContent>
             </ContextMenuSub>

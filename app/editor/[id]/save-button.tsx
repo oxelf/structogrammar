@@ -3,11 +3,15 @@ import { ShareIcon } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { getNodesBounds, getViewportForBounds, useReactFlow } from "@xyflow/react";
 import { toBlob } from "html-to-image";
+import {useAppDispatch} from "@/app/editor/store";
+import {setSelectedNode} from "@/app/editor/selected-node-slice";
 
 export function SaveButton() {
     const { getNodes, fitView } = useReactFlow();
+    const dispatch = useAppDispatch();
 
     async function onExport() {
+        dispatch(setSelectedNode(null))
         const nodesBounds = getNodesBounds(getNodes());
         const contentWidth = nodesBounds.width;
         const contentHeight = nodesBounds.height;

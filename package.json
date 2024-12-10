@@ -6,6 +6,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@dagrejs/dagre": "^1.1.4",
     "@radix-ui/react-avatar": "^1.1.1",
     "@radix-ui/react-checkbox": "^1.1.1",
     "@radix-ui/react-context-menu": "^2.2.2",
@@ -38,6 +39,7 @@
     "react-monaco-editor": "^0.56.2",
     "react-redux": "^9.1.2",
     "react-resizable-panels": "^2.1.7",
+    "react-spinners": "^0.15.0",
     "supabase": "^1.223.10"
   },
   "devDependencies": {

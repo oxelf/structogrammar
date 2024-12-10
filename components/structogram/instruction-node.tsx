@@ -1,6 +1,6 @@
 import {ContextMenuTrigger} from "@/components/ui/context-menu";
 import {setNode} from "@/app/editor/structogram-slice";
-import {inputStyle, titleStyleNormal, titleStyleSelected} from "@/components/structogram/style";
+import {inputStyle, titleSpacerStyle, titleStyleNormal, titleStyleSelected} from "@/components/structogram/style";
 import {useState} from "react";
 import {useAppDispatch} from "@/app/editor/store";
 import {StructogramNode} from "@/types/structogram";
@@ -53,19 +53,25 @@ export function InstructionComponent({data, selectedNode, readOnly}: Instruction
         setLocalData(updatedLocalData);
     }
 
+function onKeyUp(event: any) {
+    event.currentTarget.size = event.currentTarget.value.length;
+}
 
     return (
         <>
             <ContextMenuTrigger>
-                <div onClick={onSelected} onDoubleClick={onEdit} className={titleStyle + " mx-4"}>
+                <div onClick={onSelected} onDoubleClick={onEdit} className={titleStyle}>
+                    <div className={titleSpacerStyle}></div>
                     {
                         (editing) ? <input onChange={onChange}
                                            onBlur={onBlur}
                                            onKeyDown={onKeyDown}
+                                           onKeyUp={onKeyUp}
                                            className={inputStyle} value={localData.get("value")}>
                             </input>
                             : <div>{localData.get("value")}</div>
                     }
+                    <div className={titleSpacerStyle}></div>
                 </div>
             </ContextMenuTrigger>
         </>

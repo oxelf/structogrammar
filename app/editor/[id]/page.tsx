@@ -1,32 +1,33 @@
-"use server"
+"use server";
+
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { EditorProvider } from "@/app/editor/[id]/editor-provider";
 import EditorView from "@/app/editor/[id]/editor-view";
 
 async function fetchProjectData(id: string) {
-    const cookieObject = await cookies();
+    const cookieObject = await cookies(); // Synchronous function in Next.js 13+
     const supabase = createServerClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
         process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
         {
             cookies: {
-                async getAll() {
+                getAll() {
                     return cookieObject.getAll();
                 },
                 setAll(cookiesToSet) {
                     cookiesToSet.forEach(({ name, value }) =>
-                        cookieObject.set(name, value),
+                        cookieObject.set(name, value)
                     );
                 },
             },
-        },
+        }
     );
 
     const { data, error } = await supabase
-        .from('structograms')
-        .select('*')
-        .eq('id', id)
+        .from("structograms")
+        .select("*")
+        .eq("id", id)
         .single();
 
     if (error) {
@@ -36,10 +37,12 @@ async function fetchProjectData(id: string) {
     return data;
 }
 
-export default async function EditorPage({ params }: { params: { id: string } }) {
-    const projectData = await fetchProjectData(params.id);
 
-    console.log("project data: ", projectData);
+export default async function EditorPage(params: {
+    params: Promise<{ id: string }>;}) {
+    let id = (await (params).params).id;
+
+    const projectData = await fetchProjectData(id);
 
     return (
         <EditorProvider>

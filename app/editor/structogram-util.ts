@@ -1,17 +1,16 @@
-import {Structogram, StructogramNode} from "@/types/structogram";
+"use client"
+import { StructogramNode } from "@/types/structogram";
 
-export function structogramNewIds(node: StructogramNode) {
-    let newNode = new StructogramNode(node.type, new Map(node.data), node.children);
-    let id = crypto.randomUUID();
-    let children = newNode.children;
-    for (let i = 0; i < children.length; i++) {
-         children[i] = structogramNewIds(children[i]);
-    }
-    newNode.id = id;
+export function structogramNewIds(node: StructogramNode): StructogramNode {
+    let newNode = {
+        ...node,
+        data: new Map(node.data),
+        children: node.children.map(child => structogramNewIds(child))
+    };
+
+    newNode.id = crypto.randomUUID();
+
     return newNode;
 }
 
 
-export async function updateStructogram(structogram: Structogram) {
-
-}

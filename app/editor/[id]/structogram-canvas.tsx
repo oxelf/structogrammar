@@ -4,6 +4,7 @@ import '@xyflow/react/dist/style.css';
 import { useTheme } from 'next-themes';
 import { DrawStructogram } from '@/app/editor/[id]/structogram';
 import {useAppDispatch, useAppSelector} from "@/app/editor/store";
+import {PlusIcon} from "lucide-react";
 
 const initialNodes = [
     { id: '1', type: 'structogram', position: { x: 0, y: 0 }, data: { label: '1' } },
@@ -54,18 +55,20 @@ export default function StructogramCanvas({}: StructogramCanvasProps) {
                 fitView={true}
                 defaultViewport={defaultViewport}
                 selectionOnDrag={true}
-                nodes={structograms.map((structogram, index) => {
+                 nodes={structograms.map((structogram, index) => {
                     return {
                         id: index.toString(),
                         type: 'structogram',
-                        position: { x: 0, y: 0 },
+                        position: { x: structogram.x, y: structogram.y },
                         data: {  label: structogram.functionName, structogram: structogram },
                     };
                 })}
             >
                 <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
                 <MiniMap />
-                <Controls />
+                <Controls>
+                    <PlusIcon></PlusIcon>
+                </Controls>
             </ReactFlow>
         </div>
     );

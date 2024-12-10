@@ -44,13 +44,15 @@ export function LoopComponent({data, readOnly, selectedNode}: LoopComponentProps
     }
 
     async function onBlur(input: any) {
+        console.log("input: ", input);
         try {
             console.log('Structogram saved successfully');
         } catch (error) {
             console.error('Error saving structogram:', error);
         }
+
         let value = input.value;
-        onChange(value);
+        onChange(input);
         setEditing(false)
         const updatedData = {...data, data: new Map(localData)};
         dispatch(setNode(updatedData))
@@ -58,14 +60,20 @@ export function LoopComponent({data, readOnly, selectedNode}: LoopComponentProps
 
     function onKeyDown(event: any) {
         if (event.key === "Escape" || event.key === "Enter") {
+            try {
+                console.log("current target value: ", event.currentTarget);
+                onBlur(event.currentTarget); } catch (e) {}
             event.currentTarget.blur();
-            onBlur(event.currentTarget);
         }
     }
 
     function onChange(value: any) {
+        let text = value.value;
+        if  (text == undefined) {
+            text = value.target.value;
+        }
         const updatedLocalData = new Map(localData);
-        updatedLocalData.set("condition", value.target.value);
+        updatedLocalData.set("condition", text);
         setLocalData(updatedLocalData);
     }
 
@@ -80,7 +88,11 @@ export function LoopComponent({data, readOnly, selectedNode}: LoopComponentProps
                                          onKeyDown={onKeyDown}
                                          className={inputStyle} value={localData.get("condition")}>
                             </input>
-                            :<div>{localData.get("condition")}</div>
+                            : <div className="flex flex-row">
+                                <div className="w-4 h-1"></div>
+                                {localData.get("condition")}
+                                <div className="w-4 h-1"></div>
+                            </div>
                     }
                 </div>
             </ContextMenuTrigger>

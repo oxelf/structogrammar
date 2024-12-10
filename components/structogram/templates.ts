@@ -1,4 +1,4 @@
-import {StructogramNode} from "@/types/structogram";
+import {Structogram, StructogramNode} from "@/types/structogram";
 
 export function getInstructionTemplate() {
     return new StructogramNode(
@@ -16,6 +16,12 @@ export function getForTemplate() {
             getInstructionTemplate(),
         ],
     );
+}
+
+export function getStructogramTemplate() {
+    return new Structogram("main", [
+        getInstructionTemplate(),
+    ]);
 }
 
 export function getWhileTemplate() {
