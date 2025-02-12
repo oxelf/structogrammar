@@ -15,9 +15,6 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        goos: [linux, darwin, windows]
-        goarch: [amd64]
-        extension: [ '', '', '.exe' ]
     name: Build
     steps:
       - name: Checkout code
@@ -35,12 +32,12 @@ jobs:
         run: echo ${{ github.event.release.tag_name }}
 
       - name: Build the Binary
-        run: go build -o ${{matrix.os}}${{matrix.extension}} ./cli/
+        run: go build -o ${{matrix.os}} ./cli/
 
       - name: Upload Binary
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.ref }}
-          file: ./${{matrix.os}}${{matrix.extension}}
+          file: ./${{matrix.os}}
           file_glob: true
