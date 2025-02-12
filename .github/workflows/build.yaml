@@ -9,51 +9,31 @@ permissions:
     packages: write
 
 jobs:
-  release-linux-amd64:
-    name: release linux/amd64
-    env:
-      CGO_ENABLED: 1
+  build:
+    name: Build
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - uses: wangyoucao577/go-release-action@v1
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        goversion: 1.23.5
-        asset_name: "linux"
-        binary_name: "linux"
-        project_path:  ./cli/
-        goos: linux
-        goarch: amd64
-  release-mac-arm64:
-    name: release mac/arm64
-    env:
-      CGO_ENABLED: 1
-    runs-on: darwin-latest
-    steps:
-    - uses: actions/checkout@v4
-    - uses: wangyoucao577/go-release-action@v1
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        goversion: 1.23.5
-        asset_name: "mac"
-        binary_name: "mac"
-        project_path:  ./cli/
-        goos: darwin
-        goarch: arm64
-  release-windows-amd64:
-    name: release windows/amd64
-    env:
-      CGO_ENABLED: 1
-    runs-on: windows-latest
-    steps:
-    - uses: actions/checkout@v4
-    - uses: wangyoucao577/go-release-action@v1
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        goversion: 1.23.5
-        asset_name: "windows.exe"
-        binary_name: "windows.exe"
-        project_path:  ./cli/
-        goos: windows
-        goarch: amd64
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v1
+        with:
+          go-version: 1.23.5
+
+      - name: Display the version of go that we have installed
+        run: go version
+
+      - name: Display the release tag
+        run: echo ${{ github.event.release.tag_name }}
+
+      - name: Build the Binary
+        run: go build -o linux ./cli/
+
+      - name: Upload Binary
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ github.ref }}
+          file: ./linux
+          file_glob: true
