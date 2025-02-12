@@ -6,89 +6,14 @@ on:
       - 'v*'
 
 jobs:
-  build:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-        goos: [linux, darwin, windows]
-        goarch: [amd64]
-        extension: [ '', '', '.exe' ]
-
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v4
-
-      - name: Set up Go
-        uses: actions/setup-go@v4
-        with:
-          go-version: '1.23.5'
-
-      - name: Install Dependencies
-        run: go mod download
-
-      - name: Build
-        env:
-          CGO_ENABLED: 1
-          GOOS: ${{ matrix.goos }}
-          GOARCH: ${{ matrix.goarch }}
-        run: |
-          output_name="app-${{ matrix.goos }}${{ matrix.extension }}"
-          go build -o $output_name ./cli/
-          mkdir -p output
-          mv $output_name output/
-
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ matrix.goos }}-binary
-          path: output/*
-
-  release:
+  release-linux-amd64:
+    name: release linux/amd64
     runs-on: ubuntu-latest
-    needs: build
     steps:
-      - name: Download Artifacts
-        uses: actions/download-artifact@v3
-        with:
-          path: output
-
-      - name: Create Release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: $release_{{ github.ref_name }}
-          release_name: Release ${{ github.ref_name }}
-          draft: false
-          prerelease: false
-
-      - name: Upload Linux Binary
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create-release.outputs.upload_url }}
-          asset_path: output/app-linux
-          asset_name: app-linux
-          asset_content_type: application/octet-stream
-
-      - name: Upload macOS Binary
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create-release.outputs.upload_url }}
-          asset_path: output/app-darwin
-          asset_name: app-mac
-          asset_content_type: application/octet-stream
-
-      - name: Upload Windows Binary
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create-release.outputs.upload_url }}
-          asset_path: output/app-windows.exe
-          asset_name: app-windows.exe
-          asset_content_type: application/octet-stream
+    - uses: actions/checkout@v4
+    - uses: wangyoucao577/go-release-action@v1
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        asset_name: "linux"
+        goos: linux
+        goarch: amd64
