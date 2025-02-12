@@ -5,6 +5,10 @@ on:
     tags:
       - 'v*'
 
+permissions:
+    contents: write
+    packages: write
+
 jobs:
   release-linux-amd64:
     name: release linux/amd64
@@ -16,7 +20,9 @@ jobs:
     - uses: wangyoucao577/go-release-action@v1
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
+        goversion: 1.23.5
         asset_name: "linux"
+        binary_name: "linux"
         project_path:  ./cli/
         goos: linux
         goarch: amd64
