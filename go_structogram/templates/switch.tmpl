@@ -1,0 +1,24 @@
+<div style="{{.styles}}">
+<div  style="display: flex; flex-direction: column">
+<div class="{{.branchClass}}" >
+<div style="margin-top: 4px;margin-left: calc({{.offset}}%);">
+{{.variable}}
+</div>
+</div>
+    <div style="display: flex; flex-direction: row; justify-content: stretch; width: 100%">
+    {{range .branches}}
+    <div style="{{.ConditionBorder}} flex: 1; display: flex; flex-direction: row; justify-content: center">
+    {{.Condition}}
+    </div>
+    {{end}}
+</div>
+</div>
+    <div style="display: flex; flex-direction: row; justify-content: stretch; width: 100%">
+    {{range .branches}}
+    <div style="flex: 1;  display: flex; flex-direction: column;">
+    {{.HTML}}
+    </div>
+    {{end}}
+    </div>
+</div>
+</div>

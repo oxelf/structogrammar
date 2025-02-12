@@ -1,0 +1,20 @@
+<div style="{{.styles}}">
+<div class="branchSplit" style="
+display: flex; flex-direction: column">
+<div style="margin-top: 4px; display: flex; flex-direction: row; justify-content: center">
+{{.condition}}
+</div>
+<div style="margin-left: 8px; margin-right: 8px; display: flex; flex-direction: row; justify-content: space-between">
+<p style="margin: 2px">True</p>
+<p style="margin: 2px">False</p>
+</div>
+</div>
+    <div style="display: flex; flex-direction: row; justify-content: stretch; width: 100%">
+    <div style="flex: 1;  display: flex; flex-direction: column;">
+    {{.consequence}}
+    </div>
+    <div style="flex: 1;  display: flex; flex-direction: column;">
+    {{.alternative}}
+    </div>
+    </div>
+</div>
