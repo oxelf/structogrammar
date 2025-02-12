@@ -19,7 +19,6 @@ jobs:
         goarch: [amd64]
         extension: [ '', '', '.exe' ]
     name: Build
-    runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
