@@ -25,7 +25,7 @@ jobs:
         project_path:  ./cli/
         goos: linux
         goarch: amd64
-  release-linux-amd64:
+  release-mac-arm64:
     name: release mac/arm64
     env:
       CGO_ENABLED: 1
@@ -41,7 +41,7 @@ jobs:
         project_path:  ./cli/
         goos: darwin
         goarch: arm64
-  release-linux-amd64:
+  release-windows-amd64:
     name: release windows/amd64
     env:
       CGO_ENABLED: 1
