@@ -32,6 +32,8 @@ jobs:
         run: echo ${{ github.event.release.tag_name }}
 
       - name: Build the Binary
+        env:
+          CGO_ENABLED: 1
         run: go build -o ${{matrix.os}} ./cli/
 
       - name: Upload Binary
