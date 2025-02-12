@@ -8,6 +8,8 @@ on:
 jobs:
   release-linux-amd64:
     name: release linux/amd64
+    env:
+      CGO_ENABLED: 1
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -15,5 +17,6 @@ jobs:
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         asset_name: "linux"
+        project_path:  ./cli/
         goos: linux
         goarch: amd64
