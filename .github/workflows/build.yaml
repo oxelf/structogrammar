@@ -4,13 +4,6 @@ on:
   push:
     tags:
       - 'v*'
-    branches-ignore:
-      - main
-      - master
-      - v4
-  release:
-    types:
-      - created
 
 jobs:
   build:
@@ -46,7 +39,7 @@ jobs:
           mv $output_name output/
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.goos }}-binary
           path: output/*
@@ -65,7 +58,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref_name }}
+          tag_name: $release_{{ github.ref_name }}
           release_name: Release ${{ github.ref_name }}
           draft: false
           prerelease: false
