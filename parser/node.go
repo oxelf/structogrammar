@@ -1,7 +1,6 @@
 package parser
 
 import (
-	"fmt"
 	"structo/go_structogram/ast"
 
 	sitter "github.com/smacker/go-tree-sitter"
@@ -12,10 +11,8 @@ func (p *Parser) parseNode(node *sitter.Node) ast.Node {
 	rules := p.conf.ParseRules()
 	nodeType := tsMap[node.Type()]
 	if nodeType == "" {
-		fmt.Println("node type not found", node.Type())
 		return nil
 	} else {
-		fmt.Println("found: ", tsMap[node.Type()])
 		switch nodeType {
 		case "INSTRUCTION":
 			return &ast.Instruction{Instr: string(p.source[node.StartByte():node.EndByte()])}
@@ -23,7 +20,6 @@ func (p *Parser) parseNode(node *sitter.Node) ast.Node {
 			condNode := node.ChildByFieldName(rules.WhileCondition)
 			condition := string(p.source[condNode.StartByte():condNode.EndByte()])
 			bodyNode := node.ChildByFieldName(rules.WhileBody)
-			fmt.Println("bodyNode: ", bodyNode)
 			body := p.parseBlock(bodyNode)
 			return &ast.HeadLoop{Condition: condition, Body: body}
 		case "FOR":

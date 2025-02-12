@@ -22,6 +22,7 @@ func main() {
 	flag.Parse()
 	file := flag.Arg(0)
 	funcName := flag.Arg(1)
+	fmt.Printf("file: %s, funcName: %s, img: %v, htmlPath: %v \n", file, funcName, *img, *htmlPath)
 	input, err := os.ReadFile(file)
 	if err != nil {
 		fmt.Println(err)

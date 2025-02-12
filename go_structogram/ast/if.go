@@ -2,7 +2,6 @@ package ast
 
 import (
 	"bytes"
-	"fmt"
 	"html/template"
 	templs "structo/go_structogram/templates"
 )
@@ -35,13 +34,11 @@ func (i If) HTML(styles NodeStyle) string {
 	var consequence string
 	for _, n := range i.Consequence {
 		s := Style().BorderRight().BorderTop()
-		fmt.Println("parsing n for if html: ", n)
 		consequence += n.HTML(s)
 	}
 	var alternative string
 	for _, n := range i.Alternative {
 		s := Style().BorderTop()
-		fmt.Println("parsing n for if html: ", n)
 		alternative += n.HTML(s)
 	}
 	err = tmpl.Execute(&rendered, map[string]interface{}{
