@@ -52,17 +52,19 @@ func (p *Parser) parseNode(node *sitter.Node) ast.Node {
 			}
 			// alternative
 			altNode := node.ChildByFieldName(rules.IfAlternative)
-			altBodyNode := altNode.Child(1)
-			var alternative []ast.Node
-			if altBodyNode != nil {
-				if tsMap[altBodyNode.Type()] == "BLOCK" {
-					alternative = p.parseBlock(altBodyNode)
-				} else {
-					alternative = append(alternative, p.parseNode(altBodyNode))
+			alternative := []ast.Node{}
+			if altNode != nil {
+				altBodyNode := altNode.Child(1)
+				if altBodyNode != nil {
+					if tsMap[altBodyNode.Type()] == "BLOCK" {
+						alternative = p.parseBlock(altBodyNode)
+					} else {
+						alternative = append(alternative, p.parseNode(altBodyNode))
+					}
 				}
-			}
-			if altBodyNode == nil || len(alternative) == 0 {
-				alternative = append(alternative, &ast.Instruction{Instr: ""})
+				if altBodyNode == nil || len(alternative) == 0 {
+					alternative = append(alternative, &ast.Instruction{Instr: ""})
+				}
 			}
 			return &ast.If{Condition: condition, Consequence: consequence, Alternative: alternative}
 		case "SWITCH":

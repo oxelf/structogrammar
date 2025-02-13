@@ -1,25 +1,28 @@
+#include <cstdlib>
+#include <fstream>
 #include <iostream>
 
-int main(int m, int c) {
-  if (true) {
-      std::cout << "hello";
-    } else
-      std::cout << "hello alt";
-
-    for  (int i = 0; i < 10; i++) {
-            std::cout << "hello";
-        }
-    while  (true) {
-            std::cout << "hello";
-        }
-  return 0;
+void generate() {
+  std::string email, description, username, password;
+  int id;
+  std::cout << "Enter username: ";
+  std::cin >> username;
+  std::cout << "Enter E-Mail: ";
+  std::cin >> email;
+  std::ofstream Passwords("Passwords.txt", std::ios::app);
+  Passwords << "'" << "" << "' '" << password << "'" << std::endl;
+  Passwords.close();
+  std::cout << "Password generated";
+  system("pause");
 }
 
-int bar() {
-  return 0;
+int main() {
+  std::string password;
+  std::ifstream Password("Password.txt");
+  Password >> password;
+  if (password == "") {
+    firstLaunch();
+  }
+  login();
+  mainmenu();
 }
-
-std::vector<int> hello() {
-        return "";
-    }
-
