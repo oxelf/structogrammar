@@ -1,0 +1,8 @@
+<div style="display: flex; flex-direction: column;">
+<div>Couldn't reload, fix the following syntax errors first:</div>
+{{range .errors}}
+<div style="color: red;">
+{{.LineNumber}}:{{.LineColumn}}: {{.Message}}
+</div>
+{{end}}
+</div>

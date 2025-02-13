@@ -6,8 +6,7 @@
 git clone
 cd structogrammar
 go get
-go build -o bin/structogrammar ./cli
-./bin/structogrammar test.cpp
+go build -o bin/structogrammar ./cli/ && ./bin/structogrammar -html=out.html test.cpp main
 ```
 
 There's a github workflow in `.github/workflows` that runs the build on a tag push.

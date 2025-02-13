@@ -11,7 +11,7 @@ import (
 
 func Img(input []byte, function *parser.FunctionQueryResult, imagePath string) {
 	n := parser.Parse(input, &parser.CppConfig{}, *function)
-	t, err := template.ParseFS(web.TemplateFS, "site.tmpl")
+	t, err := template.ParseFS(web.TemplateFS, "static.tmpl")
 	if err != nil {
 		fmt.Println(err)
 		return

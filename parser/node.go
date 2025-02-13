@@ -2,6 +2,7 @@ package parser
 
 import (
 	"structo/go_structogram/ast"
+	"structo/util"
 
 	sitter "github.com/smacker/go-tree-sitter"
 )
@@ -18,10 +19,16 @@ func (p *Parser) parseNode(node *sitter.Node) ast.Node {
 			return &ast.Instruction{Instr: string(p.source[node.StartByte():node.EndByte()])}
 		case "WHILE":
 			condNode := node.ChildByFieldName(rules.WhileCondition)
-			condition := string(p.source[condNode.StartByte():condNode.EndByte()])
+			condition := util.RemoveBraces(string(p.source[condNode.StartByte():condNode.EndByte()]))
 			bodyNode := node.ChildByFieldName(rules.WhileBody)
 			body := p.parseBlock(bodyNode)
 			return &ast.HeadLoop{Condition: condition, Body: body}
+		case "DO_WHILE":
+			condNode := node.ChildByFieldName(rules.DoWhileCondition)
+			condition := util.RemoveBraces(string(p.source[condNode.StartByte():condNode.EndByte()]))
+			bodyNode := node.ChildByFieldName(rules.DoWhileBody)
+			body := p.parseBlock(bodyNode)
+			return &ast.Tailloop{Condition: condition, Body: body}
 		case "FOR":
 			initNode := node.ChildByFieldName(rules.ForInitializer)
 			init := ""
@@ -29,7 +36,7 @@ func (p *Parser) parseNode(node *sitter.Node) ast.Node {
 				init = string(p.source[initNode.StartByte():initNode.EndByte()])
 			}
 			condNode := node.ChildByFieldName(rules.ForCondition)
-			condition := string(p.source[condNode.StartByte():condNode.EndByte()])
+			condition := util.RemoveBraces(string(p.source[condNode.StartByte():condNode.EndByte()]))
 			updateNode := node.ChildByFieldName(rules.ForUpdate)
 			update := string(p.source[updateNode.StartByte():updateNode.EndByte()])
 			bodyNode := node.ChildByFieldName(rules.ForBody)
@@ -37,7 +44,7 @@ func (p *Parser) parseNode(node *sitter.Node) ast.Node {
 			return &ast.HeadLoop{Condition: init + condition + ";" + update, Body: body}
 		case "CONDITIONAL":
 			condNode := node.ChildByFieldName(rules.IfCondition)
-			condition := string(p.source[condNode.StartByte():condNode.EndByte()])
+			condition := util.RemoveBraces(string(p.source[condNode.StartByte():condNode.EndByte()]))
 			consNode := node.ChildByFieldName(rules.IfConsequence)
 			var consequence []ast.Node
 			if consNode != nil {
@@ -65,6 +72,8 @@ func (p *Parser) parseNode(node *sitter.Node) ast.Node {
 				if altBodyNode == nil || len(alternative) == 0 {
 					alternative = append(alternative, &ast.Instruction{Instr: ""})
 				}
+			} else {
+				alternative = append(alternative, &ast.Instruction{Instr: ""})
 			}
 			return &ast.If{Condition: condition, Consequence: consequence, Alternative: alternative}
 		case "SWITCH":

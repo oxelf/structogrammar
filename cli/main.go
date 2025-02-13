@@ -4,7 +4,9 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"path/filepath"
 	"structo/parser"
+	"structo/server"
 )
 
 func isFlagPassed(name string) bool {
@@ -22,10 +24,19 @@ func main() {
 	flag.Parse()
 	file := flag.Arg(0)
 	funcName := flag.Arg(1)
-	fmt.Printf("file: %s, funcName: %s, img: %v, htmlPath: %v \n", file, funcName, *img, *htmlPath)
 	input, err := os.ReadFile(file)
 	if err != nil {
 		fmt.Println(err)
+		return
+	}
+	htmlPassed := isFlagPassed("html")
+	imgPassed := isFlagPassed("img")
+
+	errors := parser.QueryErrors(input, &parser.CppConfig{}, nil)
+	if len(errors) != 0 && (htmlPassed || imgPassed) {
+		fmt.Printf("Found %d errors in %s\n", len(errors), file)
+		fmt.Printf("Please fix any syntax errors before generating a structogram\n")
+		parser.PrettyPrintErrors(errors)
 		return
 	}
 	funcs := parser.QueryFunctions(input, &parser.CppConfig{}, nil)
@@ -54,6 +65,11 @@ func main() {
 	if isFlagPassed("html") {
 		Html(input, function, *htmlPath)
 	}
-	fmt.Println("Starting live server")
-	return
+	f := parser.Parse(input, &parser.CppConfig{}, *function)
+	absPath, _ := filepath.Abs(file)
+	port := server.StartServer(&f, absPath, errors)
+	fmt.Printf("Server started on http://localhost:%d\n", port)
+	openUrl(fmt.Sprintf("http://localhost:%d", port))
+	for {
+	}
 }

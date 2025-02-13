@@ -2,6 +2,7 @@ package parser
 
 import (
 	"context"
+	"structo/util"
 
 	sitter "github.com/smacker/go-tree-sitter"
 )
@@ -35,7 +36,7 @@ func QueryFunctions(source []byte, lang LanguageConfig, old *sitter.Tree) []Func
 			case "name":
 				result.Name = c.Node.Content([]byte(source))
 			case "params":
-				result.Params = c.Node.Content([]byte(source))
+				result.Params = util.RemoveBraces(c.Node.Content([]byte(source)))
 			case "return_type":
 				result.ReturnType = c.Node.Content([]byte(source))
 			}

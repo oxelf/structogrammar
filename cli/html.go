@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"html/template"
 	"os"
-	"os/exec"
 	"path/filepath"
 	gostructogram "structo/go_structogram"
 	"structo/parser"
@@ -14,7 +13,7 @@ import (
 
 func Html(input []byte, function *parser.FunctionQueryResult, htmlPath string) {
 	n := parser.Parse(input, &parser.CppConfig{}, *function)
-	t, err := template.ParseFS(web.TemplateFS, "site.tmpl")
+	t, err := template.ParseFS(web.TemplateFS, "static.tmpl")
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -32,13 +31,5 @@ func Html(input []byte, function *parser.FunctionQueryResult, htmlPath string) {
 
 	absOutPath, _ := filepath.Abs(htmlPath)
 
-	if os.Getenv("GOOS") == "windows" {
-		exec.Command("cmd", "/C", "start", "file://"+absOutPath).Run()
-		return
-	} else if os.Getenv("GOOS") == "darwin" {
-		exec.Command("open", "file://"+absOutPath).Run()
-		return
-	} else {
-		exec.Command("xdg-open", "file://"+absOutPath).Run()
-	}
+	openUrl("file://" + absOutPath)
 }
